@@ -29,10 +29,7 @@ body{
 button{font-family:inherit;cursor:pointer}
 input,select{font-family:inherit}
 
-#toastBox{
-  position:fixed;top:10px;left:50%;transform:translateX(-50%);
-  z-index:100;display:flex;flex-direction:column;gap:8px;width:min(94vw,560px);
-}
+#toastBox{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:100;display:flex;flex-direction:column;gap:8px;width:min(94vw,560px)}
 .toast{
   padding:12px 16px;border-radius:11px;font-size:14px;font-weight:600;line-height:1.45;
   background:#1d2532;border:1px solid var(--border);color:var(--text);
@@ -51,21 +48,13 @@ header{
   background:rgba(14,17,22,.85);backdrop-filter:blur(8px);
   position:sticky;top:0;z-index:20;
 }
-.logo{
-  width:38px;height:38px;border-radius:10px;flex:none;
-  background:linear-gradient(135deg,var(--accent),#ff3d00);
-  display:grid;place-items:center;box-shadow:0 5px 14px rgba(255,122,26,.35);
-}
+.logo{width:38px;height:38px;border-radius:10px;flex:none;background:linear-gradient(135deg,var(--accent),#ff3d00);display:grid;place-items:center;box-shadow:0 5px 14px rgba(255,122,26,.35)}
 .logo svg{width:22px;height:22px;fill:#fff}
 .title h1{font-size:16.5px;font-weight:800;letter-spacing:.3px}
 .title h1 span{color:var(--accent)}
 .title p{font-size:11px;color:var(--muted)}
 .header-right{margin-left:auto;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.pill{
-  display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;
-  padding:7px 12px;border-radius:999px;border:1px solid var(--border);
-  background:var(--panel);color:var(--muted);transition:.3s;max-width:60vw;
-}
+.pill{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;padding:7px 12px;border-radius:999px;border:1px solid var(--border);background:var(--panel);color:var(--muted);transition:.3s;max-width:60vw}
 .pill .dot{width:8px;height:8px;border-radius:50%;background:#5a6472;flex:none;transition:.3s}
 .pill span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pill.connected{color:var(--ok);border-color:rgba(61,220,132,.35)}
@@ -74,19 +63,18 @@ header{
 .pill.connecting .dot{background:var(--warn);animation:pulse .9s infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.25)}50%{box-shadow:0 0 0 5px rgba(255,255,255,0)}}
 
-.btn{
-  border:1px solid var(--border);background:var(--panel2);color:var(--text);
-  padding:9px 14px;border-radius:9px;font-size:13.5px;font-weight:600;
-  display:inline-flex;align-items:center;gap:7px;transition:.18s;
-}
+#stateBanner{padding:9px 16px;font-size:13px;font-weight:700;text-align:center;border-bottom:1px solid var(--border);transition:.3s}
+#stateBanner.info{background:rgba(141,153,173,.1);color:var(--muted)}
+#stateBanner.warn{background:rgba(255,209,102,.1);color:var(--warn)}
+#stateBanner.ok{background:rgba(61,220,132,.1);color:var(--ok)}
+#stateBanner.err{background:rgba(255,93,93,.12);color:var(--err)}
+
+.btn{border:1px solid var(--border);background:var(--panel2);color:var(--text);padding:9px 14px;border-radius:9px;font-size:13.5px;font-weight:600;display:inline-flex;align-items:center;gap:7px;transition:.18s}
 .btn svg{width:16px;height:16px;flex:none}
 .btn:hover{border-color:#3d4a60;transform:translateY(-1px)}
 .btn:active{transform:scale(.98)}
 .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
-.btn.primary{
-  background:linear-gradient(135deg,var(--accent),#ff4d1c);border:none;color:#fff;
-  box-shadow:0 6px 16px rgba(255,100,20,.3);
-}
+.btn.primary{background:linear-gradient(135deg,var(--accent),#ff4d1c);border:none;color:#fff;box-shadow:0 6px 16px rgba(255,100,20,.3)}
 .btn.primary.not-ready{opacity:.55;box-shadow:none}
 .btn.big{padding:14px 18px;font-size:16px;border-radius:12px;justify-content:center;width:100%}
 .btn.big svg{width:20px;height:20px}
@@ -94,27 +82,14 @@ header{
 .btn.wide{width:100%;justify-content:center;margin-top:4px}
 .btn.sweep{background:#173042;border-color:#28536e;color:#9fd7ff}
 
-main{
-  display:grid;grid-template-columns:360px 1fr;gap:14px;
-  max-width:1200px;margin:0 auto;padding:14px;
-}
+main{display:grid;grid-template-columns:360px 1fr;gap:14px;max-width:1200px;margin:0 auto;padding:14px}
 @media(max-width:960px){main{grid-template-columns:1fr}}
 
-.card{
-  background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
-  padding:14px 16px;animation:rise .35s ease both;
-}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;animation:rise .35s ease both}
 .card + .card{margin-top:13px}
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.card h2{
-  font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);
-  display:flex;align-items:center;gap:8px;margin-bottom:11px;font-weight:700;
-}
-.card h2 .num{
-  width:20px;height:20px;border-radius:6px;display:grid;place-items:center;
-  background:var(--panel2);border:1px solid var(--border);color:var(--accent);
-  font-size:11px;font-weight:800;letter-spacing:0;flex:none;
-}
+.card h2{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);display:flex;align-items:center;gap:8px;margin-bottom:11px;font-weight:700}
+.card h2 .num{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;background:var(--panel2);border:1px solid var(--border);color:var(--accent);font-size:11px;font-weight:800;letter-spacing:0;flex:none}
 .card h2 .spacer{flex:1}
 .hint{font-size:12.5px;color:var(--muted);line-height:1.5}
 .hint b{color:var(--text)}
@@ -123,25 +98,13 @@ main{
 .steps li::before{content:'→';color:var(--accent);font-weight:700;flex:none}
 .check{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin-top:10px;cursor:pointer;user-select:none}
 .check input{accent-color:var(--accent);width:15px;height:15px}
-.env-line{
-  margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px;
-  padding:7px 10px;border-radius:8px;background:var(--panel2);border:1px solid var(--border);
-  color:var(--muted);word-break:break-all;
-}
+.env-line{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px;padding:7px 10px;border-radius:8px;background:var(--panel2);border:1px solid var(--border);color:var(--muted);word-break:break-all}
 .env-line.bad{color:var(--err);border-color:rgba(255,93,93,.35)}
 
-.gate{
-  display:none;margin-bottom:10px;padding:10px 12px;border-radius:9px;
-  background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.35);
-  color:var(--warn);font-size:13px;font-weight:600;line-height:1.45;
-}
+.gate{display:none;margin-bottom:10px;padding:10px 12px;border-radius:9px;background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.35);color:var(--warn);font-size:13px;font-weight:600;line-height:1.45}
 .gate.show{display:block}
 
-.drop{
-  border:2px dashed var(--border);border-radius:11px;padding:16px 12px;
-  display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;
-  transition:.25s;cursor:pointer;background:var(--panel2);
-}
+.drop{border:2px dashed var(--border);border-radius:11px;padding:16px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;transition:.25s;cursor:pointer;background:var(--panel2)}
 .drop:hover,.drop.over{border-color:var(--accent);background:rgba(255,122,26,.06)}
 .drop svg{width:26px;height:26px;stroke:var(--accent);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .drop p{font-size:13px;font-weight:600}
@@ -155,65 +118,29 @@ main{
 
 .ctrl{margin-bottom:12px}
 .ctrl:last-child{margin-bottom:0}
-.ctrl label{
-  display:flex;justify-content:space-between;align-items:baseline;
-  font-size:12.5px;font-weight:600;margin-bottom:6px;color:#cfd7e4;
-}
-.ctrl label output{
-  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent2);
-  background:var(--panel2);padding:2px 7px;border-radius:5px;border:1px solid var(--border);
-}
-select{
-  width:100%;background:var(--panel2);color:var(--text);border:1px solid var(--border);
-  border-radius:8px;padding:8px 10px;font-size:13px;outline:none;transition:.2s;
-}
+.ctrl label{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;font-weight:600;margin-bottom:6px;color:#cfd7e4}
+.ctrl label output{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent2);background:var(--panel2);padding:2px 7px;border-radius:5px;border:1px solid var(--border)}
+select{width:100%;background:var(--panel2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;outline:none;transition:.2s}
 select:focus{border-color:var(--accent)}
-input[type=range]{
-  -webkit-appearance:none;width:100%;height:5px;border-radius:3px;
-  background:linear-gradient(to right,var(--accent) var(--fill,50%),#334055 var(--fill,50%));
-  outline:none;
-}
-input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;width:17px;height:17px;border-radius:50%;
-  background:#fff;border:3px solid var(--accent);box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:grab;
-}
+input[type=range]{-webkit-appearance:none;width:100%;height:5px;border-radius:3px;background:linear-gradient(to right,var(--accent) var(--fill,50%),#334055 var(--fill,50%));outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:#fff;border:3px solid var(--accent);box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:grab}
 input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:#fff;border:3px solid var(--accent);cursor:grab}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 
 .preview-col{display:flex;flex-direction:column;gap:13px}
 .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.dims{
-  font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);
-  background:var(--panel);border:1px solid var(--border);padding:8px 12px;border-radius:9px;flex:1;min-width:170px;
-}
+.dims{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);background:var(--panel);border:1px solid var(--border);padding:8px 12px;border-radius:9px;flex:1;min-width:170px}
 .dims b{color:var(--accent2)}
-.paper-zone{
-  border:1px solid var(--border);border-radius:var(--radius);
-  min-height:160px;display:flex;align-items:center;justify-content:center;
-  padding:14px;overflow:hidden;
-}
+.paper-zone{border:1px solid var(--border);border-radius:var(--radius);min-height:160px;display:flex;align-items:center;justify-content:center;padding:14px;overflow:hidden}
 .empty{text-align:center;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:9px;font-size:12.5px}
 .empty svg{width:40px;height:40px;stroke:#3d4a60;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;animation:float 3.4s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 .paper-scroll{max-height:min(58vh,520px);overflow-y:auto;max-width:100%;border-radius:4px}
-.paper{
-  background:#fff;padding:12px 12px 20px;border-radius:4px;width:fit-content;max-width:100%;
-  box-shadow:0 14px 36px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.4);
-  position:relative;animation:feedIn .45s cubic-bezier(.2,.9,.3,1.15);
-}
+.paper{background:#fff;padding:12px 12px 20px;border-radius:4px;width:fit-content;max-width:100%;box-shadow:0 14px 36px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.4);position:relative;animation:feedIn .45s cubic-bezier(.2,.9,.3,1.15)}
 @keyframes feedIn{from{opacity:0;transform:translateY(-16px) scale(.97)}to{opacity:1;transform:none}}
-.paper::after{
-  content:'';position:absolute;left:0;right:0;bottom:-9px;height:10px;
-  background:
-    linear-gradient(45deg,transparent 33%,#fff 33%,#fff 66%,transparent 66%) 0 0/14px 10px,
-    linear-gradient(-45deg,transparent 33%,#fff 33%,#fff 66%,transparent 66%) 7px 0/14px 10px;
-}
+.paper::after{content:'';position:absolute;left:0;right:0;bottom:-9px;height:10px;background:linear-gradient(45deg,transparent 33%,#fff 33%,#fff 66%,transparent 66%) 0 0/14px 10px,linear-gradient(-45deg,transparent 33%,#fff 33%,#fff 66%,transparent 66%) 7px 0/14px 10px}
 .paper canvas{display:block;max-width:100%;height:auto;image-rendering:pixelated}
-.paper-tag{
-  position:absolute;top:-10px;left:12px;background:var(--accent);color:#fff;
-  font-size:9.5px;font-weight:800;letter-spacing:1.1px;padding:2px 9px;border-radius:5px;
-  text-transform:uppercase;box-shadow:0 4px 10px rgba(255,122,26,.4);
-}
+.paper-tag{position:absolute;top:-10px;left:12px;background:var(--accent);color:#fff;font-size:9.5px;font-weight:800;letter-spacing:1.1px;padding:2px 9px;border-radius:5px;text-transform:uppercase;box-shadow:0 4px 10px rgba(255,122,26,.4)}
 
 .diag-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:4px}
 .diag-grid .btn{justify-content:center;font-size:12.5px;padding:10px 6px}
@@ -222,11 +149,7 @@ input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;bac
 .progress-wrap.show{display:block}
 .progress-top{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:5px}
 .progress{height:11px;background:var(--panel2);border:1px solid var(--border);border-radius:999px;overflow:hidden}
-.progress .bar{
-  height:100%;width:0%;border-radius:999px;transition:width .2s;
-  background:repeating-linear-gradient(45deg,var(--accent) 0 10px,var(--accent2) 10px 20px);
-  background-size:200% 100%;animation:stripes 1s linear infinite;
-}
+.progress .bar{height:100%;width:0%;border-radius:999px;transition:width .2s;background:repeating-linear-gradient(45deg,var(--accent) 0 10px,var(--accent2) 10px 20px);background-size:200% 100%;animation:stripes 1s linear infinite}
 @keyframes stripes{from{background-position:0 0}to{background-position:40px 0}}
 
 .print-row{display:flex;gap:9px}
@@ -235,10 +158,7 @@ input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;bac
 #cancelBtn.show{display:inline-flex}
 #estTime{font-size:11.5px;color:var(--muted);text-align:center;margin-top:7px;font-family:'JetBrains Mono',monospace}
 .ready-list{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px}
-.req{
-  font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:999px;border:1px solid var(--border);
-  color:var(--muted);background:var(--panel2);
-}
+.req{font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:999px;border:1px solid var(--border);color:var(--muted);background:var(--panel2)}
 .req.ok{color:var(--ok);border-color:rgba(61,220,132,.3);background:rgba(61,220,132,.06)}
 .req.bad{color:var(--err);border-color:rgba(255,93,93,.3);background:rgba(255,93,93,.06)}
 
@@ -252,15 +172,14 @@ input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;bac
 .faq ul{padding:2px 14px 11px 26px;font-size:12.5px;color:var(--muted);display:grid;gap:5px;line-height:1.45}
 .faq li b{color:var(--text)}
 
-.log{
-  background:#0a0d12;border:1px solid var(--border);border-radius:9px;
-  font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.65;
-  padding:10px 12px;max-height:170px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;
-}
+.log{background:#0a0d12;border:1px solid var(--border);border-radius:9px;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.65;padding:10px 12px;max-height:170px;overflow-y:auto;white-space:pre-wrap;word-break:break-all}
 .log .t{color:#4b5768}
 .log .ok{color:var(--ok)} .log .err{color:var(--err)} .log .warn{color:var(--warn)} .log .info{color:#a8b3c5}
 .log::-webkit-scrollbar{width:6px}
 .log::-webkit-scrollbar-thumb{background:#334055;border-radius:3px}
+
+#floatStop{position:fixed;right:14px;bottom:14px;z-index:95;display:none;padding:16px 24px;border-radius:16px;background:#d92d20;border:none;color:#fff;font-size:16px;font-weight:800;box-shadow:0 10px 30px rgba(217,45,32,.55)}
+#floatStop.show{display:block;animation:toastIn .3s}
 
 footer{text-align:center;color:#4b5768;font-size:11px;padding:18px;font-family:'JetBrains Mono',monospace}
 footer b{color:var(--muted)}
@@ -269,6 +188,7 @@ footer b{color:var(--muted)}
 <body>
 
 <div id="toastBox" aria-live="polite"></div>
+<button id="floatStop">⏹ СТОП — принтер отреагировал</button>
 
 <header>
   <div class="logo">
@@ -287,17 +207,20 @@ footer b{color:var(--muted)}
   </div>
 </header>
 
+<div id="stateBanner" class="info">Проверка окружения…</div>
+
 <main>
   <aside>
     <div class="card">
       <h2><span class="num">1</span> Подключение</h2>
       <ul class="steps">
-        <li>Зарядите принтер (минимум 50%), включите его</li>
+        <li>Зарядите и включите принтер, заправьте бумагу</li>
         <li>На Android включите <b>Bluetooth</b> и <b>геолокацию</b></li>
         <li>Сайт должен быть открыт по <b>https://</b> в <b>Chrome</b></li>
-        <li>Нажмите кнопку наверху и выберите принтер в списке</li>
+        <li>После подключения сайт <b>сам проверит все каналы</b> принтера — просто следите за бумагой</li>
       </ul>
       <label class="check"><input type="checkbox" id="chkAllDevices"> Показывать все Bluetooth-устройства</label>
+      <label class="check"><input type="checkbox" id="chkAutoSweep" checked> Автопроверка после подключения</label>
       <div class="env-line" id="envLine">Проверка окружения…</div>
     </div>
 
@@ -431,7 +354,7 @@ footer b{color:var(--muted)}
       <div class="toolbar">
         <div class="dims" id="dimsLabel">Загрузите фото — размер подстроится автоматически</div>
         <button class="btn small" id="downloadBtn" disabled title="Скачать ч/б превью">⬇ PNG</button>
-        <button class="btn small" id="testBtn" disabled>🧪 Тест-образец</button>
+        <button class="btn small" id="testBtn">🧪 Тест-образец</button>
       </div>
 
       <div class="paper-zone" id="paperZone" style="margin-top:12px">
@@ -453,7 +376,7 @@ footer b{color:var(--muted)}
       </div>
 
       <div class="print-row" style="margin-top:13px">
-        <button class="btn primary big" id="printBtn">
+        <button class="btn primary big not-ready" id="printBtn">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 8V3h10v5h3a1 1 0 0 1 1 1v7h-4v5H7v-5H3V9a1 1 0 0 1 1-1h3zm2-3v3h6V5H9zm0 11v4h6v-4H9z"/></svg>
           Распечатать
         </button>
@@ -469,17 +392,17 @@ footer b{color:var(--muted)}
     <div class="card">
       <h2><span class="num">✚</span> Диагностика принтера</h2>
 
-      <div class="gate" id="diagGate">⚠ Сначала подключите принтер — кнопка «Подключить принтер» наверху страницы.</div>
+      <div class="gate" id="diagGate">Принтер не подключён. Любая кнопка ниже сама запустит подключение.</div>
 
-      <button class="btn sweep wide" id="sweepBtn" disabled>🔁 Автоперебор: найти рабочую характеристику</button>
-      <p class="hint" style="margin-top:8px">Приложение по очереди шлёт тестовую команду в каждый канал принтера. <b>Следите за бумагой</b>: как только она поедет — жмите «Остановить перебор».</p>
+      <button class="btn sweep wide" id="sweepBtn">🔁 Автоперебор: найти рабочую характеристику</button>
+      <p class="hint" style="margin-top:8px">Приложение по очереди шлёт команду протяжки в каждый канал принтера. <b>Следите за бумагой</b>: как только она поедет — жмите большой красный <b>СТОП</b> внизу экрана.</p>
 
       <div class="diag-grid" style="margin-top:10px">
-        <button class="btn diagBtn" id="diagFeed" disabled>⏬ Протяжка</button>
-        <button class="btn diagBtn" id="diagText" disabled>🔤 Текст</button>
-        <button class="btn diagBtn" id="diagGs" disabled>⬛ Полоса GS v 0</button>
-        <button class="btn diagBtn" id="diagEsc" disabled>⬛ Полоса ESC *</button>
-        <button class="btn diagBtn" id="diagRaw" disabled>⬛ Полоса raw</button>
+        <button class="btn diagBtn" id="diagFeed">⏬ Протяжка</button>
+        <button class="btn diagBtn" id="diagText">🔤 Текст</button>
+        <button class="btn diagBtn" id="diagGs">⬛ Полоса GS v 0</button>
+        <button class="btn diagBtn" id="diagEsc">⬛ Полоса ESC *</button>
+        <button class="btn diagBtn" id="diagRaw">⬛ Полоса raw</button>
       </div>
       <div class="char-row">
         <select id="charSelect" disabled><option value="-1">Характеристика записи: не найдена</option></select>
@@ -489,11 +412,11 @@ footer b{color:var(--muted)}
       <details class="faq">
         <summary>Частые проблемы</summary>
         <ul>
-          <li><b>Принтер молчит после подключения</b> — запустите «Автоперебор», затем «Протяжку» на найденной характеристике.</li>
+          <li><b>Принтер молчит после подключения</b> — дождитесь конца автоперебора или запустите его вручную.</li>
           <li><b>Печатает пустую ленту</b> — смените протокол (ESC * или raw), попробуйте «Инвертировать точки».</li>
           <li><b>Обрезает правый край</b> — поставьте ширину 320 px вместо 384.</li>
           <li><b>Печатает только начало картинки</b> — уменьшите пакет до 20 байт, задержку поставьте 60–100 мс.</li>
-          <li><b>Бледная печать</b> — добавьте контраст и уменьшите порог яркости.</li>
+          <li><b>Ничего не помогает</b> — скопируйте журнал и пришлите его: по списку сервисов станет понятен протокол.</li>
         </ul>
       </details>
     </div>
@@ -502,7 +425,7 @@ footer b{color:var(--muted)}
       <h2><span class="num">≡</span> Журнал <span class="spacer"></span>
         <button class="btn small" id="copyLogBtn">📋 Копировать</button>
       </h2>
-      <p class="hint" style="margin-bottom:8px">Если принтер не ожил — скопируйте журнал и пришлите его: по списку сервисов станет понятен протокол вашего MX10.</p>
+      <p class="hint" style="margin-bottom:8px">Если принтер не ожил — скопируйте журнал и пришлите его. Здесь видны все ошибки.</p>
       <div class="log" id="logBox"><div><span class="t">[--:--:--]</span> <span class="info">Готов к работе.</span></div></div>
     </div>
   </section>
@@ -512,9 +435,24 @@ footer b{color:var(--muted)}
 
 <script>
 'use strict';
+/* ---------- видимые ошибки скрипта ---------- */
+window.addEventListener('error', function(e){
+  try{
+    var b=document.getElementById('toastBox');
+    if(b){ var t=document.createElement('div'); t.className='toast err'; t.textContent='Ошибка скрипта: '+e.message; b.appendChild(t); setTimeout(function(){t.remove();},10000); }
+  }catch(x){}
+});
+window.addEventListener('unhandledrejection', function(e){
+  var m = (e.reason && (e.reason.message || e.reason)) || 'неизвестная ошибка';
+  try{
+    var b=document.getElementById('toastBox');
+    if(b){ var t=document.createElement('div'); t.className='toast err'; t.textContent='Ошибка: '+m; b.appendChild(t); setTimeout(function(){t.remove();},10000); }
+  }catch(x){}
+});
+
 const S = {
   device:null, server:null, char:null, candidates:[], printing:false, sweeping:false, cancel:false,
-  src:null, srcName:'', out:null, lastThumbUrl:null
+  src:null, srcName:'', out:null, lastThumbUrl:null, connectAttempts:0
 };
 const settings = {
   protocol:'gs', paperWidth:384, scale:100, copies:1, brightness:0, contrast:0,
@@ -522,31 +460,32 @@ const settings = {
   sliceH:200, chunk:100, delay:40, pauseBlocks:120, initPause:300, writeMode:'auto'
 };
 
-const LS_SETTINGS = 'mx10-settings-v2';
-const LS_ALLDEV = 'mx10-alldevices';
-const LS_PRINTS = 'mx10-prints';
+const LS_SETTINGS='mx10-settings-v2', LS_ALLDEV='mx10-alldevices', LS_PRINTS='mx10-prints', LS_AUTOSWEEP='mx10-autosweep';
 
 const KNOWN_SERVICES = [
   '0000ae30-0000-1000-8000-00805f9b34fb',
   '0000ff00-0000-1000-8000-00805f9b34fb',
   '0000ffe0-0000-1000-8000-00805f9b34fb',
+  '0000ffe5-0000-1000-8000-00805f9b34fb',
   '0000fff0-0000-1000-8000-00805f9b34fb',
+  '0000fff5-0000-1000-8000-00805f9b34fb',
+  '0000ffd0-0000-1000-8000-00805f9b34fb',
+  '0000ffb0-0000-1000-8000-00805f9b34fb',
+  '0000ff10-0000-1000-8000-00805f9b34fb',
   '000018f0-0000-1000-8000-00805f9b34fb',
+  '00001802-0000-1000-8000-00805f9b34fb',
   '49535343-8841-43f4-a8d4-ecbe34729bb3',
+  '49535343-fe7d-4ae5-8fa9-9fafd205e455',
   'e7810a71-73ae-499d-8c15-faa9aef0c3f2',
-  '0000aa00-0000-1000-8000-00805f9b34fb'
+  '0000aa00-0000-1000-8000-00805f9b34fb',
+  '0000ae00-0000-1000-8000-00805f9b34fb'
 ];
 
 const $ = id => document.getElementById(id);
 const sleep = ms => new Promise(r=>setTimeout(r,ms));
 
-try{
-  const saved = JSON.parse(localStorage.getItem(LS_SETTINGS) || '{}');
-  Object.assign(settings, saved);
-}catch(e){}
-function saveSettings(){
-  try{ localStorage.setItem(LS_SETTINGS, JSON.stringify(settings)); }catch(e){}
-}
+try{ Object.assign(settings, JSON.parse(localStorage.getItem(LS_SETTINGS)||'{}')); }catch(e){}
+function saveSettings(){ try{ localStorage.setItem(LS_SETTINGS, JSON.stringify(settings)); }catch(e){} }
 
 function showToast(msg, type='warn', ttl=6500){
   const box = $('toastBox');
@@ -580,7 +519,7 @@ $('copyLogBtn').addEventListener('click', async ()=>{
 });
 
 let printCount = 0;
-try{ printCount = parseInt(localStorage.getItem(LS_PRINTS) || '0', 10) || 0; }catch(e){}
+try{ printCount = parseInt(localStorage.getItem(LS_PRINTS)||'0',10)||0; }catch(e){}
 function bumpPrintCount(){
   printCount++;
   try{ localStorage.setItem(LS_PRINTS, String(printCount)); }catch(e){}
@@ -597,8 +536,7 @@ $('printCount').textContent = printCount;
     el.classList.add('bad');
     const why = !bt ? 'Браузер не поддерживает Web Bluetooth. Нужен Chrome на Android.'
                     : 'Страница открыта не по HTTPS. Нужен адрес https:// или локальный сервер.';
-    showToast(why + ' Кнопка подключения не сработает.', 'err', 10000);
-    log(why,'err');
+    showToast(why,'err',10000); log(why,'err');
   } else el.textContent += ' · готово';
 })();
 
@@ -608,9 +546,24 @@ function setStatus(mode, text){
 }
 function setConnectLabel(txt){ $('connectLabel').textContent = txt; }
 
+function refreshBanner(){
+  const el = $('stateBanner');
+  let txt='Проверка…', mode='info';
+  if(!('bluetooth' in navigator)){ txt='✗ Web Bluetooth недоступен — откройте сайт в Chrome на Android'; mode='err'; }
+  else if(!window.isSecureContext){ txt='✗ Нужен HTTPS — откройте сайт по защищённому адресу'; mode='err'; }
+  else if(S.sweeping){ txt='🔁 Автопроверка каналов: следите за бумагой. Когда поедет — жмите красный СТОП'; mode='warn'; }
+  else if(S.printing){ txt='⏳ Идёт передача данных на принтер…'; mode='warn'; }
+  else if(!S.char){ txt='Шаг 1: нажмите «Подключить принтер» (кнопка наверху)'; mode='info'; }
+  else if(!S.out){ txt='✔ Принтер подключён. Шаг 2: загрузите фото'; mode='ok'; }
+  else { txt='✔ Всё готово — нажимайте «Распечатать»'; mode='ok'; }
+  el.textContent = txt;
+  el.className = mode;
+}
+
 /* ================= подключение ================= */
-$('connectBtn').addEventListener('click', async ()=>{
+async function requestConnect(){
   const btn = $('connectBtn');
+  if(btn.disabled) return;
   if(!('bluetooth' in navigator)){
     showToast('Web Bluetooth недоступен. Откройте сайт в Chrome на Android.','err',9000);
     return;
@@ -621,6 +574,7 @@ $('connectBtn').addEventListener('click', async ()=>{
   }
   btn.disabled = true;
   setConnectLabel('Поиск…');
+  S.connectAttempts++;
   try{
     if(S.device && !S.device.gatt.connected){
       log('Переподключение к «'+S.device.name+'»…');
@@ -656,7 +610,13 @@ $('connectBtn').addEventListener('click', async ()=>{
   }catch(err){
     let msg = err.message || String(err);
     if(err.name === 'NotFoundError'){
-      msg = 'Принтер не найден или окно закрыто. Включите MX10, поднесите ближе к телефону, проверьте геолокацию на Android.';
+      if(S.connectAttempts > 1 && !$('chkAllDevices').checked){
+        $('chkAllDevices').checked = true;
+        try{ localStorage.setItem(LS_ALLDEV,'1'); }catch(e){}
+        msg = 'Принтер не найден. Я включил «Показывать все устройства» — нажмите «Подключить» ещё раз.';
+      } else {
+        msg = 'Принтер не найден или окно закрыто. Включите MX10, поднесите ближе, проверьте геолокацию на Android.';
+      }
       showToast(msg,'warn',9000); log(msg,'warn');
     } else if(err.name === 'SecurityError'){
       msg = 'Bluetooth заблокирован: откройте сайт по HTTPS.';
@@ -673,7 +633,8 @@ $('connectBtn').addEventListener('click', async ()=>{
     if(!S.char) setConnectLabel('Подключить принтер');
     updateButtons();
   }
-});
+}
+$('connectBtn').addEventListener('click', requestConnect);
 
 let notifyCount = 0;
 async function trySubscribe(ch){
@@ -687,19 +648,22 @@ async function trySubscribe(ch){
       const hex = [...bytes].slice(0,20).map(b=>b.toString(16).padStart(2,'0')).join(' ');
       log('← принтер прислал: '+hex,'ok');
     });
-  }catch(e){ /* не критично */ }
+  }catch(e){}
 }
 
 async function discoverServices(){
   S.candidates = [];
   notifyCount = 0;
+  await sleep(250);
   let services = [];
   try{ services = await S.server.getPrimaryServices(); }
   catch(e){ log('Не удалось получить сервисы: '+e.message,'err'); }
-  log('Найдено сервисов: '+services.length);
   if(!services.length){
-    showToast('Сервисы не найдены. Поставьте «Показывать все Bluetooth-устройства» и подключитесь заново.','warn',9000);
+    log('Сервисов 0 — пробую ещё раз…','warn');
+    await sleep(800);
+    try{ services = await S.server.getPrimaryServices(); }catch(e){}
   }
+  log('Найдено сервисов: '+services.length);
   for(const svc of services){
     log('Сервис: '+svc.uuid);
     let chars = [];
@@ -712,7 +676,7 @@ async function discoverServices(){
     }
   }
   if(!S.candidates.length){
-    const m = 'Не найдена характеристика записи. Скопируйте журнал и пришлите его: по списку сервисов станет понятен протокол принтера.';
+    const m = 'Не найдена характеристика записи. Скопируйте журнал и пришлите его — по списку сервисов станет понятен протокол.';
     showToast(m,'err',10000); log(m,'err');
     setStatus('','Не подключено');
     return;
@@ -724,9 +688,13 @@ async function discoverServices(){
   $('charSelect').value = '0';
   setStatus('connected', (S.device.name||'Принтер') + ' подключён');
   setConnectLabel((S.device.name||'Принтер'));
-  showToast('Принтер подключён ✔ Найдено каналов записи: '+S.candidates.length+'. Можно печатать.','ok',9000);
-  log('Готово. Каналов записи: '+S.candidates.length+'. Если принтер молчит — запустите автоперебор.','ok');
+  showToast('Принтер подключён ✔ Найдено каналов записи: '+S.candidates.length,'ok',6000);
+  log('Готово. Каналов записи: '+S.candidates.length+'.','ok');
   updateButtons();
+  if($('chkAutoSweep').checked && !S.sweeping && !S.printing){
+    showToast('Автопроверка: сайт сам пошлёт тест в каждый канал. Следите за бумагой!','warn',8000);
+    setTimeout(()=>{ if(S.char && !S.sweeping && !S.printing) startSweep(); }, 700);
+  }
 }
 
 function fillCharSelect(){
@@ -750,12 +718,25 @@ $('charSelect').addEventListener('change', e=>{
     log('Выбрана характеристика #'+idx+'.','warn');
   }
 });
-
 $('rescanBtn').addEventListener('click', async ()=>{
   if(!S.server) return;
   $('rescanBtn').disabled = true;
   try{ await discoverServices(); }finally{ $('rescanBtn').disabled = false; updateButtons(); }
 });
+
+/* ================= стоп ================= */
+function stopEverything(){
+  S.cancel = true;
+  if(S.sweeping){
+    S.sweeping = false;
+    $('sweepBtn').textContent = '🔁 Автоперебор: найти рабочую характеристику';
+  }
+  showToast('Остановлено. Активный канал остался выбранным — попробуйте печать.','warn',6000);
+  log('Остановлено пользователем.','warn');
+  updateButtons();
+}
+$('floatStop').addEventListener('click', stopEverything);
+$('cancelBtn').addEventListener('click', stopEverything);
 
 /* ================= автоперебор ================= */
 function buildProbe(){
@@ -766,21 +747,17 @@ function buildProbe(){
   return new Uint8Array(arr);
 }
 $('sweepBtn').addEventListener('click', ()=>{
-  if(S.sweeping){
-    S.sweeping = false;
-    $('sweepBtn').textContent = '🔁 Автоперебор: найти рабочую характеристику';
-    return;
-  }
+  if(S.sweeping){ stopEverything(); return; }
+  if(!S.char){ showToast('Сначала подключу принтер…','warn'); requestConnect(); return; }
   startSweep();
 });
 async function startSweep(){
   if(!S.char || !S.candidates.length){ showToast('Нет подключения к принтеру.','err'); return; }
   if(S.printing){ showToast('Идёт передача.','warn'); return; }
-  S.sweeping = true;
+  S.sweeping = true; S.cancel = false;
   $('sweepBtn').textContent = '⏹ Остановить перебор';
   updateButtons();
   log('Запуск перебора характеристик…','warn');
-  showToast('Следите за принтером: он должен протянуть бумагу или напечатать текст. Когда это случится — жмите «Остановить перебор».','warn',9000);
   const probe = buildProbe();
   for(let i=0; i<S.candidates.length && S.sweeping; i++){
     const c = S.candidates[i];
@@ -798,14 +775,23 @@ async function startSweep(){
     }catch(err){ log('Запись не удалась: '+err.message,'err'); }
     await sleep(3000);
   }
-  S.sweeping = false;
-  $('sweepBtn').textContent = '🔁 Автоперебор: найти рабочую характеристику';
-  if(S.char){
-    const idx = S.candidates.indexOf(S.char);
-    log('Перебор завершён. Активная характеристика: #'+idx+'. Если бумага двигалась — можно печатать.','warn');
-    showToast('Если принтер не отреагировал — скопируйте журнал («Копировать») и пришлите список сервисов.','warn',12000);
+  if(S.sweeping){
+    S.sweeping = false;
+    $('sweepBtn').textContent = '🔁 Автоперебор: найти рабочую характеристику';
+    if(S.char){
+      const idx = S.candidates.indexOf(S.char);
+      log('Перебор завершён. Активная характеристика: #'+idx+'.','warn');
+      showToast('Перебор завершён. Если бумага не двигалась — скопируйте журнал и пришлите список сервисов.','warn',12000);
+    }
   }
   updateButtons();
+}
+
+/* общий сторож: если нет подключения — запускаем его */
+function guardConnected(action){
+  if(S.printing || S.sweeping){ showToast('Идёт операция. Нажмите СТОП, если нужно прервать.','warn'); return; }
+  if(!S.char){ showToast('Принтер не подключён — открываю поиск…','warn',4000); requestConnect(); return; }
+  action();
 }
 
 /* ================= изображение ================= */
@@ -1095,47 +1081,38 @@ async function printBits(tw, th, bits, label, forceProtocol){
   return true;
 }
 
-/* Кнопка печати всегда активна — сама объясняет, чего не хватает */
 $('printBtn').addEventListener('click', ()=>{
-  if(S.printing || S.sweeping){ showToast('Подождите: идёт передача данных.','warn'); return; }
-  if(!S.char){
-    showToast('Сначала подключите принтер — кнопка «Подключить принтер» наверху страницы.','warn',8000);
-    return;
-  }
-  if(!S.candidates.length){
-    showToast('Нет канала записи: запустите «Автоперебор» в диагностике или пришлите журнал.','warn',8000);
-    return;
-  }
-  if(!S.out){
-    showToast('Сначала загрузите фото (шаг 2 слева).','warn',8000);
-    return;
-  }
+  if(S.printing || S.sweeping){ showToast('Идёт операция. Нажмите СТОП, если нужно прервать.','warn'); return; }
+  if(!S.char){ showToast('Принтер не подключён — открываю поиск…','warn',4000); requestConnect(); return; }
+  if(!S.candidates.length){ showToast('Нет канала записи: запустите «Автоперебор» или пришлите журнал.','warn',8000); return; }
+  if(!S.out){ showToast('Сначала загрузите фото (шаг 2 слева).','warn',8000); return; }
   printBits(S.out.tw, S.out.th, S.out.bits, `фото ${S.out.tw}×${S.out.th}`);
 });
-$('cancelBtn').addEventListener('click', ()=>{ S.cancel = true; });
 
-$('testBtn').addEventListener('click', async ()=>{
-  const tw = Math.round(settings.paperWidth/8)*8;
-  const th = 160;
-  const cv = document.createElement('canvas'); cv.width=tw; cv.height=th;
-  const cx = cv.getContext('2d');
-  cx.fillStyle='#fff'; cx.fillRect(0,0,tw,th);
-  cx.strokeStyle='#000'; cx.lineWidth=4; cx.strokeRect(4,4,tw-8,th-8);
-  cx.fillStyle='#000'; cx.textAlign='center';
-  cx.font='800 44px Manrope, sans-serif'; cx.fillText('MX10', tw/2, 60);
-  cx.font='600 18px Manrope, sans-serif'; cx.fillText('TEST PRINT · 203 DPI', tw/2, 88);
-  for(let x=16;x<tw-16;x+=2){
-    cx.fillStyle = ((x>>1)&1) ? '#000' : '#fff';
-    cx.fillRect(x,102,2,14);
-  }
-  const grd = cx.createLinearGradient(16,0,tw-16,0);
-  grd.addColorStop(0,'#000'); grd.addColorStop(1,'#fff');
-  cx.fillStyle = grd; cx.fillRect(16,126,tw-32,20);
-  const data = cv.getImageData(0,0,tw,th).data;
-  const g = new Float32Array(tw*th);
-  for(let i=0;i<g.length;i++){ const d=i*4; g[i]=0.299*data[d]+0.587*data[d+1]+0.114*data[d+2]; }
-  const bits = applyDither(g, tw, th, 'threshold', 128);
-  await printBits(tw, th, bits, 'тестовый образец');
+$('testBtn').addEventListener('click', ()=>{
+  guardConnected(async ()=>{
+    const tw = Math.round(settings.paperWidth/8)*8;
+    const th = 160;
+    const cv = document.createElement('canvas'); cv.width=tw; cv.height=th;
+    const cx = cv.getContext('2d');
+    cx.fillStyle='#fff'; cx.fillRect(0,0,tw,th);
+    cx.strokeStyle='#000'; cx.lineWidth=4; cx.strokeRect(4,4,tw-8,th-8);
+    cx.fillStyle='#000'; cx.textAlign='center';
+    cx.font='800 44px Manrope, sans-serif'; cx.fillText('MX10', tw/2, 60);
+    cx.font='600 18px Manrope, sans-serif'; cx.fillText('TEST PRINT · 203 DPI', tw/2, 88);
+    for(let x=16;x<tw-16;x+=2){
+      cx.fillStyle = ((x>>1)&1) ? '#000' : '#fff';
+      cx.fillRect(x,102,2,14);
+    }
+    const grd = cx.createLinearGradient(16,0,tw-16,0);
+    grd.addColorStop(0,'#000'); grd.addColorStop(1,'#fff');
+    cx.fillStyle = grd; cx.fillRect(16,126,tw-32,20);
+    const data = cv.getImageData(0,0,tw,th).data;
+    const g = new Float32Array(tw*th);
+    for(let i=0;i<g.length;i++){ const d=i*4; g[i]=0.299*data[d]+0.587*data[d+1]+0.114*data[d+2]; }
+    const bits = applyDither(g, tw, th, 'threshold', 128);
+    await printBits(tw, th, bits, 'тестовый образец');
+  });
 });
 
 $('downloadBtn').addEventListener('click', ()=>{
@@ -1148,17 +1125,19 @@ $('downloadBtn').addEventListener('click', ()=>{
 
 /* ================= диагностика ================= */
 $('diagFeed').addEventListener('click', ()=>{
-  runJob([{ data:new Uint8Array([0x1B,0x40, 0x1B,0x4A,0x5A, 0x0A,0x0A,0x0A, 0x0C]) }], 'протяжка бумаги');
+  guardConnected(()=>runJob([{ data:new Uint8Array([0x1B,0x40, 0x1B,0x4A,0x5A, 0x0A,0x0A,0x0A, 0x0C]) }], 'протяжка бумаги'));
 });
 $('diagText').addEventListener('click', ()=>{
-  const text = 'MX10 TEST *** PRINT OK *** 1234567890';
-  const bytes = new Uint8Array(text.length + 3);
-  for(let i=0;i<text.length;i++) bytes[i] = text.charCodeAt(i);
-  bytes[text.length]=0x0A; bytes[text.length+1]=0x0A; bytes[text.length+2]=0x0A;
-  runJob([
-    { data:new Uint8Array([0x1B,0x40, 0x1B,0x61,0x00]), init:true },
-    { data:bytes }
-  ], 'текстовый тест');
+  guardConnected(()=>{
+    const text = 'MX10 TEST *** PRINT OK *** 1234567890';
+    const bytes = new Uint8Array(text.length + 3);
+    for(let i=0;i<text.length;i++) bytes[i] = text.charCodeAt(i);
+    bytes[text.length]=0x0A; bytes[text.length+1]=0x0A; bytes[text.length+2]=0x0A;
+    runJob([
+      { data:new Uint8Array([0x1B,0x40, 0x1B,0x61,0x00]), init:true },
+      { data:bytes }
+    ], 'текстовый тест');
+  });
 });
 function stripBits(tw, h){
   const bits = new Uint8Array(tw*h);
@@ -1168,16 +1147,22 @@ function stripBits(tw, h){
   return bits;
 }
 $('diagGs').addEventListener('click', ()=>{
-  const tw = Math.round(settings.paperWidth/8)*8;
-  printBits(tw, 32, stripBits(tw,32), 'полоса GS v 0', 'gs');
+  guardConnected(()=>{
+    const tw = Math.round(settings.paperWidth/8)*8;
+    printBits(tw, 32, stripBits(tw,32), 'полоса GS v 0', 'gs');
+  });
 });
 $('diagEsc').addEventListener('click', ()=>{
-  const tw = Math.round(settings.paperWidth/8)*8;
-  printBits(tw, 32, stripBits(tw,32), 'полоса ESC *', 'esc_star');
+  guardConnected(()=>{
+    const tw = Math.round(settings.paperWidth/8)*8;
+    printBits(tw, 32, stripBits(tw,32), 'полоса ESC *', 'esc_star');
+  });
 });
 $('diagRaw').addEventListener('click', ()=>{
-  const tw = Math.round(settings.paperWidth/8)*8;
-  printBits(tw, 32, stripBits(tw,32), 'полоса raw', 'raw');
+  guardConnected(()=>{
+    const tw = Math.round(settings.paperWidth/8)*8;
+    printBits(tw, 32, stripBits(tw,32), 'полоса raw', 'raw');
+  });
 });
 
 /* ================= контролы ================= */
@@ -1215,7 +1200,10 @@ $('pauseRange').value = settings.pauseBlocks;
 $('initRange').value = settings.initPause;
 $('invertChk').checked = !!settings.invert;
 $('invertDotsChk').checked = !!settings.invertDots;
-try{ $('chkAllDevices').checked = localStorage.getItem(LS_ALLDEV) === '1'; }catch(e){}
+try{
+  $('chkAllDevices').checked = localStorage.getItem(LS_ALLDEV) === '1';
+  $('chkAutoSweep').checked = localStorage.getItem(LS_AUTOSWEEP) !== '0';
+}catch(e){}
 
 bindRange('scaleRange','scaleOut','scale', v=>v+'%');
 bindRange('brightRange','brightOut','brightness');
@@ -1238,6 +1226,9 @@ $('chkAllDevices').addEventListener('change', e=>{
   try{ localStorage.setItem(LS_ALLDEV, e.target.checked?'1':'0'); }catch(err){}
   showToast('Применится при следующем подключении.','warn',3500);
 });
+$('chkAutoSweep').addEventListener('change', e=>{
+  try{ localStorage.setItem(LS_AUTOSWEEP, e.target.checked?'1':'0'); }catch(err){}
+});
 
 window.addEventListener('beforeunload', e=>{
   if(S.printing || S.sweeping){ e.preventDefault(); e.returnValue=''; }
@@ -1252,23 +1243,21 @@ function updateButtons(){
   const busy = S.printing || S.sweeping;
   const connected = !!S.char;
   $('diagGate').classList.toggle('show', !connected && !busy);
-
-  /* кнопка печати не блокируется — она сама подсказывает, чего не хватает */
+  $('diagGate').textContent = connected ? '' : 'Принтер не подключён. Любая кнопка ниже сама запустит подключение.';
   const ready = !!S.out && connected && !busy;
   $('printBtn').classList.toggle('not-ready', !ready);
   setReq($('reqConn'), connected, 'принтер подключён', 'принтер не подключён');
   setReq($('reqPhoto'), !!S.out, 'фото готово', 'фото не загружено');
-
-  $('testBtn').disabled = !connected || busy;
+  $('testBtn').disabled = busy;
   $('downloadBtn').disabled = !S.out;
-  document.querySelectorAll('.diagBtn').forEach(b=>b.disabled = !connected || busy);
-  $('sweepBtn').disabled = !connected || busy || !S.candidates.length;
+  document.querySelectorAll('.diagBtn').forEach(b=>b.disabled = busy);
+  $('sweepBtn').disabled = busy;
   $('rescanBtn').disabled = !S.server || busy;
   $('charSelect').disabled = !connected;
-  if(S.out && !connected && !busy)
-    $('estTime').textContent = 'Фото готово — осталось подключить принтер';
+  $('floatStop').classList.toggle('show', busy);
+  refreshBanner();
 }
 updateButtons();
 </script>
 </body>
-  </html>
+</html>
