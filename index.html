@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0e1116">
 <title>MX10 Print — Bluetooth мини-принтер</title>
 <style>
 @font-face{font-family:'Manrope';font-style:normal;font-weight:400;src:url('https://cdn.jsdelivr.net/npm/@fontsource/manrope@5.0.8/files/manrope-cyrillic-400-normal.woff2') format('woff2');font-display:swap}
@@ -28,7 +29,6 @@ body{
 button{font-family:inherit;cursor:pointer}
 input,select{font-family:inherit}
 
-/* ---------- toasts ---------- */
 #toastBox{
   position:fixed;top:10px;left:50%;transform:translateX(-50%);
   z-index:100;display:flex;flex-direction:column;gap:8px;width:min(94vw,560px);
@@ -45,7 +45,6 @@ input,select{font-family:inherit}
 .toast.hide{opacity:0;transform:translateY(-8px);transition:.3s}
 @keyframes toastIn{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
 
-/* ---------- header ---------- */
 header{
   display:flex;align-items:center;gap:11px;flex-wrap:wrap;
   padding:11px 16px;border-bottom:1px solid var(--border);
@@ -65,16 +64,16 @@ header{
 .pill{
   display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;
   padding:7px 12px;border-radius:999px;border:1px solid var(--border);
-  background:var(--panel);color:var(--muted);transition:.3s;
+  background:var(--panel);color:var(--muted);transition:.3s;max-width:60vw;
 }
 .pill .dot{width:8px;height:8px;border-radius:50%;background:#5a6472;flex:none;transition:.3s}
+.pill span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pill.connected{color:var(--ok);border-color:rgba(61,220,132,.35)}
 .pill.connected .dot{background:var(--ok);animation:pulse 1.6s infinite}
 .pill.connecting{color:var(--warn);border-color:rgba(255,209,102,.35)}
 .pill.connecting .dot{background:var(--warn);animation:pulse .9s infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.25)}50%{box-shadow:0 0 0 5px rgba(255,255,255,0)}}
 
-/* ---------- buttons ---------- */
 .btn{
   border:1px solid var(--border);background:var(--panel2);color:var(--text);
   padding:9px 14px;border-radius:9px;font-size:13.5px;font-weight:600;
@@ -91,8 +90,9 @@ header{
 .btn.big{padding:14px 18px;font-size:16px;border-radius:12px;justify-content:center;width:100%}
 .btn.big svg{width:20px;height:20px}
 .btn.small{padding:7px 11px;font-size:12.5px}
+.btn.wide{width:100%;justify-content:center;margin-top:4px}
+.btn.sweep{background:#173042;border-color:#28536e;color:#9fd7ff}
 
-/* ---------- layout ---------- */
 main{
   display:grid;grid-template-columns:360px 1fr;gap:14px;
   max-width:1200px;margin:0 auto;padding:14px;
@@ -112,8 +112,9 @@ main{
 .card h2 .num{
   width:20px;height:20px;border-radius:6px;display:grid;place-items:center;
   background:var(--panel2);border:1px solid var(--border);color:var(--accent);
-  font-size:11px;font-weight:800;letter-spacing:0;
+  font-size:11px;font-weight:800;letter-spacing:0;flex:none;
 }
+.card h2 .spacer{flex:1}
 .hint{font-size:12.5px;color:var(--muted);line-height:1.5}
 .hint b{color:var(--text)}
 .steps{list-style:none;margin-top:2px;display:grid;gap:6px}
@@ -128,7 +129,13 @@ main{
 }
 .env-line.bad{color:var(--err);border-color:rgba(255,93,93,.35)}
 
-/* ---------- dropzone ---------- */
+.gate{
+  display:none;margin-bottom:10px;padding:10px 12px;border-radius:9px;
+  background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.35);
+  color:var(--warn);font-size:13px;font-weight:600;line-height:1.45;
+}
+.gate.show{display:block}
+
 .drop{
   border:2px dashed var(--border);border-radius:11px;padding:16px 12px;
   display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;
@@ -145,7 +152,6 @@ main{
 .file-row .fi b{font-size:12.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .file-row .fi span{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
 
-/* ---------- controls ---------- */
 .ctrl{margin-bottom:12px}
 .ctrl:last-child{margin-bottom:0}
 .ctrl label{
@@ -173,12 +179,11 @@ input[type=range]::-webkit-slider-thumb{
 input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:#fff;border:3px solid var(--accent);cursor:grab}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 
-/* ---------- preview ---------- */
 .preview-col{display:flex;flex-direction:column;gap:13px}
 .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .dims{
   font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);
-  background:var(--panel);border:1px solid var(--border);padding:8px 12px;border-radius:9px;flex:1;min-width:180px;
+  background:var(--panel);border:1px solid var(--border);padding:8px 12px;border-radius:9px;flex:1;min-width:170px;
 }
 .dims b{color:var(--accent2)}
 .paper-zone{
@@ -209,7 +214,7 @@ input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;bac
   text-transform:uppercase;box-shadow:0 4px 10px rgba(255,122,26,.4);
 }
 
-.diag-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:4px}
+.diag-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:4px}
 .diag-grid .btn{justify-content:center;font-size:12.5px;padding:10px 6px}
 
 .progress-wrap{display:none}
@@ -232,10 +237,17 @@ input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;bac
 .char-row{display:flex;gap:8px;margin-top:9px}
 .char-row select{flex:1}
 
+.faq{margin-top:10px;border:1px solid var(--border);border-radius:9px;background:var(--panel2)}
+.faq summary{padding:9px 12px;font-size:12.5px;font-weight:700;cursor:pointer;color:#cfd7e4;list-style:none}
+.faq summary::before{content:'▸ ';color:var(--accent)}
+.faq[open] summary::before{content:'▾ '}
+.faq ul{padding:2px 14px 11px 26px;font-size:12.5px;color:var(--muted);display:grid;gap:5px;line-height:1.45}
+.faq li b{color:var(--text)}
+
 .log{
   background:#0a0d12;border:1px solid var(--border);border-radius:9px;
   font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.65;
-  padding:10px 12px;max-height:150px;overflow-y:auto;
+  padding:10px 12px;max-height:170px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;
 }
 .log .t{color:#4b5768}
 .log .ok{color:var(--ok)} .log .err{color:var(--err)} .log .warn{color:var(--warn)} .log .info{color:#a8b3c5}
@@ -243,11 +255,12 @@ input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;bac
 .log::-webkit-scrollbar-thumb{background:#334055;border-radius:3px}
 
 footer{text-align:center;color:#4b5768;font-size:11px;padding:18px;font-family:'JetBrains Mono',monospace}
+footer b{color:var(--muted)}
 </style>
 </head>
 <body>
 
-<div id="toastBox"></div>
+<div id="toastBox" aria-live="polite"></div>
 
 <header>
   <div class="logo">
@@ -271,8 +284,8 @@ footer{text-align:center;color:#4b5768;font-size:11px;padding:18px;font-family:'
     <div class="card">
       <h2><span class="num">1</span> Подключение</h2>
       <ul class="steps">
-        <li>Включите принтер <b>MX10</b>, заправьте бумагу</li>
-        <li>На Android включите <b>Bluetooth</b> и <b>геолокацию</b> (без неё поиск не работает)</li>
+        <li>Зарядите принтер (минимум 50%), включите его</li>
+        <li>На Android включите <b>Bluetooth</b> и <b>геолокацию</b></li>
         <li>Сайт должен быть открыт по <b>https://</b> в <b>Chrome</b></li>
         <li>Нажмите кнопку наверху и выберите принтер в списке</li>
       </ul>
@@ -320,9 +333,19 @@ footer{text-align:center;color:#4b5768;font-size:11px;padding:18px;font-family:'
         </select>
       </div>
 
-      <div class="ctrl">
-        <label>Масштаб фото <output id="scaleOut">100%</output></label>
-        <input type="range" id="scaleRange" min="30" max="100" value="100">
+      <div class="grid2">
+        <div class="ctrl">
+          <label>Масштаб <output id="scaleOut">100%</output></label>
+          <input type="range" id="scaleRange" min="30" max="100" value="100">
+        </div>
+        <div class="ctrl">
+          <label>Копии</label>
+          <select id="copiesSel">
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
       </div>
 
       <div class="grid2">
@@ -399,6 +422,7 @@ footer{text-align:center;color:#4b5768;font-size:11px;padding:18px;font-family:'
 
       <div class="toolbar">
         <div class="dims" id="dimsLabel">Загрузите фото — размер подстроится автоматически</div>
+        <button class="btn small" id="downloadBtn" disabled title="Скачать ч/б превью">⬇ PNG</button>
         <button class="btn small" id="testBtn" disabled>🧪 Тест-образец</button>
       </div>
 
@@ -432,8 +456,13 @@ footer{text-align:center;color:#4b5768;font-size:11px;padding:18px;font-family:'
 
     <div class="card">
       <h2><span class="num">✚</span> Диагностика принтера</h2>
-      <p class="hint"><b>1)</b> Протяжка — есть ли связь. <b>2)</b> Текст — понимает ли принтер команды. <b>3)</b> Полосы — какой формат изображения работает. Если что-то сработало, а фото нет — смените протокол в настройках.</p>
-      <div class="diag-grid">
+
+      <div class="gate" id="diagGate">⚠ Сначала подключите принтер — кнопка «Подключить принтер» наверху страницы.</div>
+
+      <button class="btn sweep wide" id="sweepBtn" disabled>🔁 Автоперебор: найти рабочую характеристику</button>
+      <p class="hint" style="margin-top:8px">Приложение по очереди шлёт тестовую команду в каждый канал принтера. <b>Следите за бумагой</b>: как только она поедет — жмите «Остановить перебор».</p>
+
+      <div class="diag-grid" style="margin-top:10px">
         <button class="btn diagBtn" id="diagFeed" disabled>⏬ Протяжка</button>
         <button class="btn diagBtn" id="diagText" disabled>🔤 Текст</button>
         <button class="btn diagBtn" id="diagGs" disabled>⬛ Полоса GS v 0</button>
@@ -444,29 +473,46 @@ footer{text-align:center;color:#4b5768;font-size:11px;padding:18px;font-family:'
         <select id="charSelect" disabled><option value="-1">Характеристика записи: не найдена</option></select>
         <button class="btn small" id="rescanBtn" disabled title="Перечитать сервисы">🔄</button>
       </div>
-      <p class="hint" style="margin-top:8px">Если принтер молчит — выберите другую характеристику и повторите «Протяжку».</p>
+
+      <details class="faq">
+        <summary>Частые проблемы</summary>
+        <ul>
+          <li><b>Принтер молчит после подключения</b> — запустите «Автоперебор», затем «Протяжку» на найденной характеристике.</li>
+          <li><b>Печатает пустую ленту</b> — смените протокол (ESC * или raw), попробуйте «Инвертировать точки».</li>
+          <li><b>Обрезает правый край</b> — поставьте ширину 320 px вместо 384.</li>
+          <li><b>Печатает только начало картинки</b> — уменьшите пакет до 20 байт, задержку поставьте 60–100 мс.</li>
+          <li><b>Бледная печать</b> — добавьте контраст и уменьшите порог яркости.</li>
+        </ul>
+      </details>
     </div>
 
     <div class="card">
-      <h2><span class="num">≡</span> Журнал</h2>
+      <h2><span class="num">≡</span> Журнал <span class="spacer"></span>
+        <button class="btn small" id="copyLogBtn">📋 Копировать</button>
+      </h2>
+      <p class="hint" style="margin-bottom:8px">Если принтер не ожил — скопируйте журнал и пришлите его: по списку сервисов станет понятен протокол вашего MX10.</p>
       <div class="log" id="logBox"><div><span class="t">[--:--:--]</span> <span class="info">Готов к работе.</span></div></div>
     </div>
   </section>
 </main>
 
-<footer>Web Bluetooth API · ESC/POS · 203 dpi · Chrome для Android (HTTPS)</footer>
+<footer>Web Bluetooth · ESC/POS · 203 dpi · отпечатано заданий: <b id="printCount">0</b></footer>
 
 <script>
 'use strict';
 const S = {
-  device:null, server:null, char:null, candidates:[], printing:false, cancel:false,
-  src:null, srcName:'', out:null
+  device:null, server:null, char:null, candidates:[], printing:false, sweeping:false, cancel:false,
+  src:null, srcName:'', out:null, lastThumbUrl:null
 };
 const settings = {
-  protocol:'gs', paperWidth:384, scale:100, brightness:0, contrast:0,
+  protocol:'gs', paperWidth:384, scale:100, copies:1, brightness:0, contrast:0,
   dither:'fs', threshold:128, invert:false, invertDots:false,
   sliceH:200, chunk:100, delay:40, pauseBlocks:120, initPause:300, writeMode:'auto'
 };
+
+const LS_SETTINGS = 'mx10-settings-v2';
+const LS_ALLDEV = 'mx10-alldevices';
+const LS_PRINTS = 'mx10-prints';
 
 const KNOWN_SERVICES = [
   '0000ae30-0000-1000-8000-00805f9b34fb',
@@ -482,7 +528,16 @@ const KNOWN_SERVICES = [
 const $ = id => document.getElementById(id);
 const sleep = ms => new Promise(r=>setTimeout(r,ms));
 
-/* ---------- toasts ---------- */
+/* ---------- восстановление настроек ---------- */
+try{
+  const saved = JSON.parse(localStorage.getItem(LS_SETTINGS) || '{}');
+  Object.assign(settings, saved);
+}catch(e){}
+function saveSettings(){
+  try{ localStorage.setItem(LS_SETTINGS, JSON.stringify(settings)); }catch(e){}
+}
+
+/* ---------- toasts / log ---------- */
 function showToast(msg, type='warn', ttl=6500){
   const box = $('toastBox');
   const t = document.createElement('div');
@@ -493,7 +548,6 @@ function showToast(msg, type='warn', ttl=6500){
   while(box.children.length > 3) box.removeChild(box.firstChild);
   setTimeout(()=>{ if(t.parentNode){ t.classList.add('hide'); setTimeout(()=>t.remove(),320); } }, ttl);
 }
-
 function log(msg, cls='info'){
   const box = $('logBox');
   const t = new Date().toTimeString().slice(0,8);
@@ -501,29 +555,43 @@ function log(msg, cls='info'){
   line.innerHTML = `<span class="t">[${t}]</span> <span class="${cls}">${msg}</span>`;
   box.appendChild(line);
   box.scrollTop = box.scrollHeight;
-  while(box.children.length > 250) box.removeChild(box.firstChild);
+  while(box.children.length > 400) box.removeChild(box.firstChild);
 }
+$('copyLogBtn').addEventListener('click', async ()=>{
+  const txt = $('logBox').innerText;
+  try{
+    await navigator.clipboard.writeText(txt);
+    showToast('Журнал скопирован.','ok');
+  }catch(e){
+    const r = document.createRange(); r.selectNodeContents($('logBox'));
+    const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    showToast('Нет доступа к буферу — текст выделен, скопируйте вручную.','warn');
+  }
+});
+
+/* ---------- счётчик печати ---------- */
+let printCount = 0;
+try{ printCount = parseInt(localStorage.getItem(LS_PRINTS) || '0', 10) || 0; }catch(e){}
+function bumpPrintCount(){
+  printCount++;
+  try{ localStorage.setItem(LS_PRINTS, String(printCount)); }catch(e){}
+  $('printCount').textContent = printCount;
+}
+$('printCount').textContent = printCount;
 
 /* ---------- проверка окружения ---------- */
 (function(){
   const secure = window.isSecureContext;
   const bt = ('bluetooth' in navigator);
-  const parts = [
-    secure ? 'HTTPS ✓' : 'HTTPS ✗ ('+location.protocol+')',
-    bt ? 'Web Bluetooth ✓' : 'Web Bluetooth ✗'
-  ];
   const el = $('envLine');
-  el.textContent = parts.join(' · ');
+  el.textContent = (secure?'HTTPS ✓':'HTTPS ✗ ('+location.protocol+')') + ' · ' + (bt?'Web Bluetooth ✓':'Web Bluetooth ✗');
   if(!secure || !bt){
     el.classList.add('bad');
-    let why = '';
-    if(!bt) why = 'Браузер не поддерживает Web Bluetooth. Нужен Chrome на Android.';
-    else why = 'Страница открыта не по HTTPS. Загрузите файл на любой хостинг с https:// или откройте через локальный сервер.';
+    const why = !bt ? 'Браузер не поддерживает Web Bluetooth. Нужен Chrome на Android.'
+                    : 'Страница открыта не по HTTPS. Нужен адрес https:// или локальный сервер.';
     showToast(why + ' Кнопка подключения не сработает.', 'err', 10000);
     log(why,'err');
-  } else {
-    el.textContent += ' · готово к подключению';
-  }
+  } else el.textContent += ' · готово';
 })();
 
 function setStatus(mode, text){
@@ -540,7 +608,7 @@ $('connectBtn').addEventListener('click', async ()=>{
     return;
   }
   if(!window.isSecureContext){
-    showToast('Нужен HTTPS или localhost — сейчас '+location.protocol+'. Кнопка не может работать без защищённого адреса.','err',9000);
+    showToast('Нужен HTTPS или localhost — сейчас '+location.protocol+'.','err',9000);
     return;
   }
   btn.disabled = true;
@@ -567,6 +635,7 @@ $('connectBtn').addEventListener('click', async ()=>{
       S.char = null; S.server = null;
       setStatus('','Не подключено');
       setConnectLabel('Подключить принтер');
+      $('charSelect').disabled = true;
       updateButtons();
       showToast('Принтер отключился.','warn');
       log('Принтер отключился.','warn');
@@ -579,13 +648,13 @@ $('connectBtn').addEventListener('click', async ()=>{
   }catch(err){
     let msg = err.message || String(err);
     if(err.name === 'NotFoundError'){
-      msg = 'Принтер не найден или окно закрыто. Включите MX10, поднесите ближе к телефону. На Android должна быть включена геолокация. Если не помогает — поставьте галочку «Показывать все Bluetooth-устройства».';
+      msg = 'Принтер не найден или окно закрыто. Включите MX10, поднесите ближе к телефону, проверьте геолокацию на Android.';
       showToast(msg,'warn',9000); log(msg,'warn');
     } else if(err.name === 'SecurityError'){
-      msg = 'Браузер заблокировал Bluetooth: откройте сайт по HTTPS.';
+      msg = 'Bluetooth заблокирован: откройте сайт по HTTPS.';
       showToast(msg,'err',9000); log(msg,'err');
     } else if(err.name === 'NetworkError'){
-      msg = 'Bluetooth выключен или на Android отключена геолокация (нужна для поиска устройств).';
+      msg = 'Bluetooth выключен или на Android отключена геолокация.';
       showToast(msg,'err',9000); log(msg,'err');
     } else {
       showToast('Ошибка подключения: '+msg,'err',9000); log('Ошибка подключения: '+msg,'err');
@@ -597,26 +666,45 @@ $('connectBtn').addEventListener('click', async ()=>{
   }
 });
 
+let notifyCount = 0;
+async function trySubscribe(ch){
+  try{
+    await ch.startNotifications();
+    log('Подписка на уведомления …'+ch.uuid.slice(0,8)+' активна','ok');
+    ch.addEventListener('characteristicvaluechanged', ev=>{
+      if(notifyCount >= 12) return; notifyCount++;
+      const dv = ev.target.value;
+      const bytes = new Uint8Array(dv.buffer, dv.byteOffset, dv.byteLength);
+      const hex = [...bytes].slice(0,20).map(b=>b.toString(16).padStart(2,'0')).join(' ');
+      log('← принтер прислал: '+hex,'ok');
+    });
+  }catch(e){ /* не критично */ }
+}
+
 async function discoverServices(){
   S.candidates = [];
+  notifyCount = 0;
   let services = [];
   try{ services = await S.server.getPrimaryServices(); }
   catch(e){ log('Не удалось получить сервисы: '+e.message,'err'); }
   log('Найдено сервисов: '+services.length);
+  if(!services.length){
+    showToast('Сервисы не найдены. Поставьте «Показывать все Bluetooth-устройства» и подключитесь заново.','warn',9000);
+  }
   for(const svc of services){
+    log('Сервис: '+svc.uuid);
     let chars = [];
-    try{ chars = await svc.getCharacteristics(); }catch(e){ continue; }
+    try{ chars = await svc.getCharacteristics(); }catch(e){ log('  (нет доступа к характеристикам)','warn'); continue; }
     for(const ch of chars){
-      const p = ch.properties;
-      if(p.writeValue || p.writeWithoutResponse){
-        S.candidates.push(ch);
-        log(`Запись: …${svc.uuid.slice(4,8)} / …${ch.uuid.slice(0,8)} [${p.writeValue?'resp ':''}${p.writeWithoutResponse?'noresp':''}]`,'ok');
-      }
+      const props = ['read','write','writeWithoutResponse','notify','indicate'].filter(p=>ch.properties[p]).join('+');
+      log(`  · хар-ка ${ch.uuid} [${props||'—'}]`);
+      if(ch.properties.writeValue || ch.properties.writeWithoutResponse) S.candidates.push(ch);
+      if(ch.properties.notify || ch.properties.indicate) trySubscribe(ch);
     }
   }
   if(!S.candidates.length){
-    const m = 'Не найдена характеристика записи. Поставьте «Показывать все Bluetooth-устройства» и подключитесь заново.';
-    showToast(m,'err',9000); log(m,'err');
+    const m = 'Не найдена характеристика записи. Скопируйте журнал и пришлите его: по списку сервисов станет понятен протокол принтера.';
+    showToast(m,'err',10000); log(m,'err');
     setStatus('','Не подключено');
     return;
   }
@@ -627,8 +715,8 @@ async function discoverServices(){
   $('charSelect').value = '0';
   setStatus('connected', (S.device.name||'Принтер') + ' подключён');
   setConnectLabel((S.device.name||'Принтер'));
-  showToast('Принтер подключён ✔ Проверьте связь кнопкой «Протяжка» в диагностике.','ok');
-  log('Принтер готов. Начните с диагностики: «Протяжка».','ok');
+  showToast('Принтер подключён ✔ Найдено каналов записи: '+S.candidates.length+'. Если печать молчит — нажмите «Автоперебор».','ok',9000);
+  log('Готово. Каналов записи: '+S.candidates.length+'. Если принтер молчит — запустите автоперебор.','ok');
   updateButtons();
 }
 
@@ -639,7 +727,7 @@ function fillCharSelect(){
     const o = document.createElement('option');
     o.value = String(i);
     const props = (c.properties.writeValue?'resp ':'')+(c.properties.writeWithoutResponse?'noresp':'');
-    o.textContent = `#${i} · …${c.uuid.slice(0,8)} · ${props}`;
+    o.textContent = `#${i} · …${c.uuid.slice(4,12)} · ${props}`;
     sel.appendChild(o);
   });
   sel.disabled = false;
@@ -659,6 +747,57 @@ $('rescanBtn').addEventListener('click', async ()=>{
   $('rescanBtn').disabled = true;
   try{ await discoverServices(); }finally{ $('rescanBtn').disabled = false; updateButtons(); }
 });
+
+/* ================= автоперебор ================= */
+function buildProbe(){
+  const text = 'MX10 TEST *** PRINT OK ***';
+  const arr = [0x1B,0x40];
+  for(let i=0;i<text.length;i++) arr.push(text.charCodeAt(i));
+  arr.push(0x0A,0x0A, 0x1B,0x4A,0x60, 0x0C);
+  return new Uint8Array(arr);
+}
+$('sweepBtn').addEventListener('click', ()=>{
+  if(S.sweeping){
+    S.sweeping = false;
+    $('sweepBtn').textContent = '🔁 Автоперебор: найти рабочую характеристику';
+    return;
+  }
+  startSweep();
+});
+async function startSweep(){
+  if(!S.char || !S.candidates.length){ showToast('Нет подключения к принтеру.','err'); return; }
+  if(S.printing){ showToast('Идёт передача.','warn'); return; }
+  S.sweeping = true;
+  $('sweepBtn').textContent = '⏹ Остановить перебор';
+  updateButtons();
+  log('Запуск перебора характеристик…','warn');
+  showToast('Следите за принтером: он должен протянуть бумагу или напечатать текст. Когда это случится — жмите «Остановить перебор».','warn',9000);
+  const probe = buildProbe();
+  for(let i=0; i<S.candidates.length && S.sweeping; i++){
+    const c = S.candidates[i];
+    S.char = c;
+    $('charSelect').value = String(i);
+    log(`Проба #${i}: …${c.uuid.slice(4,12)} (${c.properties.writeValue?'с ответом':'без ответа'})`,'warn');
+    try{
+      const useResp = !!c.properties.writeValue;
+      for(let off=0; off<probe.length; off+=20){
+        const part = probe.buffer.slice(off, Math.min(probe.length, off+20));
+        if(useResp) await c.writeValue(part);
+        else await c.writeValueWithoutResponse(part);
+        await sleep(30);
+      }
+    }catch(err){ log('Запись не удалась: '+err.message,'err'); }
+    await sleep(3000);
+  }
+  S.sweeping = false;
+  $('sweepBtn').textContent = '🔁 Автоперебор: найти рабочую характеристику';
+  if(S.char){
+    const idx = S.candidates.indexOf(S.char);
+    log('Перебор завершён. Активная характеристика: #'+idx+'. Если бумага двигалась — можно печатать.','warn');
+    showToast('Если принтер не отреагировал — скопируйте журнал («Копировать») и пришлите список сервисов.','warn',12000);
+  }
+  updateButtons();
+}
 
 /* ================= изображение ================= */
 const dropZone = $('dropZone'), fileInput = $('fileInput'), cameraInput = $('cameraInput');
@@ -682,7 +821,9 @@ async function loadFile(file){
     catch(e){ bmp = await createImageBitmap(file); }
     if(S.src && S.src.close) S.src.close();
     S.src = bmp; S.srcName = file.name;
-    $('thumbImg').src = URL.createObjectURL(file);
+    if(S.lastThumbUrl) URL.revokeObjectURL(S.lastThumbUrl);
+    S.lastThumbUrl = URL.createObjectURL(file);
+    $('thumbImg').src = S.lastThumbUrl;
     $('fileName').textContent = file.name;
     $('fileMeta').textContent = bmp.width+'×'+bmp.height+' px · '+(file.size/1024).toFixed(0)+' КБ';
     $('fileRow').classList.add('show');
@@ -738,13 +879,12 @@ function renderOutput(){
 function updateEstimate(){
   if(!S.out){ $('estTime').textContent=''; return; }
   const {tw, th} = S.out;
-  const totalBytes = Math.round(tw/8*th + 128 + Math.ceil(th/settings.sliceH)*8);
-  const chunks = Math.ceil(totalBytes/settings.chunk);
-  const blocks = Math.ceil(th/settings.sliceH);
-  const sec = Math.round(chunks*(settings.delay+6)/1000 + blocks*settings.pauseBlocks/1000 + th/203*2.54/4);
-  $('estTime').textContent = S.char
-    ? `~${totalBytes} байт · ~${sec} c`
-    : `~${totalBytes} байт · подключите принтер`;
+  const one = Math.round(tw/8*th + 128 + Math.ceil(th/settings.sliceH)*8);
+  const total = one * settings.copies;
+  const chunks = Math.ceil(one/settings.chunk) * settings.copies;
+  const blocks = Math.ceil(th/settings.sliceH) * settings.copies;
+  const sec = Math.round(chunks*(settings.delay+6)/1000 + blocks*settings.pauseBlocks/1000 + th/203*2.54/4*settings.copies);
+  $('estTime').textContent = S.char ? `~${total} байт · ~${sec} c` : `~${total} байт · подключите принтер`;
 }
 
 function applyDither(g, w, h, mode, thr){
@@ -862,12 +1002,19 @@ async function sendChunked(bytes, onProgress){
     if(S.cancel) throw new Error('Остановлено пользователем');
     const end = Math.min(bytes.length, i+chunk);
     const part = bytes.buffer.slice(bytes.byteOffset+i, bytes.byteOffset+end);
-    try{
-      if(useNoResp) await S.char.writeValueWithoutResponse(part);
-      else await S.char.writeValue(part);
-    }catch(err){
-      throw new Error('Ошибка записи: '+err.message+'. Уменьшите пакет до 20 байт, задержку 50 мс.');
+    let lastErr = null;
+    for(let attempt=0; attempt<3; attempt++){
+      try{
+        if(useNoResp) await S.char.writeValueWithoutResponse(part);
+        else await S.char.writeValue(part);
+        lastErr = null;
+        break;
+      }catch(err){
+        lastErr = err;
+        await sleep(150 + attempt*200);
+      }
     }
+    if(lastErr) throw new Error('Ошибка записи: '+lastErr.message+'. Уменьшите пакет до 20 байт, задержку 50–100 мс.');
     onProgress(end-i);
     if(settings.delay>0) await sleep(settings.delay);
   }
@@ -875,11 +1022,10 @@ async function sendChunked(bytes, onProgress){
 
 async function runJob(items, label){
   if(!S.char){ showToast('Принтер не подключён.','err'); return false; }
-  if(S.printing){ showToast('Уже идёт передача.','warn'); return false; }
+  if(S.printing || S.sweeping){ showToast('Подождите: идёт операция.','warn'); return false; }
   S.printing = true; S.cancel = false;
   $('cancelBtn').classList.add('show');
-  $('printBtn').disabled = true; $('testBtn').disabled = true;
-  document.querySelectorAll('.diagBtn').forEach(b=>b.disabled = true);
+  updateButtons();
   $('progressWrap').classList.add('show');
   let total = 0; for(const it of items) total += it.data.length;
   let sent = 0;
@@ -893,6 +1039,7 @@ async function runJob(items, label){
       else if(i < items.length-1 && settings.pauseBlocks > 0) await sleep(settings.pauseBlocks);
     }
     log('Данные переданы. Принтер печатает… ✔','ok');
+    bumpPrintCount();
     ok = true;
   }catch(err){
     showToast(err.message,'err',8000);
@@ -909,10 +1056,17 @@ async function runJob(items, label){
 async function printBits(tw, th, bits, label, forceProtocol){
   const proto = forceProtocol || settings.protocol;
   const job = buildJobParts(tw, th, bits, proto);
-  const items = [];
-  if(job.needsInit) items.push({ data:new Uint8Array([0x1B,0x40]), init:true });
-  for(const p of job.parts) items.push({ data:p });
-  return runJob(items, label + ' · ' + proto.toUpperCase());
+  const copies = Math.max(1, Math.min(3, settings.copies|0));
+  for(let c=0;c<copies;c++){
+    const items = [];
+    if(job.needsInit) items.push({ data:new Uint8Array([0x1B,0x40]), init:true });
+    for(const p of job.parts) items.push({ data:p });
+    const suffix = copies>1 ? ` · копия ${c+1}/${copies}` : '';
+    const ok = await runJob(items, label + ' · ' + proto.toUpperCase() + suffix);
+    if(!ok) return false;
+    if(c < copies-1) await sleep(500);
+  }
+  return true;
 }
 
 $('printBtn').addEventListener('click', ()=>{
@@ -944,9 +1098,17 @@ $('testBtn').addEventListener('click', async ()=>{
   await printBits(tw, th, bits, 'тестовый образец');
 });
 
+$('downloadBtn').addEventListener('click', ()=>{
+  if(!S.out) return;
+  const a = document.createElement('a');
+  a.download = 'mx10-preview.png';
+  a.href = $('previewCanvas').toDataURL('image/png');
+  a.click();
+});
+
 /* ================= диагностика ================= */
 $('diagFeed').addEventListener('click', ()=>{
-  runJob([{ data:new Uint8Array([0x0A,0x0A,0x0A,0x0A]) }], 'протяжка бумаги');
+  runJob([{ data:new Uint8Array([0x1B,0x40, 0x1B,0x4A,0x5A, 0x0A,0x0A,0x0A, 0x0C]) }], 'протяжка бумаги');
 });
 $('diagText').addEventListener('click', ()=>{
   const text = 'MX10 TEST *** PRINT OK *** 1234567890';
@@ -986,6 +1148,7 @@ function bindRange(id, outId, key, fmt){
     $(outId).textContent = fmt ? fmt(el.value) : el.value;
     const min=+el.min, max=+el.max;
     el.style.setProperty('--fill', ((el.value-min)/(max-min)*100)+'%');
+    saveSettings();
     scheduleRender();
   };
   el.addEventListener('input', upd); upd();
@@ -995,6 +1158,25 @@ function scheduleRender(){
   clearTimeout(renderTimer);
   renderTimer = setTimeout(()=>{ if(S.src){ renderOutput(); } else updateEstimate(); }, 120);
 }
+
+/* применяем сохранённые значения к контролам */
+$('protoMode').value = settings.protocol;
+$('paperWidth').value = String(settings.paperWidth);
+$('ditherMode').value = settings.dither;
+$('writeMode').value = settings.writeMode;
+$('copiesSel').value = String(settings.copies);
+$('scaleRange').value = settings.scale;
+$('brightRange').value = settings.brightness;
+$('contrastRange').value = settings.contrast;
+$('threshRange').value = settings.threshold;
+$('sliceRange').value = settings.sliceH;
+$('chunkRange').value = settings.chunk;
+$('delayRange').value = settings.delay;
+$('pauseRange').value = settings.pauseBlocks;
+$('initRange').value = settings.initPause;
+$('invertChk').checked = !!settings.invert;
+$('invertDotsChk').checked = !!settings.invertDots;
+try{ $('chkAllDevices').checked = localStorage.getItem(LS_ALLDEV) === '1'; }catch(e){}
 
 bindRange('scaleRange','scaleOut','scale', v=>v+'%');
 bindRange('brightRange','brightOut','brightness');
@@ -1006,21 +1188,35 @@ bindRange('delayRange','delayOut','delay');
 bindRange('pauseRange','pauseOut','pauseBlocks');
 bindRange('initRange','initOut','initPause');
 
-$('protoMode').addEventListener('change', e=>{ settings.protocol=e.target.value; log('Протокол: '+e.target.options[e.target.selectedIndex].text,'warn'); updateEstimate(); });
-$('paperWidth').addEventListener('change', e=>{ settings.paperWidth=+e.target.value; scheduleRender(); });
-$('ditherMode').addEventListener('change', e=>{ settings.dither=e.target.value; scheduleRender(); });
-$('invertChk').addEventListener('change', e=>{ settings.invert=e.target.checked; scheduleRender(); });
-$('invertDotsChk').addEventListener('change', e=>{ settings.invertDots=e.target.checked; if(S.src) renderOutput(); });
-$('writeMode').addEventListener('change', e=>{ settings.writeMode=e.target.value; });
+$('protoMode').addEventListener('change', e=>{ settings.protocol=e.target.value; saveSettings(); log('Протокол: '+e.target.options[e.target.selectedIndex].text,'warn'); updateEstimate(); });
+$('paperWidth').addEventListener('change', e=>{ settings.paperWidth=+e.target.value; saveSettings(); scheduleRender(); });
+$('ditherMode').addEventListener('change', e=>{ settings.dither=e.target.value; saveSettings(); scheduleRender(); });
+$('writeMode').addEventListener('change', e=>{ settings.writeMode=e.target.value; saveSettings(); });
+$('copiesSel').addEventListener('change', e=>{ settings.copies=+e.target.value; saveSettings(); updateEstimate(); });
+$('invertChk').addEventListener('change', e=>{ settings.invert=e.target.checked; saveSettings(); scheduleRender(); });
+$('invertDotsChk').addEventListener('change', e=>{ settings.invertDots=e.target.checked; saveSettings(); if(S.src) renderOutput(); });
+$('chkAllDevices').addEventListener('change', e=>{
+  try{ localStorage.setItem(LS_ALLDEV, e.target.checked?'1':'0'); }catch(err){}
+  showToast('Применится при следующем подключении.','warn',3500);
+});
+
+/* защита от закрытия страницы во время печати */
+window.addEventListener('beforeunload', e=>{
+  if(S.printing || S.sweeping){ e.preventDefault(); e.returnValue=''; }
+});
 
 function updateButtons(){
-  const ready = !!S.out && !!S.char && !S.printing;
-  $('printBtn').disabled = !ready;
-  $('testBtn').disabled = !S.char || S.printing;
-  document.querySelectorAll('.diagBtn').forEach(b=>b.disabled = !S.char || S.printing);
-  $('rescanBtn').disabled = !S.server || S.printing;
-  $('charSelect').disabled = !S.char;
-  if(S.out && !S.char && !S.printing)
+  const busy = S.printing || S.sweeping;
+  const connected = !!S.char;
+  $('diagGate').classList.toggle('show', !connected && !busy);
+  $('printBtn').disabled = !S.out || !connected || busy;
+  $('testBtn').disabled = !connected || busy;
+  $('downloadBtn').disabled = !S.out;
+  document.querySelectorAll('.diagBtn').forEach(b=>b.disabled = !connected || busy);
+  $('sweepBtn').disabled = !connected || busy || !S.candidates.length;
+  $('rescanBtn').disabled = !S.server || busy;
+  $('charSelect').disabled = !connected;
+  if(S.out && !connected && !busy)
     $('estTime').textContent = 'Фото готово — осталось подключить принтер';
 }
 updateButtons();
