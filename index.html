@@ -9,19 +9,17 @@
 @font-face{font-family:'Manrope';font-style:normal;font-weight:600;src:url('https://cdn.jsdelivr.net/npm/@fontsource/manrope@5.0.8/files/manrope-cyrillic-600-normal.woff2') format('woff2');font-display:swap}
 @font-face{font-family:'Manrope';font-style:normal;font-weight:800;src:url('https://cdn.jsdelivr.net/npm/@fontsource/manrope@5.0.8/files/manrope-cyrillic-800-normal.woff2') format('woff2');font-display:swap}
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;src:url('https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.18/files/jetbrains-mono-cyrillic-400-normal.woff2') format('woff2');font-display:swap}
-@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;src:url('https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.18/files/jetbrains-mono-cyrillic-700-normal.woff2') format('woff2');font-display:swap}
 
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
   --bg:#0e1116; --panel:#161c26; --panel2:#1d2532; --border:#2b3546;
   --text:#eef2f8; --muted:#8d99ad; --accent:#ff7a1a; --accent2:#ffb02e;
   --ok:#3ddc84; --err:#ff5d5d; --warn:#ffd166;
-  --radius:14px;
+  --radius:12px;
 }
 body{
   background:
     radial-gradient(900px 500px at 85% -10%, rgba(255,122,26,.10), transparent 60%),
-    radial-gradient(700px 400px at -10% 110%, rgba(61,220,132,.06), transparent 60%),
     var(--bg);
   color:var(--text);
   font-family:'Manrope',system-ui,sans-serif;
@@ -30,110 +28,137 @@ body{
 button{font-family:inherit;cursor:pointer}
 input,select{font-family:inherit}
 
+/* ---------- toasts ---------- */
+#toastBox{
+  position:fixed;top:10px;left:50%;transform:translateX(-50%);
+  z-index:100;display:flex;flex-direction:column;gap:8px;width:min(94vw,560px);
+}
+.toast{
+  padding:12px 16px;border-radius:11px;font-size:14px;font-weight:600;line-height:1.45;
+  background:#1d2532;border:1px solid var(--border);color:var(--text);
+  box-shadow:0 12px 30px rgba(0,0,0,.5);cursor:pointer;
+  animation:toastIn .3s cubic-bezier(.2,.9,.3,1.2);
+}
+.toast.err{background:#2a1215;border-color:#7a2428;color:#ffb4b4}
+.toast.warn{background:#2a2410;border-color:#7a6524;color:#ffe6a6}
+.toast.ok{background:#0f2a1c;border-color:#20633f;color:#9ef5c4}
+.toast.hide{opacity:0;transform:translateY(-8px);transition:.3s}
+@keyframes toastIn{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
+
+/* ---------- header ---------- */
 header{
-  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-  padding:16px 22px;border-bottom:1px solid var(--border);
-  background:rgba(14,17,22,.8);backdrop-filter:blur(8px);
+  display:flex;align-items:center;gap:11px;flex-wrap:wrap;
+  padding:11px 16px;border-bottom:1px solid var(--border);
+  background:rgba(14,17,22,.85);backdrop-filter:blur(8px);
   position:sticky;top:0;z-index:20;
 }
 .logo{
-  width:44px;height:44px;border-radius:12px;flex:none;
+  width:38px;height:38px;border-radius:10px;flex:none;
   background:linear-gradient(135deg,var(--accent),#ff3d00);
-  display:grid;place-items:center;box-shadow:0 6px 18px rgba(255,122,26,.35);
+  display:grid;place-items:center;box-shadow:0 5px 14px rgba(255,122,26,.35);
 }
-.logo svg{width:26px;height:26px;fill:#fff}
-.title h1{font-size:19px;font-weight:800;letter-spacing:.3px}
+.logo svg{width:22px;height:22px;fill:#fff}
+.title h1{font-size:16.5px;font-weight:800;letter-spacing:.3px}
 .title h1 span{color:var(--accent)}
-.title p{font-size:12px;color:var(--muted)}
-.header-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.title p{font-size:11px;color:var(--muted)}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .pill{
-  display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;
-  padding:8px 14px;border-radius:999px;border:1px solid var(--border);
+  display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;
+  padding:7px 12px;border-radius:999px;border:1px solid var(--border);
   background:var(--panel);color:var(--muted);transition:.3s;
 }
-.pill .dot{width:9px;height:9px;border-radius:50%;background:#5a6472;flex:none;transition:.3s}
+.pill .dot{width:8px;height:8px;border-radius:50%;background:#5a6472;flex:none;transition:.3s}
 .pill.connected{color:var(--ok);border-color:rgba(61,220,132,.35)}
 .pill.connected .dot{background:var(--ok);animation:pulse 1.6s infinite}
 .pill.connecting{color:var(--warn);border-color:rgba(255,209,102,.35)}
 .pill.connecting .dot{background:var(--warn);animation:pulse .9s infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.25)}50%{box-shadow:0 0 0 6px rgba(255,255,255,0)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.25)}50%{box-shadow:0 0 0 5px rgba(255,255,255,0)}}
 
+/* ---------- buttons ---------- */
 .btn{
   border:1px solid var(--border);background:var(--panel2);color:var(--text);
-  padding:10px 16px;border-radius:10px;font-size:14px;font-weight:600;
-  display:inline-flex;align-items:center;gap:8px;transition:.18s;
+  padding:9px 14px;border-radius:9px;font-size:13.5px;font-weight:600;
+  display:inline-flex;align-items:center;gap:7px;transition:.18s;
 }
-.btn svg{width:17px;height:17px;flex:none}
+.btn svg{width:16px;height:16px;flex:none}
 .btn:hover{border-color:#3d4a60;transform:translateY(-1px)}
-.btn:active{transform:translateY(0)}
+.btn:active{transform:scale(.98)}
 .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
 .btn.primary{
   background:linear-gradient(135deg,var(--accent),#ff4d1c);border:none;color:#fff;
-  box-shadow:0 8px 20px rgba(255,100,20,.3);
+  box-shadow:0 6px 16px rgba(255,100,20,.3);
 }
-.btn.primary:hover{box-shadow:0 10px 26px rgba(255,100,20,.45)}
-.btn.big{padding:16px 22px;font-size:17px;border-radius:14px;justify-content:center;width:100%}
-.btn.big svg{width:22px;height:22px}
-.btn.small{padding:7px 12px;font-size:12.5px}
+.btn.big{padding:14px 18px;font-size:16px;border-radius:12px;justify-content:center;width:100%}
+.btn.big svg{width:20px;height:20px}
+.btn.small{padding:7px 11px;font-size:12.5px}
 
+/* ---------- layout ---------- */
 main{
-  display:grid;grid-template-columns:380px 1fr;gap:18px;
-  max-width:1240px;margin:0 auto;padding:18px;
+  display:grid;grid-template-columns:360px 1fr;gap:14px;
+  max-width:1200px;margin:0 auto;padding:14px;
 }
 @media(max-width:960px){main{grid-template-columns:1fr}}
 
 .card{
   background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
-  padding:18px;animation:rise .4s ease both;
+  padding:14px 16px;animation:rise .35s ease both;
 }
-.card + .card{margin-top:16px}
-@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card + .card{margin-top:13px}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .card h2{
-  font-size:13px;text-transform:uppercase;letter-spacing:1.6px;color:var(--muted);
-  display:flex;align-items:center;gap:9px;margin-bottom:14px;font-weight:700;
+  font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);
+  display:flex;align-items:center;gap:8px;margin-bottom:11px;font-weight:700;
 }
 .card h2 .num{
-  width:22px;height:22px;border-radius:7px;display:grid;place-items:center;
+  width:20px;height:20px;border-radius:6px;display:grid;place-items:center;
   background:var(--panel2);border:1px solid var(--border);color:var(--accent);
-  font-size:12px;font-weight:800;letter-spacing:0;
+  font-size:11px;font-weight:800;letter-spacing:0;
 }
-.hint{font-size:12.5px;color:var(--muted);line-height:1.55}
+.hint{font-size:12.5px;color:var(--muted);line-height:1.5}
 .hint b{color:var(--text)}
-.steps{list-style:none;margin-top:4px;display:grid;gap:7px}
-.steps li{font-size:13px;color:var(--muted);display:flex;gap:9px;align-items:flex-start;line-height:1.45}
+.steps{list-style:none;margin-top:2px;display:grid;gap:6px}
+.steps li{font-size:12.5px;color:var(--muted);display:flex;gap:8px;align-items:flex-start;line-height:1.4}
 .steps li::before{content:'→';color:var(--accent);font-weight:700;flex:none}
-.check{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-top:12px;cursor:pointer;user-select:none}
-.check input{accent-color:var(--accent);width:16px;height:16px}
+.check{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin-top:10px;cursor:pointer;user-select:none}
+.check input{accent-color:var(--accent);width:15px;height:15px}
+.env-line{
+  margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px;
+  padding:7px 10px;border-radius:8px;background:var(--panel2);border:1px solid var(--border);
+  color:var(--muted);word-break:break-all;
+}
+.env-line.bad{color:var(--err);border-color:rgba(255,93,93,.35)}
 
+/* ---------- dropzone ---------- */
 .drop{
-  border:2px dashed var(--border);border-radius:12px;padding:26px 16px;
-  display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;
+  border:2px dashed var(--border);border-radius:11px;padding:16px 12px;
+  display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;
   transition:.25s;cursor:pointer;background:var(--panel2);
 }
 .drop:hover,.drop.over{border-color:var(--accent);background:rgba(255,122,26,.06)}
-.drop svg{width:34px;height:34px;stroke:var(--accent);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.drop p{font-size:13.5px;font-weight:600}
-.drop span{font-size:11.5px;color:var(--muted)}
-.file-row{display:none;align-items:center;gap:12px;margin-top:14px;padding:10px 12px;background:var(--panel2);border:1px solid var(--border);border-radius:10px}
+.drop svg{width:26px;height:26px;stroke:var(--accent);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.drop p{font-size:13px;font-weight:600}
+.drop span{font-size:11px;color:var(--muted)}
+.file-row{display:none;align-items:center;gap:10px;margin-top:11px;padding:8px 10px;background:var(--panel2);border:1px solid var(--border);border-radius:9px}
 .file-row.show{display:flex}
-.file-row img{width:46px;height:46px;border-radius:8px;object-fit:cover;flex:none;border:1px solid var(--border)}
+.file-row img{width:40px;height:40px;border-radius:7px;object-fit:cover;flex:none;border:1px solid var(--border)}
 .file-row .fi{flex:1;min-width:0}
-.file-row .fi b{font-size:13px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.file-row .fi span{font-size:11.5px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.file-row .fi b{font-size:12.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-row .fi span{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
 
-.ctrl{margin-bottom:15px}
+/* ---------- controls ---------- */
+.ctrl{margin-bottom:12px}
 .ctrl:last-child{margin-bottom:0}
 .ctrl label{
   display:flex;justify-content:space-between;align-items:baseline;
-  font-size:13px;font-weight:600;margin-bottom:7px;color:#cfd7e4;
+  font-size:12.5px;font-weight:600;margin-bottom:6px;color:#cfd7e4;
 }
 .ctrl label output{
-  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent2);
-  background:var(--panel2);padding:2px 8px;border-radius:6px;border:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent2);
+  background:var(--panel2);padding:2px 7px;border-radius:5px;border:1px solid var(--border);
 }
 select{
   width:100%;background:var(--panel2);color:var(--text);border:1px solid var(--border);
-  border-radius:9px;padding:9px 11px;font-size:13.5px;outline:none;transition:.2s;
+  border-radius:8px;padding:8px 10px;font-size:13px;outline:none;transition:.2s;
 }
 select:focus{border-color:var(--accent)}
 input[type=range]{
@@ -142,37 +167,35 @@ input[type=range]{
   outline:none;
 }
 input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+  -webkit-appearance:none;width:17px;height:17px;border-radius:50%;
   background:#fff;border:3px solid var(--accent);box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:grab;
 }
-input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--accent);cursor:grab}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:#fff;border:3px solid var(--accent);cursor:grab}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 
-.preview-col{display:flex;flex-direction:column;gap:16px}
-.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+/* ---------- preview ---------- */
+.preview-col{display:flex;flex-direction:column;gap:13px}
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .dims{
-  font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--muted);
-  background:var(--panel);border:1px solid var(--border);padding:9px 14px;border-radius:10px;flex:1;min-width:200px;
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);
+  background:var(--panel);border:1px solid var(--border);padding:8px 12px;border-radius:9px;flex:1;min-width:180px;
 }
 .dims b{color:var(--accent2)}
 .paper-zone{
-  background:
-    linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
-  background-size:22px 22px;
   border:1px solid var(--border);border-radius:var(--radius);
-  min-height:340px;display:flex;align-items:center;justify-content:center;
-  padding:24px;overflow:hidden;
+  min-height:160px;display:flex;align-items:center;justify-content:center;
+  padding:14px;overflow:hidden;
 }
-.empty{text-align:center;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:12px}
-.empty svg{width:56px;height:56px;stroke:#3d4a60;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;animation:float 3.4s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.empty{text-align:center;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:9px;font-size:12.5px}
+.empty svg{width:40px;height:40px;stroke:#3d4a60;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;animation:float 3.4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.paper-scroll{max-height:min(58vh,520px);overflow-y:auto;max-width:100%;border-radius:4px}
 .paper{
-  background:#fff;padding:14px 14px 22px;border-radius:4px;
-  box-shadow:0 20px 50px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.4);
-  max-width:100%;position:relative;animation:feedIn .45s cubic-bezier(.2,.9,.3,1.15);
+  background:#fff;padding:12px 12px 20px;border-radius:4px;width:fit-content;max-width:100%;
+  box-shadow:0 14px 36px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.4);
+  position:relative;animation:feedIn .45s cubic-bezier(.2,.9,.3,1.15);
 }
-@keyframes feedIn{from{opacity:0;transform:translateY(-18px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes feedIn{from{opacity:0;transform:translateY(-16px) scale(.97)}to{opacity:1;transform:none}}
 .paper::after{
   content:'';position:absolute;left:0;right:0;bottom:-9px;height:10px;
   background:
@@ -181,18 +204,18 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 }
 .paper canvas{display:block;max-width:100%;height:auto;image-rendering:pixelated}
 .paper-tag{
-  position:absolute;top:-11px;left:14px;background:var(--accent);color:#fff;
-  font-size:10px;font-weight:800;letter-spacing:1.2px;padding:3px 10px;border-radius:6px;
+  position:absolute;top:-10px;left:12px;background:var(--accent);color:#fff;
+  font-size:9.5px;font-weight:800;letter-spacing:1.1px;padding:2px 9px;border-radius:5px;
   text-transform:uppercase;box-shadow:0 4px 10px rgba(255,122,26,.4);
 }
 
-.diag-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin-top:4px}
-.diag-grid .btn{justify-content:center;font-size:13px;padding:11px 8px}
+.diag-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:4px}
+.diag-grid .btn{justify-content:center;font-size:12.5px;padding:10px 6px}
 
 .progress-wrap{display:none}
 .progress-wrap.show{display:block}
-.progress-top{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px}
-.progress{height:12px;background:var(--panel2);border:1px solid var(--border);border-radius:999px;overflow:hidden}
+.progress-top{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:5px}
+.progress{height:11px;background:var(--panel2);border:1px solid var(--border);border-radius:999px;overflow:hidden}
 .progress .bar{
   height:100%;width:0%;border-radius:999px;transition:width .2s;
   background:repeating-linear-gradient(45deg,var(--accent) 0 10px,var(--accent2) 10px 20px);
@@ -200,39 +223,31 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 }
 @keyframes stripes{from{background-position:0 0}to{background-position:40px 0}}
 
-.print-row{display:flex;gap:10px}
+.print-row{display:flex;gap:9px}
 .print-row .btn.big{flex:1}
-#cancelBtn{display:none;flex:none;align-self:stretch;border-radius:14px;padding:16px 18px;background:#3a1418;border:1px solid #6b222a;color:var(--err)}
+#cancelBtn{display:none;flex:none;align-self:stretch;border-radius:12px;padding:14px 16px;background:#3a1418;border:1px solid #6b222a;color:var(--err)}
 #cancelBtn.show{display:inline-flex}
-#estTime{font-size:12px;color:var(--muted);text-align:center;margin-top:8px;font-family:'JetBrains Mono',monospace}
+#estTime{font-size:11.5px;color:var(--muted);text-align:center;margin-top:7px;font-family:'JetBrains Mono',monospace}
 
-.char-row{display:flex;gap:8px;margin-top:10px}
+.char-row{display:flex;gap:8px;margin-top:9px}
 .char-row select{flex:1}
 
 .log{
-  background:#0a0d12;border:1px solid var(--border);border-radius:10px;
-  font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;
-  padding:12px 14px;max-height:190px;overflow-y:auto;
+  background:#0a0d12;border:1px solid var(--border);border-radius:9px;
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.65;
+  padding:10px 12px;max-height:150px;overflow-y:auto;
 }
 .log .t{color:#4b5768}
 .log .ok{color:var(--ok)} .log .err{color:var(--err)} .log .warn{color:var(--warn)} .log .info{color:#a8b3c5}
 .log::-webkit-scrollbar{width:6px}
 .log::-webkit-scrollbar-thumb{background:#334055;border-radius:3px}
 
-.banner{
-  max-width:1240px;margin:14px auto 0;padding:13px 18px;border-radius:12px;
-  font-size:13.5px;line-height:1.5;display:none;border:1px solid rgba(255,209,102,.35);
-  background:rgba(255,209,102,.08);color:var(--warn);
-}
-.banner.show{display:block}
-.banner.err{border-color:rgba(255,93,93,.4);background:rgba(255,93,93,.08);color:var(--err)}
-
-footer{text-align:center;color:#4b5768;font-size:11.5px;padding:22px;font-family:'JetBrains Mono',monospace}
+footer{text-align:center;color:#4b5768;font-size:11px;padding:18px;font-family:'JetBrains Mono',monospace}
 </style>
 </head>
 <body>
 
-<div class="banner" id="compatBanner"></div>
+<div id="toastBox"></div>
 
 <header>
   <div class="logo">
@@ -240,261 +255,13 @@ footer{text-align:center;color:#4b5768;font-size:11.5px;padding:22px;font-family
   </div>
   <div class="title">
     <h1>MX10 <span>Print</span></h1>
-    <p>Печать фото через Bluetooth · портативный мини-принтер</p>
-  </div>
-  <div class="header-right">
-    <div class="pill" id="statusPill"><span class="dot"></span><span id="statusText">Не подключено</span></div>
-    <button class="btn primary" id="connectBtn">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a1 1 0 0 1 .67.26l.07.08 4.5 5.5a1 1 0 0 1-.1 1.36l-.07.05-3.6 2.5 3.6 2.5a1 1 0 0 1 .3 1.33l-.06.08-4.5 5.5a1 1 0 0 1-1.79-.55L11 13.5l-2.9 2.2a1 1 0 0 1-1.3-1.5l.08-.07L10.4 11 6.88 8.4a1 1 0 0 1 1.05-1.68l.17
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MX10 Print — Bluetooth мини-принтер</title>
-<style>
-@font-face{font-family:'Manrope';font-style:normal;font-weight:400;src:url('https://cdn.jsdelivr.net/npm/@fontsource/manrope@5.0.8/files/manrope-cyrillic-400-normal.woff2') format('woff2');font-display:swap}
-@font-face{font-family:'Manrope';font-style:normal;font-weight:600;src:url('https://cdn.jsdelivr.net/npm/@fontsource/manrope@5.0.8/files/manrope-cyrillic-600-normal.woff2') format('woff2');font-display:swap}
-@font-face{font-family:'Manrope';font-style:normal;font-weight:800;src:url('https://cdn.jsdelivr.net/npm/@fontsource/manrope@5.0.8/files/manrope-cyrillic-800-normal.woff2') format('woff2');font-display:swap}
-@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;src:url('https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.18/files/jetbrains-mono-cyrillic-400-normal.woff2') format('woff2');font-display:swap}
-@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;src:url('https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.18/files/jetbrains-mono-cyrillic-700-normal.woff2') format('woff2');font-display:swap}
-
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#0e1116; --panel:#161c26; --panel2:#1d2532; --border:#2b3546;
-  --text:#eef2f8; --muted:#8d99ad; --accent:#ff7a1a; --accent2:#ffb02e;
-  --ok:#3ddc84; --err:#ff5d5d; --warn:#ffd166;
-  --radius:14px;
-}
-body{
-  background:
-    radial-gradient(900px 500px at 85% -10%, rgba(255,122,26,.10), transparent 60%),
-    radial-gradient(700px 400px at -10% 110%, rgba(61,220,132,.06), transparent 60%),
-    var(--bg);
-  color:var(--text);
-  font-family:'Manrope',system-ui,sans-serif;
-  min-height:100vh;
-}
-button{font-family:inherit;cursor:pointer}
-input,select{font-family:inherit}
-
-header{
-  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-  padding:16px 22px;border-bottom:1px solid var(--border);
-  background:rgba(14,17,22,.8);backdrop-filter:blur(8px);
-  position:sticky;top:0;z-index:20;
-}
-.logo{
-  width:44px;height:44px;border-radius:12px;flex:none;
-  background:linear-gradient(135deg,var(--accent),#ff3d00);
-  display:grid;place-items:center;box-shadow:0 6px 18px rgba(255,122,26,.35);
-}
-.logo svg{width:26px;height:26px;fill:#fff}
-.title h1{font-size:19px;font-weight:800;letter-spacing:.3px}
-.title h1 span{color:var(--accent)}
-.title p{font-size:12px;color:var(--muted)}
-.header-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.pill{
-  display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;
-  padding:8px 14px;border-radius:999px;border:1px solid var(--border);
-  background:var(--panel);color:var(--muted);transition:.3s;
-}
-.pill .dot{width:9px;height:9px;border-radius:50%;background:#5a6472;flex:none;transition:.3s}
-.pill.connected{color:var(--ok);border-color:rgba(61,220,132,.35)}
-.pill.connected .dot{background:var(--ok);animation:pulse 1.6s infinite}
-.pill.connecting{color:var(--warn);border-color:rgba(255,209,102,.35)}
-.pill.connecting .dot{background:var(--warn);animation:pulse .9s infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.25)}50%{box-shadow:0 0 0 6px rgba(255,255,255,0)}}
-
-.btn{
-  border:1px solid var(--border);background:var(--panel2);color:var(--text);
-  padding:10px 16px;border-radius:10px;font-size:14px;font-weight:600;
-  display:inline-flex;align-items:center;gap:8px;transition:.18s;
-}
-.btn svg{width:17px;height:17px;flex:none}
-.btn:hover{border-color:#3d4a60;transform:translateY(-1px)}
-.btn:active{transform:translateY(0)}
-.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
-.btn.primary{
-  background:linear-gradient(135deg,var(--accent),#ff4d1c);border:none;color:#fff;
-  box-shadow:0 8px 20px rgba(255,100,20,.3);
-}
-.btn.primary:hover{box-shadow:0 10px 26px rgba(255,100,20,.45)}
-.btn.big{padding:16px 22px;font-size:17px;border-radius:14px;justify-content:center;width:100%}
-.btn.big svg{width:22px;height:22px}
-.btn.small{padding:7px 12px;font-size:12.5px}
-
-main{
-  display:grid;grid-template-columns:380px 1fr;gap:18px;
-  max-width:1240px;margin:0 auto;padding:18px;
-}
-@media(max-width:960px){main{grid-template-columns:1fr}}
-
-.card{
-  background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
-  padding:18px;animation:rise .4s ease both;
-}
-.card + .card{margin-top:16px}
-@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.card h2{
-  font-size:13px;text-transform:uppercase;letter-spacing:1.6px;color:var(--muted);
-  display:flex;align-items:center;gap:9px;margin-bottom:14px;font-weight:700;
-}
-.card h2 .num{
-  width:22px;height:22px;border-radius:7px;display:grid;place-items:center;
-  background:var(--panel2);border:1px solid var(--border);color:var(--accent);
-  font-size:12px;font-weight:800;letter-spacing:0;
-}
-.hint{font-size:12.5px;color:var(--muted);line-height:1.55}
-.hint b{color:var(--text)}
-.steps{list-style:none;margin-top:4px;display:grid;gap:7px}
-.steps li{font-size:13px;color:var(--muted);display:flex;gap:9px;align-items:flex-start;line-height:1.45}
-.steps li::before{content:'→';color:var(--accent);font-weight:700;flex:none}
-.check{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-top:12px;cursor:pointer;user-select:none}
-.check input{accent-color:var(--accent);width:16px;height:16px}
-
-.drop{
-  border:2px dashed var(--border);border-radius:12px;padding:26px 16px;
-  display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;
-  transition:.25s;cursor:pointer;background:var(--panel2);
-}
-.drop:hover,.drop.over{border-color:var(--accent);background:rgba(255,122,26,.06)}
-.drop svg{width:34px;height:34px;stroke:var(--accent);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.drop p{font-size:13.5px;font-weight:600}
-.drop span{font-size:11.5px;color:var(--muted)}
-.file-row{display:none;align-items:center;gap:12px;margin-top:14px;padding:10px 12px;background:var(--panel2);border:1px solid var(--border);border-radius:10px}
-.file-row.show{display:flex}
-.file-row img{width:46px;height:46px;border-radius:8px;object-fit:cover;flex:none;border:1px solid var(--border)}
-.file-row .fi{flex:1;min-width:0}
-.file-row .fi b{font-size:13px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.file-row .fi span{font-size:11.5px;color:var(--muted);font-family:'JetBrains Mono',monospace}
-
-.ctrl{margin-bottom:15px}
-.ctrl:last-child{margin-bottom:0}
-.ctrl label{
-  display:flex;justify-content:space-between;align-items:baseline;
-  font-size:13px;font-weight:600;margin-bottom:7px;color:#cfd7e4;
-}
-.ctrl label output{
-  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent2);
-  background:var(--panel2);padding:2px 8px;border-radius:6px;border:1px solid var(--border);
-}
-select{
-  width:100%;background:var(--panel2);color:var(--text);border:1px solid var(--border);
-  border-radius:9px;padding:9px 11px;font-size:13.5px;outline:none;transition:.2s;
-}
-select:focus{border-color:var(--accent)}
-input[type=range]{
-  -webkit-appearance:none;width:100%;height:5px;border-radius:3px;
-  background:linear-gradient(to right,var(--accent) var(--fill,50%),#334055 var(--fill,50%));
-  outline:none;
-}
-input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;width:18px;height:18px;border-radius:50%;
-  background:#fff;border:3px solid var(--accent);box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:grab;
-}
-input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--accent);cursor:grab}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-.preview-col{display:flex;flex-direction:column;gap:16px}
-.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.dims{
-  font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--muted);
-  background:var(--panel);border:1px solid var(--border);padding:9px 14px;border-radius:10px;flex:1;min-width:200px;
-}
-.dims b{color:var(--accent2)}
-.paper-zone{
-  background:
-    linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
-  background-size:22px 22px;
-  border:1px solid var(--border);border-radius:var(--radius);
-  min-height:340px;display:flex;align-items:center;justify-content:center;
-  padding:24px;overflow:hidden;
-}
-.empty{text-align:center;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:12px}
-.empty svg{width:56px;height:56px;stroke:#3d4a60;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;animation:float 3.4s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.paper{
-  background:#fff;padding:14px 14px 22px;border-radius:4px;
-  box-shadow:0 20px 50px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.4);
-  max-width:100%;position:relative;animation:feedIn .45s cubic-bezier(.2,.9,.3,1.15);
-}
-@keyframes feedIn{from{opacity:0;transform:translateY(-18px) scale(.97)}to{opacity:1;transform:none}}
-.paper::after{
-  content:'';position:absolute;left:0;right:0;bottom:-9px;height:10px;
-  background:
-    linear-gradient(45deg,transparent 33%,#fff 33%,#fff 66%,transparent 66%) 0 0/14px 10px,
-    linear-gradient(-45deg,transparent 33%,#fff 33%,#fff 66%,transparent 66%) 7px 0/14px 10px;
-}
-.paper canvas{display:block;max-width:100%;height:auto;image-rendering:pixelated}
-.paper-tag{
-  position:absolute;top:-11px;left:14px;background:var(--accent);color:#fff;
-  font-size:10px;font-weight:800;letter-spacing:1.2px;padding:3px 10px;border-radius:6px;
-  text-transform:uppercase;box-shadow:0 4px 10px rgba(255,122,26,.4);
-}
-
-.diag-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin-top:4px}
-.diag-grid .btn{justify-content:center;font-size:13px;padding:11px 8px}
-
-.progress-wrap{display:none}
-.progress-wrap.show{display:block}
-.progress-top{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px}
-.progress{height:12px;background:var(--panel2);border:1px solid var(--border);border-radius:999px;overflow:hidden}
-.progress .bar{
-  height:100%;width:0%;border-radius:999px;transition:width .2s;
-  background:repeating-linear-gradient(45deg,var(--accent) 0 10px,var(--accent2) 10px 20px);
-  background-size:200% 100%;animation:stripes 1s linear infinite;
-}
-@keyframes stripes{from{background-position:0 0}to{background-position:40px 0}}
-
-.print-row{display:flex;gap:10px}
-.print-row .btn.big{flex:1}
-#cancelBtn{display:none;flex:none;align-self:stretch;border-radius:14px;padding:16px 18px;background:#3a1418;border:1px solid #6b222a;color:var(--err)}
-#cancelBtn.show{display:inline-flex}
-#estTime{font-size:12px;color:var(--muted);text-align:center;margin-top:8px;font-family:'JetBrains Mono',monospace}
-
-.char-row{display:flex;gap:8px;margin-top:10px}
-.char-row select{flex:1}
-
-.log{
-  background:#0a0d12;border:1px solid var(--border);border-radius:10px;
-  font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;
-  padding:12px 14px;max-height:190px;overflow-y:auto;
-}
-.log .t{color:#4b5768}
-.log .ok{color:var(--ok)} .log .err{color:var(--err)} .log .warn{color:var(--warn)} .log .info{color:#a8b3c5}
-.log::-webkit-scrollbar{width:6px}
-.log::-webkit-scrollbar-thumb{background:#334055;border-radius:3px}
-
-.banner{
-  max-width:1240px;margin:14px auto 0;padding:13px 18px;border-radius:12px;
-  font-size:13.5px;line-height:1.5;display:none;border:1px solid rgba(255,209,102,.35);
-  background:rgba(255,209,102,.08);color:var(--warn);
-}
-.banner.show{display:block}
-.banner.err{border-color:rgba(255,93,93,.4);background:rgba(255,93,93,.08);color:var(--err)}
-
-footer{text-align:center;color:#4b5768;font-size:11.5px;padding:22px;font-family:'JetBrains Mono',monospace}
-</style>
-</head>
-<body>
-
-<div class="banner" id="compatBanner"></div>
-
-<header>
-  <div class="logo">
-    <svg viewBox="0 0 24 24"><path d="M6 9V3h12v6h2a2 2 0 0 1 2 2v6h-4v4H6v-4H2v-6a2 2 0 0 1 2-2h2zm2-4v4h8V5H8zm0 12v4h8v-4H8zm-4-2h2v2H4v-2z"/></svg>
-  </div>
-  <div class="title">
-    <h1>MX10 <span>Print</span></h1>
-    <p>Печать фото через Bluetooth · портативный мини-принтер</p>
+    <p>Печать фото через Bluetooth · мини-принтер</p>
   </div>
   <div class="header-right">
     <div class="pill" id="statusPill"><span class="dot"></span><span id="statusText">Не подключено</span></div>
     <button class="btn primary" id="connectBtn">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a1 1 0 0 1 .67.26l.07.08 4.5 5.5a1 1 0 0 1-.1 1.36l-.07.05-3.6 2.5 3.6 2.5a1 1 0 0 1 .3 1.33l-.06.08-4.5 5.5a1 1 0 0 1-1.79-.55L11 13.5l-2.9 2.2a1 1 0 0 1-1.3-1.5l.08-.07L10.4 11 6.88 8.4a1 1 0 0 1 1.05-1.68l.17.1L11 9V3a1 1 0 0 1 1-1zm1 11.5-2.1 1.6L13 14.5zm0-5L10.9 6.9 13 8.5z"/></svg>
-      Подключить принтер
+      <span id="connectLabel">Подключить принтер</span>
     </button>
   </div>
 </header>
@@ -504,25 +271,26 @@ footer{text-align:center;color:#4b5768;font-size:11.5px;padding:22px;font-family
     <div class="card">
       <h2><span class="num">1</span> Подключение</h2>
       <ul class="steps">
-        <li>Включите принтер <b>MX10</b> (кнопка питания), заправьте бумагу</li>
-        <li>На Android включите <b>геолокацию</b> — без неё Chrome не видит Bluetooth-устройства</li>
-        <li>Используйте <b>Chrome</b> и адрес <b>https://</b></li>
-        <li>Нажмите «Подключить принтер» и выберите устройство в окне</li>
+        <li>Включите принтер <b>MX10</b>, заправьте бумагу</li>
+        <li>На Android включите <b>Bluetooth</b> и <b>геолокацию</b> (без неё поиск не работает)</li>
+        <li>Сайт должен быть открыт по <b>https://</b> в <b>Chrome</b></li>
+        <li>Нажмите кнопку наверху и выберите принтер в списке</li>
       </ul>
       <label class="check"><input type="checkbox" id="chkAllDevices"> Показывать все Bluetooth-устройства</label>
+      <div class="env-line" id="envLine">Проверка окружения…</div>
     </div>
 
     <div class="card">
       <h2><span class="num">2</span> Фотография</h2>
       <div class="drop" id="dropZone">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5-9 9"/></svg>
-        <p>Перетащите фото сюда</p>
-        <span>или нажмите, чтобы выбрать файл · JPG / PNG / WEBP</span>
+        <p>Перетащите фото сюда или нажмите</p>
+        <span>JPG / PNG / WEBP</span>
       </div>
       <input type="file" id="fileInput" accept="image/*" hidden>
       <input type="file" id="cameraInput" accept="image/*" capture="environment" hidden>
-      <div style="display:flex;gap:8px;margin-top:12px">
-        <button class="btn small" id="chooseBtn">📁 Выбрать файл</button>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn small" id="chooseBtn">📁 Файл</button>
         <button class="btn small" id="cameraBtn">📷 Камера</button>
       </div>
       <div class="file-row" id="fileRow">
@@ -546,7 +314,7 @@ footer{text-align:center;color:#4b5768;font-size:11.5px;padding:22px;font-family
       <div class="ctrl">
         <label>Ширина бумаги (точек)</label>
         <select id="paperWidth">
-          <option value="384" selected>384 px — MX10, ≈ 48 мм (рекомендуется)</option>
+          <option value="384" selected>384 px — MX10, ≈ 48 мм</option>
           <option value="320">320 px — узкая лента</option>
           <option value="576">576 px — широкая лента</option>
         </select>
@@ -569,12 +337,12 @@ footer{text-align:center;color:#4b5768;font-size:11.5px;padding:22px;font-family
       </div>
 
       <div class="ctrl">
-        <label>Метод преобразования в ч/б</label>
+        <label>Метод ч/б</label>
         <select id="ditherMode">
-          <option value="fs" selected>Флойд–Стейнберг (рекомендуется)</option>
-          <option value="atkinson">Аткинсон (контрастнее)</option>
-          <option value="bayer">Упорядоченный (Байер 8×8)</option>
-          <option value="threshold">Пороговый (1 бит)</option>
+          <option value="fs" selected>Флойд–Стейнберг</option>
+          <option value="atkinson">Аткинсон</option>
+          <option value="bayer">Байер 8×8</option>
+          <option value="threshold">Пороговый</option>
         </select>
       </div>
 
@@ -583,10 +351,10 @@ footer{text-align:center;color:#4b5768;font-size:11.5px;padding:22px;font-family
         <input type="range" id="threshRange" min="40" max="216" value="128">
       </div>
 
-      <label class="check" style="margin-top:0"><input type="checkbox" id="invertChk"> Инвертировать фото (негатив)</label>
-      <label class="check"><input type="checkbox" id="invertDotsChk"> Инвертировать точки (если печатает «наоборот»)</label>
+      <label class="check" style="margin-top:0"><input type="checkbox" id="invertChk"> Инвертировать фото</label>
+      <label class="check"><input type="checkbox" id="invertDotsChk"> Инвертировать точки</label>
 
-      <h2 style="margin-top:14px"><span class="num">⚙</span> Передача данных</h2>
+      <h2 style="margin-top:12px"><span class="num">⚙</span> Передача данных</h2>
 
       <div class="grid2">
         <div class="ctrl">
@@ -610,15 +378,15 @@ footer{text-align:center;color:#4b5768;font-size:11.5px;padding:22px;font-family
       </div>
       <div class="grid2">
         <div class="ctrl">
-          <label>Пауза после иниц., мс <output id="initOut">300</output></label>
+          <label>Пауза иниц., мс <output id="initOut">300</output></label>
           <input type="range" id="initRange" min="0" max="1000" step="50" value="300">
         </div>
         <div class="ctrl">
           <label>Режим записи</label>
           <select id="writeMode">
             <option value="auto" selected>Авто (надёжно)</option>
-            <option value="resp">Всегда с ответом</option>
-            <option value="noresp">Без ответа (быстрее)</option>
+            <option value="resp">С ответом</option>
+            <option value="noresp">Без ответа</option>
           </select>
         </div>
       </div>
@@ -631,26 +399,28 @@ footer{text-align:center;color:#4b5768;font-size:11.5px;padding:22px;font-family
 
       <div class="toolbar">
         <div class="dims" id="dimsLabel">Загрузите фото — размер подстроится автоматически</div>
-        <button class="btn small" id="testBtn" disabled>🧪 Тест: фото-образец</button>
+        <button class="btn small" id="testBtn" disabled>🧪 Тест-образец</button>
       </div>
 
-      <div class="paper-zone" id="paperZone" style="margin-top:14px">
+      <div class="paper-zone" id="paperZone" style="margin-top:12px">
         <div class="empty" id="emptyState">
           <svg viewBox="0 0 24 24"><path d="M6 18h12v-6H6v6zm0 0v3h12v-3M6 9V4h12v5M4 9h16a1 1 0 0 1 1 1v7h-3M3 10v7h3M17 13h2"/></svg>
-          <div>Бумага заправлена и ждёт фото</div>
+          <div>Бумага ждёт фото</div>
         </div>
-        <div class="paper" id="paperWrap" hidden>
-          <div class="paper-tag">MX10 · термопечать</div>
-          <canvas id="previewCanvas"></canvas>
+        <div class="paper-scroll" id="paperWrap" hidden>
+          <div class="paper">
+            <div class="paper-tag">MX10 · термопечать</div>
+            <canvas id="previewCanvas"></canvas>
+          </div>
         </div>
       </div>
 
-      <div class="progress-wrap" id="progressWrap" style="margin-top:16px">
+      <div class="progress-wrap" id="progressWrap" style="margin-top:13px">
         <div class="progress-top"><span id="progressLabel">Передача…</span><span id="progressPct">0%</span></div>
         <div class="progress"><div class="bar" id="progressBar"></div></div>
       </div>
 
-      <div class="print-row" style="margin-top:16px">
+      <div class="print-row" style="margin-top:13px">
         <button class="btn primary big" id="printBtn" disabled>
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 8V3h10v5h3a1 1 0 0 1 1 1v7h-4v5H7v-5H3V9a1 1 0 0 1 1-1h3zm2-3v3h6V5H9zm0 11v4h6v-4H9z"/></svg>
           Распечатать
@@ -662,27 +432,24 @@ footer{text-align:center;color:#4b5768;font-size:11.5px;padding:22px;font-family
 
     <div class="card">
       <h2><span class="num">✚</span> Диагностика принтера</h2>
-      <p class="hint">Идите по шагам — так понятно, где именно проблема:<br>
-      <b>1)</b> Протяжка — проверяет связь вообще. <b>2)</b> Текст — печатает ли принтер команды. <b>3)</b> Полосы — проверяют формат изображения. Если что-то из этого работает, а фото нет — смените протокол в настройках.</p>
+      <p class="hint"><b>1)</b> Протяжка — есть ли связь. <b>2)</b> Текст — понимает ли принтер команды. <b>3)</b> Полосы — какой формат изображения работает. Если что-то сработало, а фото нет — смените протокол в настройках.</p>
       <div class="diag-grid">
-        <button class="btn diagBtn" id="diagFeed" disabled>⏬ Протяжка бумаги</button>
-        <button class="btn diagBtn" id="diagText" disabled>🔤 Печать текста</button>
-        <button class="btn diagBtn" id="diagGs" disabled>⬛ Полоса (GS v 0)</button>
-        <button class="btn diagBtn" id="diagEsc" disabled>⬛ Полоса (ESC *)</button>
-        <button class="btn diagBtn" id="diagRaw" disabled>⬛ Полоса (raw)</button>
+        <button class="btn diagBtn" id="diagFeed" disabled>⏬ Протяжка</button>
+        <button class="btn diagBtn" id="diagText" disabled>🔤 Текст</button>
+        <button class="btn diagBtn" id="diagGs" disabled>⬛ Полоса GS v 0</button>
+        <button class="btn diagBtn" id="diagEsc" disabled>⬛ Полоса ESC *</button>
+        <button class="btn diagBtn" id="diagRaw" disabled>⬛ Полоса raw</button>
       </div>
       <div class="char-row">
-        <select id="charSelect" disabled>
-          <option value="-1">Характеристика записи: не найдена</option>
-        </select>
+        <select id="charSelect" disabled><option value="-1">Характеристика записи: не найдена</option></select>
         <button class="btn small" id="rescanBtn" disabled title="Перечитать сервисы">🔄</button>
       </div>
-      <p class="hint" style="margin-top:10px">Если принтер молчит — попробуйте выбрать другую характеристику из списка и повторить «Протяжку».</p>
+      <p class="hint" style="margin-top:8px">Если принтер молчит — выберите другую характеристику и повторите «Протяжку».</p>
     </div>
 
     <div class="card">
       <h2><span class="num">≡</span> Журнал</h2>
-      <div class="log" id="logBox"><div><span class="t">[--:--:--]</span> <span class="info">Готов к работе. Подключите принтер и загрузите фото.</span></div></div>
+      <div class="log" id="logBox"><div><span class="t">[--:--:--]</span> <span class="info">Готов к работе.</span></div></div>
     </div>
   </section>
 </main>
@@ -715,6 +482,18 @@ const KNOWN_SERVICES = [
 const $ = id => document.getElementById(id);
 const sleep = ms => new Promise(r=>setTimeout(r,ms));
 
+/* ---------- toasts ---------- */
+function showToast(msg, type='warn', ttl=6500){
+  const box = $('toastBox');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  t.addEventListener('click', ()=>{ t.classList.add('hide'); setTimeout(()=>t.remove(),320); });
+  box.appendChild(t);
+  while(box.children.length > 3) box.removeChild(box.firstChild);
+  setTimeout(()=>{ if(t.parentNode){ t.classList.add('hide'); setTimeout(()=>t.remove(),320); } }, ttl);
+}
+
 function log(msg, cls='info'){
   const box = $('logBox');
   const t = new Date().toTimeString().slice(0,8);
@@ -725,14 +504,25 @@ function log(msg, cls='info'){
   while(box.children.length > 250) box.removeChild(box.firstChild);
 }
 
+/* ---------- проверка окружения ---------- */
 (function(){
-  const b = $('compatBanner');
-  if(!('bluetooth' in navigator)){
-    b.className = 'banner show err';
-    b.innerHTML = '⚠️ Браузер не поддерживает Web Bluetooth. Откройте сайт в <b>Chrome на Android</b> по адресу <b>https://</b> (или localhost).';
-  } else if(!window.isSecureContext){
-    b.className = 'banner show';
-    b.innerHTML = '⚠️ Bluetooth доступен только на защищённых страницах: <b>https://</b> или <b>localhost</b>.';
+  const secure = window.isSecureContext;
+  const bt = ('bluetooth' in navigator);
+  const parts = [
+    secure ? 'HTTPS ✓' : 'HTTPS ✗ ('+location.protocol+')',
+    bt ? 'Web Bluetooth ✓' : 'Web Bluetooth ✗'
+  ];
+  const el = $('envLine');
+  el.textContent = parts.join(' · ');
+  if(!secure || !bt){
+    el.classList.add('bad');
+    let why = '';
+    if(!bt) why = 'Браузер не поддерживает Web Bluetooth. Нужен Chrome на Android.';
+    else why = 'Страница открыта не по HTTPS. Загрузите файл на любой хостинг с https:// или откройте через локальный сервер.';
+    showToast(why + ' Кнопка подключения не сработает.', 'err', 10000);
+    log(why,'err');
+  } else {
+    el.textContent += ' · готово к подключению';
   }
 })();
 
@@ -740,11 +530,21 @@ function setStatus(mode, text){
   $('statusPill').className = 'pill' + (mode ? ' '+mode : '');
   $('statusText').textContent = text;
 }
+function setConnectLabel(txt){ $('connectLabel').textContent = txt; }
 
 /* ================= подключение ================= */
 $('connectBtn').addEventListener('click', async ()=>{
   const btn = $('connectBtn');
+  if(!('bluetooth' in navigator)){
+    showToast('Web Bluetooth недоступен. Откройте сайт в Chrome на Android.','err',9000);
+    return;
+  }
+  if(!window.isSecureContext){
+    showToast('Нужен HTTPS или localhost — сейчас '+location.protocol+'. Кнопка не может работать без защищённого адреса.','err',9000);
+    return;
+  }
   btn.disabled = true;
+  setConnectLabel('Поиск…');
   try{
     if(S.device && !S.device.gatt.connected){
       log('Переподключение к «'+S.device.name+'»…');
@@ -753,7 +553,6 @@ $('connectBtn').addEventListener('click', async ()=>{
       await discoverServices();
       return;
     }
-    if(!('bluetooth' in navigator)) throw new Error('Web Bluetooth недоступен в этом браузере');
     setStatus('connecting','Поиск принтера…');
     log('Запрос устройств Bluetooth…');
     const opts = { optionalServices: KNOWN_SERVICES };
@@ -763,26 +562,39 @@ $('connectBtn').addEventListener('click', async ()=>{
       opts.filters = [ {namePrefix:'MX10'}, {namePrefix:'mx10'}, {namePrefix:'Printer'} ];
     }
     S.device = await navigator.bluetooth.requestDevice(opts);
-    log('Найдено устройство: <b>'+ (S.device.name||'без имени') +'</b>');
+    log('Найдено устройство: <b>'+ (S.device.name||'без имени') +'</b>','ok');
     S.device.addEventListener('gattserverdisconnected', ()=>{
       S.char = null; S.server = null;
       setStatus('','Не подключено');
+      setConnectLabel('Подключить принтер');
       updateButtons();
-      log('Принтер отключился. Нажмите «Подключить» для переподключения.','warn');
+      showToast('Принтер отключился.','warn');
+      log('Принтер отключился.','warn');
     });
     setStatus('connecting','Подключение…');
+    setConnectLabel('Подключение…');
     S.server = await S.device.gatt.connect();
     log('GATT-соединение установлено','ok');
     await discoverServices();
   }catch(err){
+    let msg = err.message || String(err);
     if(err.name === 'NotFoundError'){
-      log('Устройство не выбрано.','warn');
-      setStatus('','Не подключено');
+      msg = 'Принтер не найден или окно закрыто. Включите MX10, поднесите ближе к телефону. На Android должна быть включена геолокация. Если не помогает — поставьте галочку «Показывать все Bluetooth-устройства».';
+      showToast(msg,'warn',9000); log(msg,'warn');
+    } else if(err.name === 'SecurityError'){
+      msg = 'Браузер заблокировал Bluetooth: откройте сайт по HTTPS.';
+      showToast(msg,'err',9000); log(msg,'err');
+    } else if(err.name === 'NetworkError'){
+      msg = 'Bluetooth выключен или на Android отключена геолокация (нужна для поиска устройств).';
+      showToast(msg,'err',9000); log(msg,'err');
     } else {
-      log('Ошибка подключения: '+err.message,'err');
-      setStatus('','Не подключено');
+      showToast('Ошибка подключения: '+msg,'err',9000); log('Ошибка подключения: '+msg,'err');
     }
-  }finally{ btn.disabled = false; }
+    setStatus('','Не подключено');
+  }finally{
+    btn.disabled = false;
+    if(!S.char) setConnectLabel('Подключить принтер');
+  }
 });
 
 async function discoverServices(){
@@ -798,23 +610,25 @@ async function discoverServices(){
       const p = ch.properties;
       if(p.writeValue || p.writeWithoutResponse){
         S.candidates.push(ch);
-        log(`Запись: сервис …${svc.uuid.slice(4,8)} / хар-ка …${ch.uuid.slice(0,8)} [${p.writeValue?'resp ':''}${p.writeWithoutResponse?'noresp':''}]`,'ok');
+        log(`Запись: …${svc.uuid.slice(4,8)} / …${ch.uuid.slice(0,8)} [${p.writeValue?'resp ':''}${p.writeWithoutResponse?'noresp':''}]`,'ok');
       }
     }
   }
   if(!S.candidates.length){
-    log('Не найдена характеристика записи. Включите «Показывать все устройства» и подключитесь заново.','err');
+    const m = 'Не найдена характеристика записи. Поставьте «Показывать все Bluetooth-устройства» и подключитесь заново.';
+    showToast(m,'err',9000); log(m,'err');
     setStatus('','Не подключено');
     return;
   }
-  // приоритет: с ответом + «известные» UUID печати
   const score = c => (c.properties.writeValue?2:0) + (/ae01|ffe1|ff02|fff2|2af1/i.test(c.uuid)?1:0);
   S.candidates.sort((a,b)=>score(b)-score(a));
   fillCharSelect();
   S.char = S.candidates[0];
   $('charSelect').value = '0';
   setStatus('connected', (S.device.name||'Принтер') + ' подключён');
-  log('Принтер готов. Начните с диагностики: «Протяжка бумаги».','ok');
+  setConnectLabel((S.device.name||'Принтер'));
+  showToast('Принтер подключён ✔ Проверьте связь кнопкой «Протяжка» в диагностике.','ok');
+  log('Принтер готов. Начните с диагностики: «Протяжка».','ok');
   updateButtons();
 }
 
@@ -835,7 +649,8 @@ $('charSelect').addEventListener('change', e=>{
   const idx = +e.target.value;
   if(S.candidates[idx]){
     S.char = S.candidates[idx];
-    log('Выбрана характеристика #'+idx+' — попробуйте «Протяжку бумаги».','warn');
+    showToast('Выбрана характеристика #'+idx+'. Нажмите «Протяжка».','warn');
+    log('Выбрана характеристика #'+idx+'.','warn');
   }
 });
 
@@ -845,5 +660,370 @@ $('rescanBtn').addEventListener('click', async ()=>{
   try{ await discoverServices(); }finally{ $('rescanBtn').disabled = false; updateButtons(); }
 });
 
-/* ================= загрузка изображения ================= */
-const
+/* ================= изображение ================= */
+const dropZone = $('dropZone'), fileInput = $('fileInput'), cameraInput = $('cameraInput');
+dropZone.addEventListener('click', ()=>fileInput.click());
+$('chooseBtn').addEventListener('click', ()=>fileInput.click());
+$('cameraBtn').addEventListener('click', ()=>cameraInput.click());
+fileInput.addEventListener('change', e=>{ if(e.target.files[0]) loadFile(e.target.files[0]); e.target.value=''; });
+cameraInput.addEventListener('change', e=>{ if(e.target.files[0]) loadFile(e.target.files[0]); e.target.value=''; });
+['dragenter','dragover'].forEach(ev=>dropZone.addEventListener(ev,e=>{e.preventDefault();dropZone.classList.add('over');}));
+['dragleave','drop'].forEach(ev=>dropZone.addEventListener(ev,e=>{e.preventDefault();dropZone.classList.remove('over');}));
+dropZone.addEventListener('drop', e=>{
+  const f = e.dataTransfer.files && e.dataTransfer.files[0];
+  if(f) loadFile(f);
+});
+
+async function loadFile(file){
+  if(!file.type.startsWith('image/')){ showToast('Это не изображение.','err'); return; }
+  try{
+    let bmp;
+    try{ bmp = await createImageBitmap(file, {imageOrientation:'from-image'}); }
+    catch(e){ bmp = await createImageBitmap(file); }
+    if(S.src && S.src.close) S.src.close();
+    S.src = bmp; S.srcName = file.name;
+    $('thumbImg').src = URL.createObjectURL(file);
+    $('fileName').textContent = file.name;
+    $('fileMeta').textContent = bmp.width+'×'+bmp.height+' px · '+(file.size/1024).toFixed(0)+' КБ';
+    $('fileRow').classList.add('show');
+    log('Загружено фото: '+file.name+' ('+bmp.width+'×'+bmp.height+')','ok');
+    renderOutput();
+  }catch(err){ showToast('Не удалось открыть изображение: '+err.message,'err'); }
+}
+
+function renderOutput(){
+  if(!S.src) return;
+  const pw = settings.paperWidth;
+  let tw = Math.round(pw * settings.scale/100);
+  tw = Math.max(8, Math.round(tw/8)*8);
+  const iw = S.src.width, ih = S.src.height;
+  let th = Math.max(1, Math.round(ih * tw / iw));
+  const capped = th > 12000; if(capped) th = 12000;
+
+  const cv = document.createElement('canvas'); cv.width = tw; cv.height = th;
+  const cx = cv.getContext('2d', {willReadFrequently:true});
+  cx.drawImage(S.src, 0, 0, tw, th);
+  const data = cx.getImageData(0,0,tw,th).data;
+
+  const g = new Float32Array(tw*th);
+  const cf = (settings.contrast+100)/100;
+  const br = settings.brightness * 2.55;
+  for(let i=0, n=tw*th; i<n; i++){
+    const d = i*4;
+    let v = 0.299*data[d] + 0.587*data[d+1] + 0.114*data[d+2];
+    v = (v-128)*cf + 128 + br;
+    if(settings.invert) v = 255 - v;
+    g[i] = v<0?0 : v>255?255 : v;
+  }
+  const bits = applyDither(g, tw, th, settings.dither, settings.threshold);
+  S.out = {tw, th, bits};
+
+  const pc = $('previewCanvas'); pc.width = tw; pc.height = th;
+  const pctx = pc.getContext('2d');
+  const img = pctx.createImageData(tw, th);
+  for(let i=0, n=tw*th; i<n; i++){
+    const v = bits[i] ? 0 : 255, d = i*4;
+    img.data[d]=v; img.data[d+1]=v; img.data[d+2]=v; img.data[d+3]=255;
+  }
+  pctx.putImageData(img,0,0);
+  $('emptyState').style.display = 'none';
+  $('paperWrap').hidden = false;
+
+  const cm = d => (d/203*2.54).toFixed(1);
+  $('dimsLabel').innerHTML = `Размер: <b>${tw} × ${th}</b> точек ≈ <b>${cm(tw)} × ${cm(th)}</b> см` + (capped?' · <span style="color:var(--warn)">⚠ обрезано</span>':'');
+  updateEstimate();
+  updateButtons();
+}
+
+function updateEstimate(){
+  if(!S.out){ $('estTime').textContent=''; return; }
+  const {tw, th} = S.out;
+  const totalBytes = Math.round(tw/8*th + 128 + Math.ceil(th/settings.sliceH)*8);
+  const chunks = Math.ceil(totalBytes/settings.chunk);
+  const blocks = Math.ceil(th/settings.sliceH);
+  const sec = Math.round(chunks*(settings.delay+6)/1000 + blocks*settings.pauseBlocks/1000 + th/203*2.54/4);
+  $('estTime').textContent = S.char
+    ? `~${totalBytes} байт · ~${sec} c`
+    : `~${totalBytes} байт · подключите принтер`;
+}
+
+function applyDither(g, w, h, mode, thr){
+  const bits = new Uint8Array(w*h);
+  if(mode === 'threshold'){
+    for(let i=0;i<g.length;i++) bits[i] = g[i] < thr ? 1 : 0;
+    return bits;
+  }
+  if(mode === 'bayer'){
+    const B = [
+      [ 0,32, 8,40, 2,34,10,42],[48,16,56,24,50,18,58,26],
+      [12,44, 4,36,14,46, 6,38],[60,28,52,20,62,30,54,22],
+      [ 3,35,11,43, 1,33, 9,41],[51,19,59,27,49,17,57,25],
+      [15,47, 7,39,13,45, 5,37],[63,31,55,23,61,29,53,21]];
+    const shift = thr - 128;
+    for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+      const i=y*w+x;
+      bits[i] = g[i] < (B[y&7][x&7]/64)*255 + shift ? 1 : 0;
+    }
+    return bits;
+  }
+  const err = Float32Array.from(g);
+  const add = (idx, e, cond)=>{ if(cond) err[idx]+=e; };
+  if(mode === 'atkinson'){
+    for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+      const i=y*w+x, v=err[i], black = v<thr;
+      bits[i]=black?1:0;
+      const e=(black?v:v-255)/8;
+      add(i+1,e,x+1<w); add(i+2,e,x+2<w);
+      add(i+w-1,e,x>0&&y+1<h); add(i+w,e,y+1<h); add(i+w+1,e,x+1<w&&y+1<h);
+      add(i+2*w,e,y+2<h);
+    }
+    return bits;
+  }
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+    const i=y*w+x, v=err[i], black = v<thr;
+    bits[i]=black?1:0;
+    const e = black? v : v-255;
+    add(i+1,   e*7/16, x+1<w);
+    add(i+w-1, e*3/16, x>0&&y+1<h);
+    add(i+w,   e*5/16, y+1<h);
+    add(i+w+1, e*1/16, x+1<w&&y+1<h);
+  }
+  return bits;
+}
+
+/* ================= данные ================= */
+function concatU8(arrays){
+  let len=0; for(const a of arrays) len+=a.length;
+  const out = new Uint8Array(len); let o=0;
+  for(const a of arrays){ out.set(a,o); o+=a.length; }
+  return out;
+}
+function dotAt(bits, tw, x, y){
+  let b = bits[y*tw+x];
+  if(settings.invertDots) b ^= 1;
+  return b;
+}
+function packRows(bits, tw, y0, h){
+  const xB = tw>>3, data = new Uint8Array(h*xB);
+  for(let r=0;r<h;r++){
+    const row=(y0+r)*tw, o=r*xB;
+    for(let x=0;x<tw;x++) if(bits[row+x] ^ (settings.invertDots?1:0)) data[o+(x>>3)] |= (0x80>>(x&7));
+  }
+  return data;
+}
+function buildJobParts(tw, th, bits, protocol){
+  if(protocol === 'raw'){
+    return { needsInit:false, parts:[ packRows(bits, tw, 0, th) ] };
+  }
+  if(protocol === 'esc_star'){
+    const parts = [ new Uint8Array([0x1B,0x33,0x00]) ];
+    for(let band=0; band<th; band+=24){
+      const header = [0x1B,0x2A,33, tw&0xff,(tw>>8)&0xff];
+      const data = new Uint8Array(tw*3);
+      for(let x=0;x<tw;x++){
+        for(let b=0;b<3;b++){
+          let byte=0;
+          for(let bit=0;bit<8;bit++){
+            const y=band+b*8+bit;
+            if(y<th && dotAt(bits,tw,x,y)) byte |= (0x80>>bit);
+          }
+          data[x*3+b]=byte;
+        }
+      }
+      parts.push(concatU8([new Uint8Array(header), data, new Uint8Array([0x0A])]));
+    }
+    parts.push(new Uint8Array([0x1B,0x32, 0x0A,0x0A,0x0A]));
+    return { needsInit:true, parts };
+  }
+  const xB = tw>>3;
+  const parts = [];
+  for(let y=0; y<th; y+=settings.sliceH){
+    const h = Math.min(settings.sliceH, th-y);
+    const head = new Uint8Array([0x1D,0x76,0x30,0x00, xB&0xff,(xB>>8)&0xff, h&0xff,(h>>8)&0xff]);
+    parts.push(concatU8([head, packRows(bits, tw, y, h)]));
+  }
+  parts.push(new Uint8Array([0x0A,0x0A,0x0A,0x0A]));
+  return { needsInit:true, parts };
+}
+
+/* ================= отправка ================= */
+function updateProgress(sent, total){
+  const pct = total ? Math.round(sent/total*100) : 0;
+  $('progressBar').style.width = pct+'%';
+  $('progressPct').textContent = pct+'%';
+  $('progressLabel').textContent = `${sent} / ${total} байт`;
+}
+
+async function sendChunked(bytes, onProgress){
+  const chunk = settings.chunk;
+  const useNoResp = settings.writeMode==='noresp' ||
+    (settings.writeMode==='auto' && !S.char.properties.writeValue && S.char.properties.writeWithoutResponse);
+  for(let i=0;i<bytes.length;i+=chunk){
+    if(S.cancel) throw new Error('Остановлено пользователем');
+    const end = Math.min(bytes.length, i+chunk);
+    const part = bytes.buffer.slice(bytes.byteOffset+i, bytes.byteOffset+end);
+    try{
+      if(useNoResp) await S.char.writeValueWithoutResponse(part);
+      else await S.char.writeValue(part);
+    }catch(err){
+      throw new Error('Ошибка записи: '+err.message+'. Уменьшите пакет до 20 байт, задержку 50 мс.');
+    }
+    onProgress(end-i);
+    if(settings.delay>0) await sleep(settings.delay);
+  }
+}
+
+async function runJob(items, label){
+  if(!S.char){ showToast('Принтер не подключён.','err'); return false; }
+  if(S.printing){ showToast('Уже идёт передача.','warn'); return false; }
+  S.printing = true; S.cancel = false;
+  $('cancelBtn').classList.add('show');
+  $('printBtn').disabled = true; $('testBtn').disabled = true;
+  document.querySelectorAll('.diagBtn').forEach(b=>b.disabled = true);
+  $('progressWrap').classList.add('show');
+  let total = 0; for(const it of items) total += it.data.length;
+  let sent = 0;
+  log(`Передача ${total} байт (${label})…`);
+  let ok = false;
+  try{
+    for(let i=0;i<items.length;i++){
+      const it = items[i];
+      await sendChunked(it.data, n=>{ sent += n; updateProgress(sent,total); });
+      if(it.init) await sleep(settings.initPause);
+      else if(i < items.length-1 && settings.pauseBlocks > 0) await sleep(settings.pauseBlocks);
+    }
+    log('Данные переданы. Принтер печатает… ✔','ok');
+    ok = true;
+  }catch(err){
+    showToast(err.message,'err',8000);
+    log(err.message,'err');
+  }finally{
+    S.printing = false;
+    $('cancelBtn').classList.remove('show');
+    setTimeout(()=>{ $('progressWrap').classList.remove('show'); $('progressBar').style.width='0%'; }, 1500);
+    updateButtons();
+  }
+  return ok;
+}
+
+async function printBits(tw, th, bits, label, forceProtocol){
+  const proto = forceProtocol || settings.protocol;
+  const job = buildJobParts(tw, th, bits, proto);
+  const items = [];
+  if(job.needsInit) items.push({ data:new Uint8Array([0x1B,0x40]), init:true });
+  for(const p of job.parts) items.push({ data:p });
+  return runJob(items, label + ' · ' + proto.toUpperCase());
+}
+
+$('printBtn').addEventListener('click', ()=>{
+  if(S.out) printBits(S.out.tw, S.out.th, S.out.bits, `фото ${S.out.tw}×${S.out.th}`);
+});
+$('cancelBtn').addEventListener('click', ()=>{ S.cancel = true; });
+
+$('testBtn').addEventListener('click', async ()=>{
+  const tw = Math.round(settings.paperWidth/8)*8;
+  const th = 160;
+  const cv = document.createElement('canvas'); cv.width=tw; cv.height=th;
+  const cx = cv.getContext('2d');
+  cx.fillStyle='#fff'; cx.fillRect(0,0,tw,th);
+  cx.strokeStyle='#000'; cx.lineWidth=4; cx.strokeRect(4,4,tw-8,th-8);
+  cx.fillStyle='#000'; cx.textAlign='center';
+  cx.font='800 44px Manrope, sans-serif'; cx.fillText('MX10', tw/2, 60);
+  cx.font='600 18px Manrope, sans-serif'; cx.fillText('TEST PRINT · 203 DPI', tw/2, 88);
+  for(let x=16;x<tw-16;x+=2){
+    cx.fillStyle = ((x>>1)&1) ? '#000' : '#fff';
+    cx.fillRect(x,102,2,14);
+  }
+  const grd = cx.createLinearGradient(16,0,tw-16,0);
+  grd.addColorStop(0,'#000'); grd.addColorStop(1,'#fff');
+  cx.fillStyle = grd; cx.fillRect(16,126,tw-32,20);
+  const data = cv.getImageData(0,0,tw,th).data;
+  const g = new Float32Array(tw*th);
+  for(let i=0;i<g.length;i++){ const d=i*4; g[i]=0.299*data[d]+0.587*data[d+1]+0.114*data[d+2]; }
+  const bits = applyDither(g, tw, th, 'threshold', 128);
+  await printBits(tw, th, bits, 'тестовый образец');
+});
+
+/* ================= диагностика ================= */
+$('diagFeed').addEventListener('click', ()=>{
+  runJob([{ data:new Uint8Array([0x0A,0x0A,0x0A,0x0A]) }], 'протяжка бумаги');
+});
+$('diagText').addEventListener('click', ()=>{
+  const text = 'MX10 TEST *** PRINT OK *** 1234567890';
+  const bytes = new Uint8Array(text.length + 3);
+  for(let i=0;i<text.length;i++) bytes[i] = text.charCodeAt(i);
+  bytes[text.length]=0x0A; bytes[text.length+1]=0x0A; bytes[text.length+2]=0x0A;
+  runJob([
+    { data:new Uint8Array([0x1B,0x40, 0x1B,0x61,0x00]), init:true },
+    { data:bytes }
+  ], 'текстовый тест');
+});
+function stripBits(tw, h){
+  const bits = new Uint8Array(tw*h);
+  for(let y=0;y<h;y++)for(let x=0;x<tw;x++){
+    bits[y*tw+x] = (y<4 || y>=h-4 || x<4 || x>=tw-4 || ((x>>4)&1)===((y>>3)&1)) ? 1 : 0;
+  }
+  return bits;
+}
+$('diagGs').addEventListener('click', ()=>{
+  const tw = Math.round(settings.paperWidth/8)*8;
+  printBits(tw, 32, stripBits(tw,32), 'полоса GS v 0', 'gs');
+});
+$('diagEsc').addEventListener('click', ()=>{
+  const tw = Math.round(settings.paperWidth/8)*8;
+  printBits(tw, 32, stripBits(tw,32), 'полоса ESC *', 'esc_star');
+});
+$('diagRaw').addEventListener('click', ()=>{
+  const tw = Math.round(settings.paperWidth/8)*8;
+  printBits(tw, 32, stripBits(tw,32), 'полоса raw', 'raw');
+});
+
+/* ================= контролы ================= */
+function bindRange(id, outId, key, fmt){
+  const el = $(id);
+  const upd = ()=>{
+    settings[key] = +el.value;
+    $(outId).textContent = fmt ? fmt(el.value) : el.value;
+    const min=+el.min, max=+el.max;
+    el.style.setProperty('--fill', ((el.value-min)/(max-min)*100)+'%');
+    scheduleRender();
+  };
+  el.addEventListener('input', upd); upd();
+}
+let renderTimer = null;
+function scheduleRender(){
+  clearTimeout(renderTimer);
+  renderTimer = setTimeout(()=>{ if(S.src){ renderOutput(); } else updateEstimate(); }, 120);
+}
+
+bindRange('scaleRange','scaleOut','scale', v=>v+'%');
+bindRange('brightRange','brightOut','brightness');
+bindRange('contrastRange','contrastOut','contrast');
+bindRange('threshRange','threshOut','threshold');
+bindRange('sliceRange','sliceOut','sliceH');
+bindRange('chunkRange','chunkOut','chunk');
+bindRange('delayRange','delayOut','delay');
+bindRange('pauseRange','pauseOut','pauseBlocks');
+bindRange('initRange','initOut','initPause');
+
+$('protoMode').addEventListener('change', e=>{ settings.protocol=e.target.value; log('Протокол: '+e.target.options[e.target.selectedIndex].text,'warn'); updateEstimate(); });
+$('paperWidth').addEventListener('change', e=>{ settings.paperWidth=+e.target.value; scheduleRender(); });
+$('ditherMode').addEventListener('change', e=>{ settings.dither=e.target.value; scheduleRender(); });
+$('invertChk').addEventListener('change', e=>{ settings.invert=e.target.checked; scheduleRender(); });
+$('invertDotsChk').addEventListener('change', e=>{ settings.invertDots=e.target.checked; if(S.src) renderOutput(); });
+$('writeMode').addEventListener('change', e=>{ settings.writeMode=e.target.value; });
+
+function updateButtons(){
+  const ready = !!S.out && !!S.char && !S.printing;
+  $('printBtn').disabled = !ready;
+  $('testBtn').disabled = !S.char || S.printing;
+  document.querySelectorAll('.diagBtn').forEach(b=>b.disabled = !S.char || S.printing);
+  $('rescanBtn').disabled = !S.server || S.printing;
+  $('charSelect').disabled = !S.char;
+  if(S.out && !S.char && !S.printing)
+    $('estTime').textContent = 'Фото готово — осталось подключить принтер';
+}
+updateButtons();
+</script>
+</body>
+</html>
