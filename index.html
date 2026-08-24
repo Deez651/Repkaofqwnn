@@ -2,1224 +2,585 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0e1116">
-<title>MX10 Print — Bluetooth мини-принтер</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>MX10 · Печать фото</title>
 <style>
-@font-face{font-family:'Manrope';font-style:normal;font-weight:400;src:url('https://cdn.jsdelivr.net/npm/@fontsource/manrope@5.0.8/files/manrope-cyrillic-400-normal.woff2') format('woff2');font-display:swap}
-@font-face{font-family:'Manrope';font-style:normal;font-weight:600;src:url('https://cdn.jsdelivr.net/npm/@fontsource/manrope@5.0.8/files/manrope-cyrillic-600-normal.woff2') format('woff2');font-display:swap}
-@font-face{font-family:'Manrope';font-style:normal;font-weight:800;src:url('https://cdn.jsdelivr.net/npm/@fontsource/manrope@5.0.8/files/manrope-cyrillic-800-normal.woff2') format('woff2');font-display:swap}
-@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;src:url('https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.18/files/jetbrains-mono-cyrillic-400-normal.woff2') format('woff2');font-display:swap}
-
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#0e1116; --panel:#161c26; --panel2:#1d2532; --border:#2b3546;
-  --text:#eef2f8; --muted:#8d99ad; --accent:#ff7a1a; --accent2:#ffb02e;
-  --ok:#3ddc84; --err:#ff5d5d; --warn:#ffd166;
-  --radius:12px;
-}
-body{
-  background:
-    radial-gradient(900px 500px at 85% -10%, rgba(255,122,26,.10), transparent 60%),
-    var(--bg);
-  color:var(--text);
-  font-family:'Manrope',system-ui,sans-serif;
-  min-height:100vh;
-}
-button{font-family:inherit;cursor:pointer}
-input,select{font-family:inherit}
-
-#toastBox{
-  position:fixed;top:10px;left:50%;transform:translateX(-50%);
-  z-index:100;display:flex;flex-direction:column;gap:8px;width:min(94vw,560px);
-}
-.toast{
-  padding:12px 16px;border-radius:11px;font-size:14px;font-weight:600;line-height:1.45;
-  background:#1d2532;border:1px solid var(--border);color:var(--text);
-  box-shadow:0 12px 30px rgba(0,0,0,.5);cursor:pointer;
-  animation:toastIn .3s cubic-bezier(.2,.9,.3,1.2);
-}
-.toast.err{background:#2a1215;border-color:#7a2428;color:#ffb4b4}
-.toast.warn{background:#2a2410;border-color:#7a6524;color:#ffe6a6}
-.toast.ok{background:#0f2a1c;border-color:#20633f;color:#9ef5c4}
-.toast.hide{opacity:0;transform:translateY(-8px);transition:.3s}
-@keyframes toastIn{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
-
-header{
-  display:flex;align-items:center;gap:11px;flex-wrap:wrap;
-  padding:11px 16px;border-bottom:1px solid var(--border);
-  background:rgba(14,17,22,.85);backdrop-filter:blur(8px);
-  position:sticky;top:0;z-index:20;
-}
-.logo{
-  width:38px;height:38px;border-radius:10px;flex:none;
-  background:linear-gradient(135deg,var(--accent),#ff3d00);
-  display:grid;place-items:center;box-shadow:0 5px 14px rgba(255,122,26,.35);
-}
-.logo svg{width:22px;height:22px;fill:#fff}
-.title h1{font-size:16.5px;font-weight:800;letter-spacing:.3px}
-.title h1 span{color:var(--accent)}
-.title p{font-size:11px;color:var(--muted)}
-.header-right{margin-left:auto;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.pill{
-  display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;
-  padding:7px 12px;border-radius:999px;border:1px solid var(--border);
-  background:var(--panel);color:var(--muted);transition:.3s;max-width:60vw;
-}
-.pill .dot{width:8px;height:8px;border-radius:50%;background:#5a6472;flex:none;transition:.3s}
-.pill span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pill.connected{color:var(--ok);border-color:rgba(61,220,132,.35)}
-.pill.connected .dot{background:var(--ok);animation:pulse 1.6s infinite}
-.pill.connecting{color:var(--warn);border-color:rgba(255,209,102,.35)}
-.pill.connecting .dot{background:var(--warn);animation:pulse .9s infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.25)}50%{box-shadow:0 0 0 5px rgba(255,255,255,0)}}
-
-.btn{
-  border:1px solid var(--border);background:var(--panel2);color:var(--text);
-  padding:9px 14px;border-radius:9px;font-size:13.5px;font-weight:600;
-  display:inline-flex;align-items:center;gap:7px;transition:.18s;
-}
-.btn svg{width:16px;height:16px;flex:none}
-.btn:hover{border-color:#3d4a60;transform:translateY(-1px)}
-.btn:active{transform:scale(.98)}
-.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
-.btn.primary{
-  background:linear-gradient(135deg,var(--accent),#ff4d1c);border:none;color:#fff;
-  box-shadow:0 6px 16px rgba(255,100,20,.3);
-}
-.btn.big{padding:14px 18px;font-size:16px;border-radius:12px;justify-content:center;width:100%}
-.btn.big svg{width:20px;height:20px}
-.btn.small{padding:7px 11px;font-size:12.5px}
-.btn.wide{width:100%;justify-content:center;margin-top:4px}
-.btn.sweep{background:#173042;border-color:#28536e;color:#9fd7ff}
-
-main{
-  display:grid;grid-template-columns:360px 1fr;gap:14px;
-  max-width:1200px;margin:0 auto;padding:14px;
-}
-@media(max-width:960px){main{grid-template-columns:1fr}}
-
-.card{
-  background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
-  padding:14px 16px;animation:rise .35s ease both;
-}
-.card + .card{margin-top:13px}
-@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.card h2{
-  font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);
-  display:flex;align-items:center;gap:8px;margin-bottom:11px;font-weight:700;
-}
-.card h2 .num{
-  width:20px;height:20px;border-radius:6px;display:grid;place-items:center;
-  background:var(--panel2);border:1px solid var(--border);color:var(--accent);
-  font-size:11px;font-weight:800;letter-spacing:0;flex:none;
-}
-.card h2 .spacer{flex:1}
-.hint{font-size:12.5px;color:var(--muted);line-height:1.5}
-.hint b{color:var(--text)}
-.steps{list-style:none;margin-top:2px;display:grid;gap:6px}
-.steps li{font-size:12.5px;color:var(--muted);display:flex;gap:8px;align-items:flex-start;line-height:1.4}
-.steps li::before{content:'→';color:var(--accent);font-weight:700;flex:none}
-.check{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin-top:10px;cursor:pointer;user-select:none}
-.check input{accent-color:var(--accent);width:15px;height:15px}
-.env-line{
-  margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px;
-  padding:7px 10px;border-radius:8px;background:var(--panel2);border:1px solid var(--border);
-  color:var(--muted);word-break:break-all;
-}
-.env-line.bad{color:var(--err);border-color:rgba(255,93,93,.35)}
-
-.gate{
-  display:none;margin-bottom:10px;padding:10px 12px;border-radius:9px;
-  background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.35);
-  color:var(--warn);font-size:13px;font-weight:600;line-height:1.45;
-}
-.gate.show{display:block}
-
-.drop{
-  border:2px dashed var(--border);border-radius:11px;padding:16px 12px;
-  display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;
-  transition:.25s;cursor:pointer;background:var(--panel2);
-}
-.drop:hover,.drop.over{border-color:var(--accent);background:rgba(255,122,26,.06)}
-.drop svg{width:26px;height:26px;stroke:var(--accent);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.drop p{font-size:13px;font-weight:600}
-.drop span{font-size:11px;color:var(--muted)}
-.file-row{display:none;align-items:center;gap:10px;margin-top:11px;padding:8px 10px;background:var(--panel2);border:1px solid var(--border);border-radius:9px}
-.file-row.show{display:flex}
-.file-row img{width:40px;height:40px;border-radius:7px;object-fit:cover;flex:none;border:1px solid var(--border)}
-.file-row .fi{flex:1;min-width:0}
-.file-row .fi b{font-size:12.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.file-row .fi span{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
-
-.ctrl{margin-bottom:12px}
-.ctrl:last-child{margin-bottom:0}
-.ctrl label{
-  display:flex;justify-content:space-between;align-items:baseline;
-  font-size:12.5px;font-weight:600;margin-bottom:6px;color:#cfd7e4;
-}
-.ctrl label output{
-  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent2);
-  background:var(--panel2);padding:2px 7px;border-radius:5px;border:1px solid var(--border);
-}
-select{
-  width:100%;background:var(--panel2);color:var(--text);border:1px solid var(--border);
-  border-radius:8px;padding:8px 10px;font-size:13px;outline:none;transition:.2s;
-}
-select:focus{border-color:var(--accent)}
-input[type=range]{
-  -webkit-appearance:none;width:100%;height:5px;border-radius:3px;
-  background:linear-gradient(to right,var(--accent) var(--fill,50%),#334055 var(--fill,50%));
-  outline:none;
-}
-input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;width:17px;height:17px;border-radius:50%;
-  background:#fff;border:3px solid var(--accent);box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:grab;
-}
-input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:#fff;border:3px solid var(--accent);cursor:grab}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-
-.preview-col{display:flex;flex-direction:column;gap:13px}
-.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.dims{
-  font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);
-  background:var(--panel);border:1px solid var(--border);padding:8px 12px;border-radius:9px;flex:1;min-width:170px;
-}
-.dims b{color:var(--accent2)}
-.paper-zone{
-  border:1px solid var(--border);border-radius:var(--radius);
-  min-height:160px;display:flex;align-items:center;justify-content:center;
-  padding:14px;overflow:hidden;
-}
-.empty{text-align:center;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:9px;font-size:12.5px}
-.empty svg{width:40px;height:40px;stroke:#3d4a60;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;animation:float 3.4s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.paper-scroll{max-height:min(58vh,520px);overflow-y:auto;max-width:100%;border-radius:4px}
-.paper{
-  background:#fff;padding:12px 12px 20px;border-radius:4px;width:fit-content;max-width:100%;
-  box-shadow:0 14px 36px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.4);
-  position:relative;animation:feedIn .45s cubic-bezier(.2,.9,.3,1.15);
-}
-@keyframes feedIn{from{opacity:0;transform:translateY(-16px) scale(.97)}to{opacity:1;transform:none}}
-.paper::after{
-  content:'';position:absolute;left:0;right:0;bottom:-9px;height:10px;
-  background:
-    linear-gradient(45deg,transparent 33%,#fff 33%,#fff 66%,transparent 66%) 0 0/14px 10px,
-    linear-gradient(-45deg,transparent 33%,#fff 33%,#fff 66%,transparent 66%) 7px 0/14px 10px;
-}
-.paper canvas{display:block;max-width:100%;height:auto;image-rendering:pixelated}
-.paper-tag{
-  position:absolute;top:-10px;left:12px;background:var(--accent);color:#fff;
-  font-size:9.5px;font-weight:800;letter-spacing:1.1px;padding:2px 9px;border-radius:5px;
-  text-transform:uppercase;box-shadow:0 4px 10px rgba(255,122,26,.4);
-}
-
-.diag-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:4px}
-.diag-grid .btn{justify-content:center;font-size:12.5px;padding:10px 6px}
-
-.progress-wrap{display:none}
-.progress-wrap.show{display:block}
-.progress-top{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:5px}
-.progress{height:11px;background:var(--panel2);border:1px solid var(--border);border-radius:999px;overflow:hidden}
-.progress .bar{
-  height:100%;width:0%;border-radius:999px;transition:width .2s;
-  background:repeating-linear-gradient(45deg,var(--accent) 0 10px,var(--accent2) 10px 20px);
-  background-size:200% 100%;animation:stripes 1s linear infinite;
-}
-@keyframes stripes{from{background-position:0 0}to{background-position:40px 0}}
-
-.print-row{display:flex;gap:9px}
-.print-row .btn.big{flex:1}
-#cancelBtn{display:none;flex:none;align-self:stretch;border-radius:12px;padding:14px 16px;background:#3a1418;border:1px solid #6b222a;color:var(--err)}
-#cancelBtn.show{display:inline-flex}
-#estTime{font-size:11.5px;color:var(--muted);text-align:center;margin-top:7px;font-family:'JetBrains Mono',monospace}
-
-.char-row{display:flex;gap:8px;margin-top:9px}
-.char-row select{flex:1}
-
-.faq{margin-top:10px;border:1px solid var(--border);border-radius:9px;background:var(--panel2)}
-.faq summary{padding:9px 12px;font-size:12.5px;font-weight:700;cursor:pointer;color:#cfd7e4;list-style:none}
-.faq summary::before{content:'▸ ';color:var(--accent)}
-.faq[open] summary::before{content:'▾ '}
-.faq ul{padding:2px 14px 11px 26px;font-size:12.5px;color:var(--muted);display:grid;gap:5px;line-height:1.45}
-.faq li b{color:var(--text)}
-
-.log{
-  background:#0a0d12;border:1px solid var(--border);border-radius:9px;
-  font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.65;
-  padding:10px 12px;max-height:170px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;
-}
-.log .t{color:#4b5768}
-.log .ok{color:var(--ok)} .log .err{color:var(--err)} .log .warn{color:var(--warn)} .log .info{color:#a8b3c5}
-.log::-webkit-scrollbar{width:6px}
-.log::-webkit-scrollbar-thumb{background:#334055;border-radius:3px}
-
-footer{text-align:center;color:#4b5768;font-size:11px;padding:18px;font-family:'JetBrains Mono',monospace}
-footer b{color:var(--muted)}
+  :root{
+    --paper:#e8e4d9;
+    --ink:#17140f;
+    --ink-soft:#5a5548;
+    --accent:#b3261e;
+    --accent-soft:#b3261e22;
+    --line:rgba(23,20,15,.18);
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: radial-gradient(ellipse at top, #2a271f 0%, #17150f 70%);
+    min-height:100vh;
+    font-family: var(--sans);
+    color: var(--ink);
+    display:flex;
+    justify-content:center;
+    padding: 28px 14px 60px;
+  }
+  .receipt{ width:100%; max-width:420px; }
+  .card{
+    background: var(--paper);
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,.6), 0 2px 0 rgba(0,0,0,.2) inset;
+    padding: 26px 22px 30px;
+    position:relative;
+  }
+  .card::before{
+    content:"";
+    position:absolute; top:-9px; left:0; right:0; height:10px;
+    background: linear-gradient(135deg, var(--paper) 50%, transparent 50%),
+                linear-gradient(-135deg, var(--paper) 50%, transparent 50%);
+    background-size: 16px 16px;
+    background-position: 0 0, 8px 0;
+    background-repeat: repeat-x;
+  }
+  header{ text-align:center; margin-bottom: 18px; }
+  .brand{ font-family: var(--mono); letter-spacing: .18em; text-transform: uppercase; font-size: 11px; color: var(--ink-soft); }
+  h1{ font-family: var(--mono); font-size: 26px; margin: 6px 0 2px; letter-spacing: -0.01em; }
+  .sub{ font-family: var(--mono); font-size: 12px; color: var(--ink-soft); }
+  .rule{ border: none; border-top: 1.5px dashed var(--line); margin: 18px 0; }
+  .row{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin: 10px 0;}
+  .status{ display:flex; align-items:center; gap:8px; font-family: var(--mono); font-size: 13px; }
+  .dot{ width:8px; height:8px; border-radius:50%; background: #9a927e; flex-shrink:0; }
+  .dot.on{ background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+  button{
+    font-family: var(--sans); font-weight: 600; font-size: 14px;
+    border: 1.5px solid var(--ink); background: transparent; color: var(--ink);
+    padding: 10px 16px; cursor: pointer; letter-spacing: .01em;
+  }
+  button:active{ transform: translateY(1px); }
+  button:disabled{ opacity:.35; cursor:not-allowed; }
+  button.primary{
+    background: var(--accent); border-color: var(--accent); color: #fbf3ea;
+    width: 100%; padding: 14px 16px; font-size: 15px;
+  }
+  button.stop{
+    background: transparent; border-color: var(--accent); color: var(--accent);
+    width: 100%; padding: 14px 16px; font-size: 15px;
+  }
+  button.ghost{ border-color: var(--line); }
+  button.wide{ width:100%; }
+  .field{ margin: 14px 0; }
+  label{
+    display:flex; justify-content:space-between; font-family: var(--mono); font-size: 11px;
+    text-transform:uppercase; letter-spacing:.1em; color: var(--ink-soft); margin-bottom: 6px;
+  }
+  label span.val{ color: var(--accent); font-weight:600; }
+  input[type=range]{ width:100%; accent-color: var(--accent); }
+  .hint-row{
+    display:flex; justify-content:space-between; font-family: var(--mono);
+    font-size: 10px; color: var(--ink-soft); margin-top:4px;
+    text-transform:uppercase; letter-spacing:.05em;
+  }
+  select{
+    width:100%; font-family: var(--sans); font-size:14px;
+    padding: 8px; border:1.5px solid var(--line); background:#fbf9f4;
+  }
+  .dropzone{
+    border: 1.5px dashed var(--line); padding: 22px 14px; text-align:center;
+    font-family: var(--mono); font-size: 13px; color: var(--ink-soft); cursor:pointer;
+  }
+  .dropzone.has-img{ border-style: solid; }
+  input[type=file]{ display:none; }
+  .preview-wrap{ margin: 18px auto 0; max-width: 220px; filter: drop-shadow(0 14px 18px rgba(0,0,0,.35)); }
+  canvas#preview{ width:100%; display:block; background:#fff; image-rendering: pixelated; }
+  .tear{
+    width:100%; height:12px;
+    background: linear-gradient(135deg, #fff 50%, transparent 50%), linear-gradient(-135deg, #fff 50%, transparent 50%);
+    background-size: 14px 14px; background-position: 0 0, 7px 0; background-repeat: repeat-x;
+  }
+  .log{ font-family: var(--mono); font-size: 11.5px; color: var(--ink-soft); white-space: pre-wrap; min-height: 16px; margin-top: 10px; line-height:1.5; }
+  .progress{ height: 4px; background: var(--line); margin-top: 8px; overflow:hidden; }
+  .progress > i{ display:block; height:100%; width:0%; background: var(--accent); transition: width .15s; }
+  .banner{
+    font-family: var(--mono); font-size: 12px; background:#3a2320; color:#f3d9d4;
+    padding: 10px 12px; margin-bottom:14px; border:1px solid #6b3530;
+  }
+  footer{ text-align:center; margin-top: 16px; font-family: var(--mono); font-size: 10px; color:#7a7360; }
+  .adv{ font-family: var(--mono); font-size: 11px; color: var(--ink-soft); cursor:pointer; text-align:center; margin-top:10px; text-decoration: underline dotted; }
+  .adv-panel{ display:none; }
+  .adv-panel.open{ display:block; }
 </style>
 </head>
 <body>
+<div class="receipt">
+  <div class="card">
+    <header>
+      <div class="brand">bt instant printing</div>
+      <h1>MX10</h1>
+      <div class="sub">фото → термолента</div>
+    </header>
 
-<div id="toastBox" aria-live="polite"></div>
+    <div id="unsupported" class="banner" style="display:none"></div>
 
-<header>
-  <div class="logo">
-    <svg viewBox="0 0 24 24"><path d="M6 9V3h12v6h2a2 2 0 0 1 2 2v6h-4v4H6v-4H2v-6a2 2 0 0 1 2-2h2zm2-4v4h8V5H8zm0 12v4h8v-4H8zm-4-2h2v2H4v-2z"/></svg>
-  </div>
-  <div class="title">
-    <h1>MX10 <span>Print</span></h1>
-    <p>Печать фото через Bluetooth · мини-принтер</p>
-  </div>
-  <div class="header-right">
-    <div class="pill" id="statusPill"><span class="dot"></span><span id="statusText">Не подключено</span></div>
-    <button class="btn primary" id="connectBtn">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a1 1 0 0 1 .67.26l.07.08 4.5 5.5a1 1 0 0 1-.1 1.36l-.07.05-3.6 2.5 3.6 2.5a1 1 0 0 1 .3 1.33l-.06.08-4.5 5.5a1 1 0 0 1-1.79-.55L11 13.5l-2.9 2.2a1 1 0 0 1-1.3-1.5l.08-.07L10.4 11 6.88 8.4a1 1 0 0 1 1.05-1.68l.17.1L11 9V3a1 1 0 0 1 1-1zm1 11.5-2.1 1.6L13 14.5zm0-5L10.9 6.9 13 8.5z"/></svg>
-      <span id="connectLabel">Подключить принтер</span>
-    </button>
-  </div>
-</header>
-
-<main>
-  <aside>
-    <div class="card">
-      <h2><span class="num">1</span> Подключение</h2>
-      <ul class="steps">
-        <li>Зарядите принтер (минимум 50%), включите его</li>
-        <li>На Android включите <b>Bluetooth</b> и <b>геолокацию</b></li>
-        <li>Сайт должен быть открыт по <b>https://</b> в <b>Chrome</b></li>
-        <li>Нажмите кнопку наверху и выберите принтер в списке</li>
-      </ul>
-      <label class="check"><input type="checkbox" id="chkAllDevices"> Показывать все Bluetooth-устройства</label>
-      <div class="env-line" id="envLine">Проверка окружения…</div>
+    <div class="row">
+      <div class="status"><span id="dot" class="dot"></span><span id="statusText">не подключено</span></div>
+      <button id="connectBtn" class="ghost">Подключить</button>
     </div>
 
-    <div class="card">
-      <h2><span class="num">2</span> Фотография</h2>
-      <div class="drop" id="dropZone">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5-9 9"/></svg>
-        <p>Перетащите фото сюда или нажмите</p>
-        <span>JPG / PNG / WEBP</span>
-      </div>
-      <input type="file" id="fileInput" accept="image/*" hidden>
-      <input type="file" id="cameraInput" accept="image/*" capture="environment" hidden>
-      <div style="display:flex;gap:8px;margin-top:10px">
-        <button class="btn small" id="chooseBtn">📁 Файл</button>
-        <button class="btn small" id="cameraBtn">📷 Камера</button>
-      </div>
-      <div class="file-row" id="fileRow">
-        <img id="thumbImg" alt="">
-        <div class="fi"><b id="fileName"></b><span id="fileMeta"></span></div>
-      </div>
+    <hr class="rule">
+
+    <div id="dropzone" class="dropzone">выберите фото или перетащите сюда</div>
+    <input type="file" id="fileInput" accept="image/*">
+
+    <div class="preview-wrap" id="previewWrap" style="display:none">
+      <canvas id="preview"></canvas>
+      <div class="tear"></div>
     </div>
 
-    <div class="card">
-      <h2><span class="num">3</span> Настройки печати</h2>
+    <button id="rotateBtn" class="ghost wide" style="margin-top:14px;">⟳ повернуть на 90°</button>
 
-      <div class="ctrl">
-        <label>Протокол печати</label>
-        <select id="protoMode">
-          <option value="gs" selected>Растр GS v 0 (стандартный)</option>
-          <option value="esc_star">Построчный ESC * (старые прошивки)</option>
-          <option value="raw">Сырой поток (без команд)</option>
-        </select>
-      </div>
+    <div class="field">
+      <label>размер печати</label>
+      <input type="range" id="sizeSlider" min="30" max="100" value="100">
+      <div class="hint-row"><span>меньше</span><span>во всю ширину</span></div>
+    </div>
 
-      <div class="ctrl">
-        <label>Ширина бумаги (точек)</label>
-        <select id="paperWidth">
-          <option value="384" selected>384 px — MX10, ≈ 48 мм</option>
-          <option value="320">320 px — узкая лента</option>
-          <option value="576">576 px — широкая лента</option>
-        </select>
-      </div>
+    <div class="field">
+      <label>растянуть по высоте</label>
+      <input type="range" id="stretchSlider" min="50" max="200" value="100">
+      <div class="hint-row"><span>сжать</span><span>вытянуть</span></div>
+    </div>
 
-      <div class="grid2">
-        <div class="ctrl">
-          <label>Масштаб <output id="scaleOut">100%</output></label>
-          <input type="range" id="scaleRange" min="30" max="100" value="100">
-        </div>
-        <div class="ctrl">
-          <label>Копии</label>
-          <select id="copiesSel">
-            <option value="1" selected>1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-          </select>
-        </div>
-      </div>
+    <div class="field">
+      <label>сила нагрева (затемнение) <span class="val" id="darknessVal">55%</span></label>
+      <input type="range" id="darkness" min="0" max="100" value="55">
+    </div>
 
-      <div class="grid2">
-        <div class="ctrl">
-          <label>Яркость <output id="brightOut">0</output></label>
-          <input type="range" id="brightRange" min="-100" max="100" value="0">
-        </div>
-        <div class="ctrl">
-          <label>Контраст <output id="contrastOut">0</output></label>
-          <input type="range" id="contrastRange" min="-100" max="100" value="0">
-        </div>
-      </div>
+    <div class="field">
+      <label>скорость выхода ленты <span class="val" id="durationEst">≈ 0 сек</span></label>
+      <input type="range" id="speedSlider" min="0" max="100" value="60">
+      <div class="hint-row"><span>медленнее / чётче</span><span>быстрее</span></div>
+    </div>
 
-      <div class="ctrl">
-        <label>Метод ч/б</label>
+    <div class="adv" id="advToggle">настройки принтера ▾</div>
+    <div class="adv-panel" id="advPanel">
+      <div class="field">
+        <label>дизеринг</label>
         <select id="ditherMode">
-          <option value="fs" selected>Флойд–Стейнберг</option>
-          <option value="atkinson">Аткинсон</option>
-          <option value="bayer">Байер 8×8</option>
-          <option value="threshold">Пороговый</option>
+          <option value="fs">Floyd–Steinberg (плавные тона)</option>
+          <option value="threshold">Порог (чёткий чёрно-белый)</option>
         </select>
       </div>
-
-      <div class="ctrl">
-        <label>Порог яркости <output id="threshOut">128</output></label>
-        <input type="range" id="threshRange" min="40" max="216" value="128">
+      <div class="field">
+        <label>ширина ленты</label>
+        <select id="paperWidth">
+          <option value="384" selected>58 мм / 384 точки (по умолчанию)</option>
+          <option value="576">80 мм / 576 точек</option>
+        </select>
       </div>
-
-      <label class="check" style="margin-top:0"><input type="checkbox" id="invertChk"> Инвертировать фото</label>
-      <label class="check"><input type="checkbox" id="invertDotsChk"> Инвертировать точки</label>
-
-      <h2 style="margin-top:12px"><span class="num">⚙</span> Передача данных</h2>
-
-      <div class="grid2">
-        <div class="ctrl">
-          <label>Пакет, байт <output id="chunkOut">100</output></label>
-          <input type="range" id="chunkRange" min="20" max="512" step="4" value="100">
-        </div>
-        <div class="ctrl">
-          <label>Задержка, мс <output id="delayOut">40</output></label>
-          <input type="range" id="delayRange" min="0" max="200" step="5" value="40">
-        </div>
-      </div>
-      <div class="grid2">
-        <div class="ctrl">
-          <label>Высота блока <output id="sliceOut">200</output></label>
-          <input type="range" id="sliceRange" min="64" max="800" step="8" value="200">
-        </div>
-        <div class="ctrl">
-          <label>Пауза блоков, мс <output id="pauseOut">120</output></label>
-          <input type="range" id="pauseRange" min="0" max="500" step="10" value="120">
-        </div>
-      </div>
-      <div class="grid2">
-        <div class="ctrl">
-          <label>Пауза иниц., мс <output id="initOut">300</output></label>
-          <input type="range" id="initRange" min="0" max="1000" step="50" value="300">
-        </div>
-        <div class="ctrl">
-          <label>Режим записи</label>
-          <select id="writeMode">
-            <option value="auto" selected>Авто (надёжно)</option>
-            <option value="resp">С ответом</option>
-            <option value="noresp">Без ответа</option>
-          </select>
-        </div>
+      <div class="field">
+        <label>пауза между пакетами (BLE)</label>
+        <input type="range" id="delaySlider" min="0" max="100" value="20">
+        <div class="hint-row"><span>быстрее</span><span>стабильнее</span></div>
       </div>
     </div>
-  </aside>
 
-  <section class="preview-col">
-    <div class="card">
-      <h2><span class="num">4</span> Превью и печать</h2>
+    <hr class="rule">
 
-      <div class="toolbar">
-        <div class="dims" id="dimsLabel">Загрузите фото — размер подстроится автоматически</div>
-        <button class="btn small" id="downloadBtn" disabled title="Скачать ч/б превью">⬇ PNG</button>
-        <button class="btn small" id="testBtn" disabled>🧪 Тест-образец</button>
-      </div>
-
-      <div class="paper-zone" id="paperZone" style="margin-top:12px">
-        <div class="empty" id="emptyState">
-          <svg viewBox="0 0 24 24"><path d="M6 18h12v-6H6v6zm0 0v3h12v-3M6 9V4h12v5M4 9h16a1 1 0 0 1 1 1v7h-3M3 10v7h3M17 13h2"/></svg>
-          <div>Бумага ждёт фото</div>
-        </div>
-        <div class="paper-scroll" id="paperWrap" hidden>
-          <div class="paper">
-            <div class="paper-tag">MX10 · термопечать</div>
-            <canvas id="previewCanvas"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <div class="progress-wrap" id="progressWrap" style="margin-top:13px">
-        <div class="progress-top"><span id="progressLabel">Передача…</span><span id="progressPct">0%</span></div>
-        <div class="progress"><div class="bar" id="progressBar"></div></div>
-      </div>
-
-      <div class="print-row" style="margin-top:13px">
-        <button class="btn primary big" id="printBtn" disabled>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 8V3h10v5h3a1 1 0 0 1 1 1v7h-4v5H7v-5H3V9a1 1 0 0 1 1-1h3zm2-3v3h6V5H9zm0 11v4h6v-4H9z"/></svg>
-          Распечатать
-        </button>
-        <button class="btn" id="cancelBtn">✕ Стоп</button>
-      </div>
-      <div id="estTime"></div>
+    <div class="row">
+      <div class="status" style="font-family:var(--mono); font-size:12px; color:var(--ink-soft);">лента</div>
+      <button id="feedBtn" class="ghost" disabled>протянуть / обрезать →</button>
     </div>
 
-    <div class="card">
-      <h2><span class="num">✚</span> Диагностика принтера</h2>
+    <hr class="rule">
 
-      <div class="gate" id="diagGate">⚠ Сначала подключите принтер — кнопка «Подключить принтер» наверху страницы.</div>
-
-      <button class="btn sweep wide" id="sweepBtn" disabled>🔁 Автоперебор: найти рабочую характеристику</button>
-      <p class="hint" style="margin-top:8px">Приложение по очереди шлёт тестовую команду в каждый канал принтера. <b>Следите за бумагой</b>: как только она поедет — жмите «Остановить перебор».</p>
-
-      <div class="diag-grid" style="margin-top:10px">
-        <button class="btn diagBtn" id="diagFeed" disabled>⏬ Протяжка</button>
-        <button class="btn diagBtn" id="diagText" disabled>🔤 Текст</button>
-        <button class="btn diagBtn" id="diagGs" disabled>⬛ Полоса GS v 0</button>
-        <button class="btn diagBtn" id="diagEsc" disabled>⬛ Полоса ESC *</button>
-        <button class="btn diagBtn" id="diagRaw" disabled>⬛ Полоса raw</button>
-      </div>
-      <div class="char-row">
-        <select id="charSelect" disabled><option value="-1">Характеристика записи: не найдена</option></select>
-        <button class="btn small" id="rescanBtn" disabled title="Перечитать сервисы">🔄</button>
-      </div>
-
-      <details class="faq">
-        <summary>Частые проблемы</summary>
-        <ul>
-          <li><b>Принтер молчит после подключения</b> — запустите «Автоперебор», затем «Протяжку» на найденной характеристике.</li>
-          <li><b>Печатает пустую ленту</b> — смените протокол (ESC * или raw), попробуйте «Инвертировать точки».</li>
-          <li><b>Обрезает правый край</b> — поставьте ширину 320 px вместо 384.</li>
-          <li><b>Печатает только начало картинки</b> — уменьшите пакет до 20 байт, задержку поставьте 60–100 мс.</li>
-          <li><b>Бледная печать</b> — добавьте контраст и уменьшите порог яркости.</li>
-        </ul>
-      </details>
-    </div>
-
-    <div class="card">
-      <h2><span class="num">≡</span> Журнал <span class="spacer"></span>
-        <button class="btn small" id="copyLogBtn">📋 Копировать</button>
-      </h2>
-      <p class="hint" style="margin-bottom:8px">Если принтер не ожил — скопируйте журнал и пришлите его: по списку сервисов станет понятен протокол вашего MX10.</p>
-      <div class="log" id="logBox"><div><span class="t">[--:--:--]</span> <span class="info">Готов к работе.</span></div></div>
-    </div>
-  </section>
-</main>
-
-<footer>Web Bluetooth · ESC/POS · 203 dpi · отпечатано заданий: <b id="printCount">0</b></footer>
+    <button id="printBtn" class="primary" disabled>Печать</button>
+    <button id="stopBtn" class="stop" style="display:none;">Стоп</button>
+    <div class="progress"><i id="progressBar"></i></div>
+    <div class="log" id="log"></div>
+  </div>
+  <footer>протокол cat-printer (GPL-3.0) · для MX10 и совместимых мини-принтеров</footer>
+</div>
 
 <script>
-'use strict';
-const S = {
-  device:null, server:null, char:null, candidates:[], printing:false, sweeping:false, cancel:false,
-  src:null, srcName:'', out:null, lastThumbUrl:null
-};
-const settings = {
-  protocol:'gs', paperWidth:384, scale:100, copies:1, brightness:0, contrast:0,
-  dither:'fs', threshold:128, invert:false, invertDots:false,
-  sliceH:200, chunk:100, delay:40, pauseBlocks:120, initPause:300, writeMode:'auto'
-};
-
-const LS_SETTINGS = 'mx10-settings-v2';
-const LS_ALLDEV = 'mx10-alldevices';
-const LS_PRINTS = 'mx10-prints';
-
-const KNOWN_SERVICES = [
-  '0000ae30-0000-1000-8000-00805f9b34fb',
-  '0000ff00-0000-1000-8000-00805f9b34fb',
-  '0000ffe0-0000-1000-8000-00805f9b34fb',
-  '0000fff0-0000-1000-8000-00805f9b34fb',
-  '000018f0-0000-1000-8000-00805f9b34fb',
-  '49535343-8841-43f4-a8d4-ecbe34729bb3',
-  'e7810a71-73ae-499d-8c15-faa9aef0c3f2',
-  '0000aa00-0000-1000-8000-00805f9b34fb'
-];
-
-const $ = id => document.getElementById(id);
-const sleep = ms => new Promise(r=>setTimeout(r,ms));
-
-/* ---------- восстановление настроек ---------- */
-try{
-  const saved = JSON.parse(localStorage.getItem(LS_SETTINGS) || '{}');
-  Object.assign(settings, saved);
-}catch(e){}
-function saveSettings(){
-  try{ localStorage.setItem(LS_SETTINGS, JSON.stringify(settings)); }catch(e){}
-}
-
-/* ---------- toasts / log ---------- */
-function showToast(msg, type='warn', ttl=6500){
-  const box = $('toastBox');
-  const t = document.createElement('div');
-  t.className = 'toast ' + type;
-  t.textContent = msg;
-  t.addEventListener('click', ()=>{ t.classList.add('hide'); setTimeout(()=>t.remove(),320); });
-  box.appendChild(t);
-  while(box.children.length > 3) box.removeChild(box.firstChild);
-  setTimeout(()=>{ if(t.parentNode){ t.classList.add('hide'); setTimeout(()=>t.remove(),320); } }, ttl);
-}
-function log(msg, cls='info'){
-  const box = $('logBox');
-  const t = new Date().toTimeString().slice(0,8);
-  const line = document.createElement('div');
-  line.innerHTML = `<span class="t">[${t}]</span> <span class="${cls}">${msg}</span>`;
-  box.appendChild(line);
-  box.scrollTop = box.scrollHeight;
-  while(box.children.length > 400) box.removeChild(box.firstChild);
-}
-$('copyLogBtn').addEventListener('click', async ()=>{
-  const txt = $('logBox').innerText;
-  try{
-    await navigator.clipboard.writeText(txt);
-    showToast('Журнал скопирован.','ok');
-  }catch(e){
-    const r = document.createRange(); r.selectNodeContents($('logBox'));
-    const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
-    showToast('Нет доступа к буферу — текст выделен, скопируйте вручную.','warn');
-  }
-});
-
-/* ---------- счётчик печати ---------- */
-let printCount = 0;
-try{ printCount = parseInt(localStorage.getItem(LS_PRINTS) || '0', 10) || 0; }catch(e){}
-function bumpPrintCount(){
-  printCount++;
-  try{ localStorage.setItem(LS_PRINTS, String(printCount)); }catch(e){}
-  $('printCount').textContent = printCount;
-}
-$('printCount').textContent = printCount;
-
-/* ---------- проверка окружения ---------- */
 (function(){
-  const secure = window.isSecureContext;
-  const bt = ('bluetooth' in navigator);
-  const el = $('envLine');
-  el.textContent = (secure?'HTTPS ✓':'HTTPS ✗ ('+location.protocol+')') + ' · ' + (bt?'Web Bluetooth ✓':'Web Bluetooth ✗');
-  if(!secure || !bt){
-    el.classList.add('bad');
-    const why = !bt ? 'Браузер не поддерживает Web Bluetooth. Нужен Chrome на Android.'
-                    : 'Страница открыта не по HTTPS. Нужен адрес https:// или локальный сервер.';
-    showToast(why + ' Кнопка подключения не сработает.', 'err', 10000);
-    log(why,'err');
-  } else el.textContent += ' · готово';
-})();
+  'use strict';
 
-function setStatus(mode, text){
-  $('statusPill').className = 'pill' + (mode ? ' '+mode : '');
-  $('statusText').textContent = text;
-}
-function setConnectLabel(txt){ $('connectLabel').textContent = txt; }
+  // ---------- BLE protocol constants (cat-printer family, MX10-compatible) ----------
+  const SERVICE_UUID = '0000ae30-0000-1000-8000-00805f9b34fb';
+  const WRITE_UUID    = '0000ae01-0000-1000-8000-00805f9b34fb';
+  const NOTIFY_UUID   = '0000ae02-0000-1000-8000-00805f9b34fb';
 
-/* ================= подключение ================= */
-$('connectBtn').addEventListener('click', async ()=>{
-  const btn = $('connectBtn');
-  if(!('bluetooth' in navigator)){
-    showToast('Web Bluetooth недоступен. Откройте сайт в Chrome на Android.','err',9000);
-    return;
-  }
-  if(!window.isSecureContext){
-    showToast('Нужен HTTPS или localhost — сейчас '+location.protocol+'.','err',9000);
-    return;
-  }
-  btn.disabled = true;
-  setConnectLabel('Поиск…');
-  try{
-    if(S.device && !S.device.gatt.connected){
-      log('Переподключение к «'+S.device.name+'»…');
-      setStatus('connecting','Подключение…');
-      S.server = await S.device.gatt.connect();
-      await discoverServices();
-      return;
-    }
-    setStatus('connecting','Поиск принтера…');
-    log('Запрос устройств Bluetooth…');
-    const opts = { optionalServices: KNOWN_SERVICES };
-    if($('chkAllDevices').checked){
-      opts.acceptAllDevices = true;
-    } else {
-      opts.filters = [ {namePrefix:'MX10'}, {namePrefix:'mx10'}, {namePrefix:'Printer'} ];
-    }
-    S.device = await navigator.bluetooth.requestDevice(opts);
-    log('Найдено устройство: <b>'+ (S.device.name||'без имени') +'</b>','ok');
-    S.device.addEventListener('gattserverdisconnected', ()=>{
-      S.char = null; S.server = null;
-      setStatus('','Не подключено');
-      setConnectLabel('Подключить принтер');
-      $('charSelect').disabled = true;
-      updateButtons();
-      showToast('Принтер отключился.','warn');
-      log('Принтер отключился.','warn');
-    });
-    setStatus('connecting','Подключение…');
-    setConnectLabel('Подключение…');
-    S.server = await S.device.gatt.connect();
-    log('GATT-соединение установлено','ok');
-    await discoverServices();
-  }catch(err){
-    let msg = err.message || String(err);
-    if(err.name === 'NotFoundError'){
-      msg = 'Принтер не найден или окно закрыто. Включите MX10, поднесите ближе к телефону, проверьте геолокацию на Android.';
-      showToast(msg,'warn',9000); log(msg,'warn');
-    } else if(err.name === 'SecurityError'){
-      msg = 'Bluetooth заблокирован: откройте сайт по HTTPS.';
-      showToast(msg,'err',9000); log(msg,'err');
-    } else if(err.name === 'NetworkError'){
-      msg = 'Bluetooth выключен или на Android отключена геолокация.';
-      showToast(msg,'err',9000); log(msg,'err');
-    } else {
-      showToast('Ошибка подключения: '+msg,'err',9000); log('Ошибка подключения: '+msg,'err');
-    }
-    setStatus('','Не подключено');
-  }finally{
-    btn.disabled = false;
-    if(!S.char) setConnectLabel('Подключить принтер');
-  }
-});
+  const PAUSE_SIGNAL  = [0x51,0x78,0xae,0x01,0x01,0x00,0x10,0x70,0xff];
+  const RESUME_SIGNAL = [0x51,0x78,0xae,0x01,0x01,0x00,0x00,0x00,0xff];
 
-let notifyCount = 0;
-async function trySubscribe(ch){
-  try{
-    await ch.startNotifications();
-    log('Подписка на уведомления …'+ch.uuid.slice(0,8)+' активна','ok');
-    ch.addEventListener('characteristicvaluechanged', ev=>{
-      if(notifyCount >= 12) return; notifyCount++;
-      const dv = ev.target.value;
-      const bytes = new Uint8Array(dv.buffer, dv.byteOffset, dv.byteLength);
-      const hex = [...bytes].slice(0,20).map(b=>b.toString(16).padStart(2,'0')).join(' ');
-      log('← принтер прислал: '+hex,'ok');
-    });
-  }catch(e){ /* не критично */ }
-}
-
-async function discoverServices(){
-  S.candidates = [];
-  notifyCount = 0;
-  let services = [];
-  try{ services = await S.server.getPrimaryServices(); }
-  catch(e){ log('Не удалось получить сервисы: '+e.message,'err'); }
-  log('Найдено сервисов: '+services.length);
-  if(!services.length){
-    showToast('Сервисы не найдены. Поставьте «Показывать все Bluetooth-устройства» и подключитесь заново.','warn',9000);
+  const CRC8_TABLE = [
+    0x00,0x07,0x0e,0x09,0x1c,0x1b,0x12,0x15,0x38,0x3f,0x36,0x31,0x24,0x23,0x2a,0x2d,
+    0x70,0x77,0x7e,0x79,0x6c,0x6b,0x62,0x65,0x48,0x4f,0x46,0x41,0x54,0x53,0x5a,0x5d,
+    0xe0,0xe7,0xee,0xe9,0xfc,0xfb,0xf2,0xf5,0xd8,0xdf,0xd6,0xd1,0xc4,0xc3,0xca,0xcd,
+    0x90,0x97,0x9e,0x99,0x8c,0x8b,0x82,0x85,0xa8,0xaf,0xa6,0xa1,0xb4,0xb3,0xba,0xbd,
+    0xc7,0xc0,0xc9,0xce,0xdb,0xdc,0xd5,0xd2,0xff,0xf8,0xf1,0xf6,0xe3,0xe4,0xed,0xea,
+    0xb7,0xb0,0xb9,0xbe,0xab,0xac,0xa5,0xa2,0x8f,0x88,0x81,0x86,0x93,0x94,0x9d,0x9a,
+    0x27,0x20,0x29,0x2e,0x3b,0x3c,0x35,0x32,0x1f,0x18,0x11,0x16,0x03,0x04,0x0d,0x0a,
+    0x57,0x50,0x59,0x5e,0x4b,0x4c,0x45,0x42,0x6f,0x68,0x61,0x66,0x73,0x74,0x7d,0x7a,
+    0x89,0x8e,0x87,0x80,0x95,0x92,0x9b,0x9c,0xb1,0xb6,0xbf,0xb8,0xad,0xaa,0xa3,0xa4,
+    0xf9,0xfe,0xf7,0xf0,0xe5,0xe2,0xeb,0xec,0xc1,0xc6,0xcf,0xc8,0xdd,0xda,0xd3,0xd4,
+    0x69,0x6e,0x67,0x60,0x75,0x72,0x7b,0x7c,0x51,0x56,0x5f,0x58,0x4d,0x4a,0x43,0x44,
+    0x19,0x1e,0x17,0x10,0x05,0x02,0x0b,0x0c,0x21,0x26,0x2f,0x28,0x3d,0x3a,0x33,0x34,
+    0x4e,0x49,0x40,0x47,0x52,0x55,0x5c,0x5b,0x76,0x71,0x78,0x7f,0x6a,0x6d,0x64,0x63,
+    0x3e,0x39,0x30,0x37,0x22,0x25,0x2c,0x2b,0x06,0x01,0x08,0x0f,0x1a,0x1d,0x14,0x13,
+    0xae,0xa9,0xa0,0xa7,0xb2,0xb5,0xbc,0xbb,0x96,0x91,0x98,0x9f,0x8a,0x8d,0x84,0x83,
+    0xde,0xd9,0xd0,0xd7,0xc2,0xc5,0xcc,0xcb,0xe6,0xe1,0xe8,0xef,0xfa,0xfd,0xf4,0xf3
+  ];
+  function crc8(bytes){
+    let crc = 0;
+    for (const b of bytes) crc = CRC8_TABLE[(crc ^ b) & 0xff];
+    return crc & 0xff;
   }
-  for(const svc of services){
-    log('Сервис: '+svc.uuid);
-    let chars = [];
-    try{ chars = await svc.getCharacteristics(); }catch(e){ log('  (нет доступа к характеристикам)','warn'); continue; }
-    for(const ch of chars){
-      const props = ['read','write','writeWithoutResponse','notify','indicate'].filter(p=>ch.properties[p]).join('+');
-      log(`  · хар-ка ${ch.uuid} [${props||'—'}]`);
-      if(ch.properties.writeValue || ch.properties.writeWithoutResponse) S.candidates.push(ch);
-      if(ch.properties.notify || ch.properties.indicate) trySubscribe(ch);
+  function reverseBits(i){
+    i = ((i & 0b10101010) >> 1) | ((i & 0b01010101) << 1);
+    i = ((i & 0b11001100) >> 2) | ((i & 0b00110011) << 2);
+    return ((i & 0b11110000) >> 4) | ((i & 0b00001111) << 4);
+  }
+  function clampInt(n, min, max, fallback){
+    n = parseInt(n, 10);
+    if (!Number.isFinite(n)) n = fallback;
+    return Math.max(min, Math.min(max, n));
+  }
+  function u16le(n){ n = clampInt(n, 0, 0xffff, 0); return [n & 0xff, (n >> 8) & 0xff]; }
+
+  function makeCommand(commandBit, payload){
+    if (payload.length > 0xff) throw new Error('payload too big');
+    return [0x51,0x78,commandBit,0x00,payload.length,0x00, ...payload, crc8(payload), 0xff];
+  }
+
+  function speedByteFromSlider(s){ return clampInt(Math.round(48 - s*0.32), 16, 48, 32); }
+  function delayMsFromSlider(t){ return Math.round(5 + t * 0.75); }
+
+  // ---------- Builds the full print job as one flat byte stream ----------
+  class PrintJob {
+    constructor({ energy, speed=32 }){ this.energy = energy; this.speed = speed; this.bytes = []; }
+    push(arr){ this.bytes.push(...arr); }
+    startPrintingNew(){ this.push([0x12,0x51,0x78,0xa3,0x00,0x01,0x00,0x00,0x00,0xff]); }
+    getDeviceState(){ this.push(makeCommand(0xa3,[0x00])); }
+    updateDevice(){ this.push(makeCommand(0xa9,[0x00])); }
+    setDpiAs200(){ this.push(makeCommand(0xa4,[50])); }
+    setSpeed(v){ this.push(makeCommand(0xbd,[clampInt(v,1,63,32)])); }
+    setEnergy(a){ this.push(makeCommand(0xaf, u16le(a))); }
+    applyEnergy(){ this.push(makeCommand(0xbe,[0x01])); }
+    startLattice(){ this.push(makeCommand(0xa6,[0xaa,0x55,0x17,0x38,0x44,0x5f,0x5f,0x5f,0x44,0x38,0x2c])); }
+    endLattice(){ this.push(makeCommand(0xa6,[0xaa,0x55,0x17,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x17])); }
+    feedPaper(px){ this.push(makeCommand(0xa1, u16le(px))); }
+    drawBitmapRow(rowBytes){ this.push(makeCommand(0xa2, Array.from(rowBytes, reverseBits))); }
+    build(bitmapRows){
+      this.getDeviceState();
+      this.startPrintingNew();
+      this.setDpiAs200();
+      this.setSpeed(this.speed);
+      this.setEnergy(this.energy);
+      this.applyEnergy();
+      this.updateDevice();
+      this.startLattice();
+      for (const row of bitmapRows) this.drawBitmapRow(row);
+      this.endLattice();
+      this.setSpeed(8);
+      this.feedPaper(128);
+      this.getDeviceState();
+      return new Uint8Array(this.bytes);
     }
   }
-  if(!S.candidates.length){
-    const m = 'Не найдена характеристика записи. Скопируйте журнал и пришлите его: по списку сервисов станет понятен протокол принтера.';
-    showToast(m,'err',10000); log(m,'err');
-    setStatus('','Не подключено');
-    return;
-  }
-  const score = c => (c.properties.writeValue?2:0) + (/ae01|ffe1|ff02|fff2|2af1/i.test(c.uuid)?1:0);
-  S.candidates.sort((a,b)=>score(b)-score(a));
-  fillCharSelect();
-  S.char = S.candidates[0];
-  $('charSelect').value = '0';
-  setStatus('connected', (S.device.name||'Принтер') + ' подключён');
-  setConnectLabel((S.device.name||'Принтер'));
-  showToast('Принтер подключён ✔ Найдено каналов записи: '+S.candidates.length+'. Если печать молчит — нажмите «Автоперебор».','ok',9000);
-  log('Готово. Каналов записи: '+S.candidates.length+'. Если принтер молчит — запустите автоперебор.','ok');
-  updateButtons();
-}
 
-function fillCharSelect(){
-  const sel = $('charSelect');
-  sel.innerHTML = '';
-  S.candidates.forEach((c,i)=>{
-    const o = document.createElement('option');
-    o.value = String(i);
-    const props = (c.properties.writeValue?'resp ':'')+(c.properties.writeWithoutResponse?'noresp':'');
-    o.textContent = `#${i} · …${c.uuid.slice(4,12)} · ${props}`;
-    sel.appendChild(o);
-  });
-  sel.disabled = false;
-}
-
-$('charSelect').addEventListener('change', e=>{
-  const idx = +e.target.value;
-  if(S.candidates[idx]){
-    S.char = S.candidates[idx];
-    showToast('Выбрана характеристика #'+idx+'. Нажмите «Протяжка».','warn');
-    log('Выбрана характеристика #'+idx+'.','warn');
-  }
-});
-
-$('rescanBtn').addEventListener('click', async ()=>{
-  if(!S.server) return;
-  $('rescanBtn').disabled = true;
-  try{ await discoverServices(); }finally{ $('rescanBtn').disabled = false; updateButtons(); }
-});
-
-/* ================= автоперебор ================= */
-function buildProbe(){
-  const text = 'MX10 TEST *** PRINT OK ***';
-  const arr = [0x1B,0x40];
-  for(let i=0;i<text.length;i++) arr.push(text.charCodeAt(i));
-  arr.push(0x0A,0x0A, 0x1B,0x4A,0x60, 0x0C);
-  return new Uint8Array(arr);
-}
-$('sweepBtn').addEventListener('click', ()=>{
-  if(S.sweeping){
-    S.sweeping = false;
-    $('sweepBtn').textContent = '🔁 Автоперебор: найти рабочую характеристику';
-    return;
-  }
-  startSweep();
-});
-async function startSweep(){
-  if(!S.char || !S.candidates.length){ showToast('Нет подключения к принтеру.','err'); return; }
-  if(S.printing){ showToast('Идёт передача.','warn'); return; }
-  S.sweeping = true;
-  $('sweepBtn').textContent = '⏹ Остановить перебор';
-  updateButtons();
-  log('Запуск перебора характеристик…','warn');
-  showToast('Следите за принтером: он должен протянуть бумагу или напечатать текст. Когда это случится — жмите «Остановить перебор».','warn',9000);
-  const probe = buildProbe();
-  for(let i=0; i<S.candidates.length && S.sweeping; i++){
-    const c = S.candidates[i];
-    S.char = c;
-    $('charSelect').value = String(i);
-    log(`Проба #${i}: …${c.uuid.slice(4,12)} (${c.properties.writeValue?'с ответом':'без ответа'})`,'warn');
-    try{
-      const useResp = !!c.properties.writeValue;
-      for(let off=0; off<probe.length; off+=20){
-        const part = probe.buffer.slice(off, Math.min(probe.length, off+20));
-        if(useResp) await c.writeValue(part);
-        else await c.writeValueWithoutResponse(part);
-        await sleep(30);
-      }
-    }catch(err){ log('Запись не удалась: '+err.message,'err'); }
-    await sleep(3000);
-  }
-  S.sweeping = false;
-  $('sweepBtn').textContent = '🔁 Автоперебор: найти рабочую характеристику';
-  if(S.char){
-    const idx = S.candidates.indexOf(S.char);
-    log('Перебор завершён. Активная характеристика: #'+idx+'. Если бумага двигалась — можно печатать.','warn');
-    showToast('Если принтер не отреагировал — скопируйте журнал («Копировать») и пришлите список сервисов.','warn',12000);
-  }
-  updateButtons();
-}
-
-/* ================= изображение ================= */
-const dropZone = $('dropZone'), fileInput = $('fileInput'), cameraInput = $('cameraInput');
-dropZone.addEventListener('click', ()=>fileInput.click());
-$('chooseBtn').addEventListener('click', ()=>fileInput.click());
-$('cameraBtn').addEventListener('click', ()=>cameraInput.click());
-fileInput.addEventListener('change', e=>{ if(e.target.files[0]) loadFile(e.target.files[0]); e.target.value=''; });
-cameraInput.addEventListener('change', e=>{ if(e.target.files[0]) loadFile(e.target.files[0]); e.target.value=''; });
-['dragenter','dragover'].forEach(ev=>dropZone.addEventListener(ev,e=>{e.preventDefault();dropZone.classList.add('over');}));
-['dragleave','drop'].forEach(ev=>dropZone.addEventListener(ev,e=>{e.preventDefault();dropZone.classList.remove('over');}));
-dropZone.addEventListener('drop', e=>{
-  const f = e.dataTransfer.files && e.dataTransfer.files[0];
-  if(f) loadFile(f);
-});
-
-async function loadFile(file){
-  if(!file.type.startsWith('image/')){ showToast('Это не изображение.','err'); return; }
-  try{
-    let bmp;
-    try{ bmp = await createImageBitmap(file, {imageOrientation:'from-image'}); }
-    catch(e){ bmp = await createImageBitmap(file); }
-    if(S.src && S.src.close) S.src.close();
-    S.src = bmp; S.srcName = file.name;
-    if(S.lastThumbUrl) URL.revokeObjectURL(S.lastThumbUrl);
-    S.lastThumbUrl = URL.createObjectURL(file);
-    $('thumbImg').src = S.lastThumbUrl;
-    $('fileName').textContent = file.name;
-    $('fileMeta').textContent = bmp.width+'×'+bmp.height+' px · '+(file.size/1024).toFixed(0)+' КБ';
-    $('fileRow').classList.add('show');
-    log('Загружено фото: '+file.name+' ('+bmp.width+'×'+bmp.height+')','ok');
-    renderOutput();
-  }catch(err){ showToast('Не удалось открыть изображение: '+err.message,'err'); }
-}
-
-function renderOutput(){
-  if(!S.src) return;
-  const pw = settings.paperWidth;
-  let tw = Math.round(pw * settings.scale/100);
-  tw = Math.max(8, Math.round(tw/8)*8);
-  const iw = S.src.width, ih = S.src.height;
-  let th = Math.max(1, Math.round(ih * tw / iw));
-  const capped = th > 12000; if(capped) th = 12000;
-
-  const cv = document.createElement('canvas'); cv.width = tw; cv.height = th;
-  const cx = cv.getContext('2d', {willReadFrequently:true});
-  cx.drawImage(S.src, 0, 0, tw, th);
-  const data = cx.getImageData(0,0,tw,th).data;
-
-  const g = new Float32Array(tw*th);
-  const cf = (settings.contrast+100)/100;
-  const br = settings.brightness * 2.55;
-  for(let i=0, n=tw*th; i<n; i++){
-    const d = i*4;
-    let v = 0.299*data[d] + 0.587*data[d+1] + 0.114*data[d+2];
-    v = (v-128)*cf + 128 + br;
-    if(settings.invert) v = 255 - v;
-    g[i] = v<0?0 : v>255?255 : v;
-  }
-  const bits = applyDither(g, tw, th, settings.dither, settings.threshold);
-  S.out = {tw, th, bits};
-
-  const pc = $('previewCanvas'); pc.width = tw; pc.height = th;
-  const pctx = pc.getContext('2d');
-  const img = pctx.createImageData(tw, th);
-  for(let i=0, n=tw*th; i<n; i++){
-    const v = bits[i] ? 0 : 255, d = i*4;
-    img.data[d]=v; img.data[d+1]=v; img.data[d+2]=v; img.data[d+3]=255;
-  }
-  pctx.putImageData(img,0,0);
-  $('emptyState').style.display = 'none';
-  $('paperWrap').hidden = false;
-
-  const cm = d => (d/203*2.54).toFixed(1);
-  $('dimsLabel').innerHTML = `Размер: <b>${tw} × ${th}</b> точек ≈ <b>${cm(tw)} × ${cm(th)}</b> см` + (capped?' · <span style="color:var(--warn)">⚠ обрезано</span>':'');
-  updateEstimate();
-  updateButtons();
-}
-
-function updateEstimate(){
-  if(!S.out){ $('estTime').textContent=''; return; }
-  const {tw, th} = S.out;
-  const one = Math.round(tw/8*th + 128 + Math.ceil(th/settings.sliceH)*8);
-  const total = one * settings.copies;
-  const chunks = Math.ceil(one/settings.chunk) * settings.copies;
-  const blocks = Math.ceil(th/settings.sliceH) * settings.copies;
-  const sec = Math.round(chunks*(settings.delay+6)/1000 + blocks*settings.pauseBlocks/1000 + th/203*2.54/4*settings.copies);
-  $('estTime').textContent = S.char ? `~${total} байт · ~${sec} c` : `~${total} байт · подключите принтер`;
-}
-
-function applyDither(g, w, h, mode, thr){
-  const bits = new Uint8Array(w*h);
-  if(mode === 'threshold'){
-    for(let i=0;i<g.length;i++) bits[i] = g[i] < thr ? 1 : 0;
-    return bits;
-  }
-  if(mode === 'bayer'){
-    const B = [
-      [ 0,32, 8,40, 2,34,10,42],[48,16,56,24,50,18,58,26],
-      [12,44, 4,36,14,46, 6,38],[60,28,52,20,62,30,54,22],
-      [ 3,35,11,43, 1,33, 9,41],[51,19,59,27,49,17,57,25],
-      [15,47, 7,39,13,45, 5,37],[63,31,55,23,61,29,53,21]];
-    const shift = thr - 128;
-    for(let y=0;y<h;y++)for(let x=0;x<w;x++){
-      const i=y*w+x;
-      bits[i] = g[i] < (B[y&7][x&7]/64)*255 + shift ? 1 : 0;
+  // ---------- Image -> 1-bit bitmap rows (MSB-first, 1 = black) ----------
+  function imageToBitmapRows(canvas, ditherMode){
+    const w = canvas.width, h = canvas.height;
+    const ctx = canvas.getContext('2d');
+    const imgData = ctx.getImageData(0,0,w,h);
+    const gray = new Float32Array(w*h);
+    for (let i=0, p=0; i<imgData.data.length; i+=4, p++){
+      gray[p] = 0.299*imgData.data[i] + 0.587*imgData.data[i+1] + 0.114*imgData.data[i+2];
     }
-    return bits;
-  }
-  const err = Float32Array.from(g);
-  const add = (idx, e, cond)=>{ if(cond) err[idx]+=e; };
-  if(mode === 'atkinson'){
-    for(let y=0;y<h;y++)for(let x=0;x<w;x++){
-      const i=y*w+x, v=err[i], black = v<thr;
-      bits[i]=black?1:0;
-      const e=(black?v:v-255)/8;
-      add(i+1,e,x+1<w); add(i+2,e,x+2<w);
-      add(i+w-1,e,x>0&&y+1<h); add(i+w,e,y+1<h); add(i+w+1,e,x+1<w&&y+1<h);
-      add(i+2*w,e,y+2<h);
-    }
-    return bits;
-  }
-  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
-    const i=y*w+x, v=err[i], black = v<thr;
-    bits[i]=black?1:0;
-    const e = black? v : v-255;
-    add(i+1,   e*7/16, x+1<w);
-    add(i+w-1, e*3/16, x>0&&y+1<h);
-    add(i+w,   e*5/16, y+1<h);
-    add(i+w+1, e*1/16, x+1<w&&y+1<h);
-  }
-  return bits;
-}
-
-/* ================= данные ================= */
-function concatU8(arrays){
-  let len=0; for(const a of arrays) len+=a.length;
-  const out = new Uint8Array(len); let o=0;
-  for(const a of arrays){ out.set(a,o); o+=a.length; }
-  return out;
-}
-function dotAt(bits, tw, x, y){
-  let b = bits[y*tw+x];
-  if(settings.invertDots) b ^= 1;
-  return b;
-}
-function packRows(bits, tw, y0, h){
-  const xB = tw>>3, data = new Uint8Array(h*xB);
-  for(let r=0;r<h;r++){
-    const row=(y0+r)*tw, o=r*xB;
-    for(let x=0;x<tw;x++) if(bits[row+x] ^ (settings.invertDots?1:0)) data[o+(x>>3)] |= (0x80>>(x&7));
-  }
-  return data;
-}
-function buildJobParts(tw, th, bits, protocol){
-  if(protocol === 'raw'){
-    return { needsInit:false, parts:[ packRows(bits, tw, 0, th) ] };
-  }
-  if(protocol === 'esc_star'){
-    const parts = [ new Uint8Array([0x1B,0x33,0x00]) ];
-    for(let band=0; band<th; band+=24){
-      const header = [0x1B,0x2A,33, tw&0xff,(tw>>8)&0xff];
-      const data = new Uint8Array(tw*3);
-      for(let x=0;x<tw;x++){
-        for(let b=0;b<3;b++){
-          let byte=0;
-          for(let bit=0;bit<8;bit++){
-            const y=band+b*8+bit;
-            if(y<th && dotAt(bits,tw,x,y)) byte |= (0x80>>bit);
+    const bytesPerRow = w/8;
+    const rows = [];
+    for (let y=0; y<h; y++){
+      const rowBytes = new Uint8Array(bytesPerRow);
+      for (let x=0; x<w; x++){
+        const idx = y*w+x;
+        const old = gray[idx];
+        const black = old < 128 ? 1 : 0;
+        if (ditherMode === 'fs'){
+          const newVal = black ? 0 : 255;
+          const err = old - newVal;
+          if (x+1<w) gray[idx+1] += err*7/16;
+          if (y+1<h){
+            if (x>0) gray[idx-1+w] += err*3/16;
+            gray[idx+w] += err*5/16;
+            if (x+1<w) gray[idx+1+w] += err*1/16;
           }
-          data[x*3+b]=byte;
         }
+        if (black) rowBytes[x >> 3] |= (0x80 >> (x & 7));
       }
-      parts.push(concatU8([new Uint8Array(header), data, new Uint8Array([0x0A])]));
+      rows.push(rowBytes);
     }
-    parts.push(new Uint8Array([0x1B,0x32, 0x0A,0x0A,0x0A]));
-    return { needsInit:true, parts };
+    return rows;
   }
-  const xB = tw>>3;
-  const parts = [];
-  for(let y=0; y<th; y+=settings.sliceH){
-    const h = Math.min(settings.sliceH, th-y);
-    const head = new Uint8Array([0x1D,0x76,0x30,0x00, xB&0xff,(xB>>8)&0xff, h&0xff,(h>>8)&0xff]);
-    parts.push(concatU8([head, packRows(bits, tw, y, h)]));
+
+  // ---------- UI wiring ----------
+  const $ = (id) => document.getElementById(id);
+  const log = (msg) => { $('log').textContent = msg; };
+
+  let writeChar=null, notifyChar=null, paused=false, sourceImage=null, rotation=0, printAbort=false;
+
+  if (!navigator.bluetooth){
+    $('unsupported').style.display = 'block';
+    $('unsupported').textContent = 'Web Bluetooth недоступен в этом браузере. Откройте страницу в Chrome для Android.';
+    $('connectBtn').disabled = true;
+  } else if (location.protocol !== 'https:' && location.hostname !== 'localhost'){
+    $('unsupported').style.display = 'block';
+    $('unsupported').textContent = 'Откройте страницу по https:// — Bluetooth не работает при открытии файла напрямую.';
   }
-  parts.push(new Uint8Array([0x0A,0x0A,0x0A,0x0A]));
-  return { needsInit:true, parts };
-}
 
-/* ================= отправка ================= */
-function updateProgress(sent, total){
-  const pct = total ? Math.round(sent/total*100) : 0;
-  $('progressBar').style.width = pct+'%';
-  $('progressPct').textContent = pct+'%';
-  $('progressLabel').textContent = `${sent} / ${total} байт`;
-}
-
-async function sendChunked(bytes, onProgress){
-  const chunk = settings.chunk;
-  const useNoResp = settings.writeMode==='noresp' ||
-    (settings.writeMode==='auto' && !S.char.properties.writeValue && S.char.properties.writeWithoutResponse);
-  for(let i=0;i<bytes.length;i+=chunk){
-    if(S.cancel) throw new Error('Остановлено пользователем');
-    const end = Math.min(bytes.length, i+chunk);
-    const part = bytes.buffer.slice(bytes.byteOffset+i, bytes.byteOffset+end);
-    let lastErr = null;
-    for(let attempt=0; attempt<3; attempt++){
-      try{
-        if(useNoResp) await S.char.writeValueWithoutResponse(part);
-        else await S.char.writeValue(part);
-        lastErr = null;
-        break;
-      }catch(err){
-        lastErr = err;
-        await sleep(150 + attempt*200);
-      }
+  $('connectBtn').addEventListener('click', async () => {
+    try{
+      log('выбор устройства…');
+      const device = await navigator.bluetooth.requestDevice({
+        acceptAllDevices: true,
+        optionalServices: [SERVICE_UUID]
+      });
+      device.addEventListener('gattserverdisconnected', onDisconnected);
+      log('подключение…');
+      const server = await device.gatt.connect();
+      const service = await server.getPrimaryService(SERVICE_UUID);
+      writeChar = await service.getCharacteristic(WRITE_UUID);
+      notifyChar = await service.getCharacteristic(NOTIFY_UUID);
+      await notifyChar.startNotifications();
+      notifyChar.addEventListener('characteristicvaluechanged', onNotify);
+      $('dot').classList.add('on');
+      $('statusText').textContent = device.name || 'подключено';
+      log('готово к печати');
+      updateButtons();
+    } catch(e){
+      log('ошибка подключения: ' + e.message);
     }
-    if(lastErr) throw new Error('Ошибка записи: '+lastErr.message+'. Уменьшите пакет до 20 байт, задержку 50–100 мс.');
-    onProgress(end-i);
-    if(settings.delay>0) await sleep(settings.delay);
-  }
-}
+  });
 
-async function runJob(items, label){
-  if(!S.char){ showToast('Принтер не подключён.','err'); return false; }
-  if(S.printing || S.sweeping){ showToast('Подождите: идёт операция.','warn'); return false; }
-  S.printing = true; S.cancel = false;
-  $('cancelBtn').classList.add('show');
-  updateButtons();
-  $('progressWrap').classList.add('show');
-  let total = 0; for(const it of items) total += it.data.length;
-  let sent = 0;
-  log(`Передача ${total} байт (${label})…`);
-  let ok = false;
-  try{
-    for(let i=0;i<items.length;i++){
-      const it = items[i];
-      await sendChunked(it.data, n=>{ sent += n; updateProgress(sent,total); });
-      if(it.init) await sleep(settings.initPause);
-      else if(i < items.length-1 && settings.pauseBlocks > 0) await sleep(settings.pauseBlocks);
-    }
-    log('Данные переданы. Принтер печатает… ✔','ok');
-    bumpPrintCount();
-    ok = true;
-  }catch(err){
-    showToast(err.message,'err',8000);
-    log(err.message,'err');
-  }finally{
-    S.printing = false;
-    $('cancelBtn').classList.remove('show');
-    setTimeout(()=>{ $('progressWrap').classList.remove('show'); $('progressBar').style.width='0%'; }, 1500);
+  function onDisconnected(){
+    $('dot').classList.remove('on');
+    $('statusText').textContent = 'отключено';
+    writeChar = null; notifyChar = null;
     updateButtons();
   }
-  return ok;
-}
-
-async function printBits(tw, th, bits, label, forceProtocol){
-  const proto = forceProtocol || settings.protocol;
-  const job = buildJobParts(tw, th, bits, proto);
-  const copies = Math.max(1, Math.min(3, settings.copies|0));
-  for(let c=0;c<copies;c++){
-    const items = [];
-    if(job.needsInit) items.push({ data:new Uint8Array([0x1B,0x40]), init:true });
-    for(const p of job.parts) items.push({ data:p });
-    const suffix = copies>1 ? ` · копия ${c+1}/${copies}` : '';
-    const ok = await runJob(items, label + ' · ' + proto.toUpperCase() + suffix);
-    if(!ok) return false;
-    if(c < copies-1) await sleep(500);
+  function onNotify(ev){
+    const arr = Array.from(new Uint8Array(ev.target.value.buffer));
+    if (arraysEqual(arr, PAUSE_SIGNAL)) paused = true;
+    else if (arraysEqual(arr, RESUME_SIGNAL)) paused = false;
   }
-  return true;
-}
-
-$('printBtn').addEventListener('click', ()=>{
-  if(S.out) printBits(S.out.tw, S.out.th, S.out.bits, `фото ${S.out.tw}×${S.out.th}`);
-});
-$('cancelBtn').addEventListener('click', ()=>{ S.cancel = true; });
-
-$('testBtn').addEventListener('click', async ()=>{
-  const tw = Math.round(settings.paperWidth/8)*8;
-  const th = 160;
-  const cv = document.createElement('canvas'); cv.width=tw; cv.height=th;
-  const cx = cv.getContext('2d');
-  cx.fillStyle='#fff'; cx.fillRect(0,0,tw,th);
-  cx.strokeStyle='#000'; cx.lineWidth=4; cx.strokeRect(4,4,tw-8,th-8);
-  cx.fillStyle='#000'; cx.textAlign='center';
-  cx.font='800 44px Manrope, sans-serif'; cx.fillText('MX10', tw/2, 60);
-  cx.font='600 18px Manrope, sans-serif'; cx.fillText('TEST PRINT · 203 DPI', tw/2, 88);
-  for(let x=16;x<tw-16;x+=2){
-    cx.fillStyle = ((x>>1)&1) ? '#000' : '#fff';
-    cx.fillRect(x,102,2,14);
+  function arraysEqual(a,b){
+    if (a.length!==b.length) return false;
+    for (let i=0;i<a.length;i++) if(a[i]!==b[i]) return false;
+    return true;
   }
-  const grd = cx.createLinearGradient(16,0,tw-16,0);
-  grd.addColorStop(0,'#000'); grd.addColorStop(1,'#fff');
-  cx.fillStyle = grd; cx.fillRect(16,126,tw-32,20);
-  const data = cv.getImageData(0,0,tw,th).data;
-  const g = new Float32Array(tw*th);
-  for(let i=0;i<g.length;i++){ const d=i*4; g[i]=0.299*data[d]+0.587*data[d+1]+0.114*data[d+2]; }
-  const bits = applyDither(g, tw, th, 'threshold', 128);
-  await printBits(tw, th, bits, 'тестовый образец');
-});
 
-$('downloadBtn').addEventListener('click', ()=>{
-  if(!S.out) return;
-  const a = document.createElement('a');
-  a.download = 'mx10-preview.png';
-  a.href = $('previewCanvas').toDataURL('image/png');
-  a.click();
-});
+  $('dropzone').addEventListener('click', () => $('fileInput').click());
+  $('fileInput').addEventListener('change', (e) => { if (e.target.files[0]) loadImage(e.target.files[0]); });
+  $('dropzone').addEventListener('dragover', e=>e.preventDefault());
+  $('dropzone').addEventListener('drop', e => { e.preventDefault(); if (e.dataTransfer.files[0]) loadImage(e.dataTransfer.files[0]); });
 
-/* ================= диагностика ================= */
-$('diagFeed').addEventListener('click', ()=>{
-  runJob([{ data:new Uint8Array([0x1B,0x40, 0x1B,0x4A,0x5A, 0x0A,0x0A,0x0A, 0x0C]) }], 'протяжка бумаги');
-});
-$('diagText').addEventListener('click', ()=>{
-  const text = 'MX10 TEST *** PRINT OK *** 1234567890';
-  const bytes = new Uint8Array(text.length + 3);
-  for(let i=0;i<text.length;i++) bytes[i] = text.charCodeAt(i);
-  bytes[text.length]=0x0A; bytes[text.length+1]=0x0A; bytes[text.length+2]=0x0A;
-  runJob([
-    { data:new Uint8Array([0x1B,0x40, 0x1B,0x61,0x00]), init:true },
-    { data:bytes }
-  ], 'текстовый тест');
-});
-function stripBits(tw, h){
-  const bits = new Uint8Array(tw*h);
-  for(let y=0;y<h;y++)for(let x=0;x<tw;x++){
-    bits[y*tw+x] = (y<4 || y>=h-4 || x<4 || x>=tw-4 || ((x>>4)&1)===((y>>3)&1)) ? 1 : 0;
+  function loadImage(file){
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => { sourceImage = img; rotation = 0; renderPreview(); };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
   }
-  return bits;
-}
-$('diagGs').addEventListener('click', ()=>{
-  const tw = Math.round(settings.paperWidth/8)*8;
-  printBits(tw, 32, stripBits(tw,32), 'полоса GS v 0', 'gs');
-});
-$('diagEsc').addEventListener('click', ()=>{
-  const tw = Math.round(settings.paperWidth/8)*8;
-  printBits(tw, 32, stripBits(tw,32), 'полоса ESC *', 'esc_star');
-});
-$('diagRaw').addEventListener('click', ()=>{
-  const tw = Math.round(settings.paperWidth/8)*8;
-  printBits(tw, 32, stripBits(tw,32), 'полоса raw', 'raw');
-});
 
-/* ================= контролы ================= */
-function bindRange(id, outId, key, fmt){
-  const el = $(id);
-  const upd = ()=>{
-    settings[key] = +el.value;
-    $(outId).textContent = fmt ? fmt(el.value) : el.value;
-    const min=+el.min, max=+el.max;
-    el.style.setProperty('--fill', ((el.value-min)/(max-min)*100)+'%');
-    saveSettings();
-    scheduleRender();
-  };
-  el.addEventListener('input', upd); upd();
-}
-let renderTimer = null;
-function scheduleRender(){
-  clearTimeout(renderTimer);
-  renderTimer = setTimeout(()=>{ if(S.src){ renderOutput(); } else updateEstimate(); }, 120);
-}
+  $('rotateBtn').addEventListener('click', () => {
+    if (!sourceImage) return;
+    rotation = (rotation + 90) % 360;
+    renderPreview();
+  });
 
-/* применяем сохранённые значения к контролам */
-$('protoMode').value = settings.protocol;
-$('paperWidth').value = String(settings.paperWidth);
-$('ditherMode').value = settings.dither;
-$('writeMode').value = settings.writeMode;
-$('copiesSel').value = String(settings.copies);
-$('scaleRange').value = settings.scale;
-$('brightRange').value = settings.brightness;
-$('contrastRange').value = settings.contrast;
-$('threshRange').value = settings.threshold;
-$('sliceRange').value = settings.sliceH;
-$('chunkRange').value = settings.chunk;
-$('delayRange').value = settings.delay;
-$('pauseRange').value = settings.pauseBlocks;
-$('initRange').value = settings.initPause;
-$('invertChk').checked = !!settings.invert;
-$('invertDotsChk').checked = !!settings.invertDots;
-try{ $('chkAllDevices').checked = localStorage.getItem(LS_ALLDEV) === '1'; }catch(e){}
+  function getRotatedSource(){
+    if (rotation === 0) return sourceImage;
+    const swap = (rotation === 90 || rotation === 270);
+    const rw = swap ? sourceImage.height : sourceImage.width;
+    const rh = swap ? sourceImage.width : sourceImage.height;
+    const off = document.createElement('canvas');
+    off.width = rw; off.height = rh;
+    const octx = off.getContext('2d');
+    octx.translate(rw/2, rh/2);
+    octx.rotate(rotation*Math.PI/180);
+    octx.drawImage(sourceImage, -sourceImage.width/2, -sourceImage.height/2);
+    return off;
+  }
 
-bindRange('scaleRange','scaleOut','scale', v=>v+'%');
-bindRange('brightRange','brightOut','brightness');
-bindRange('contrastRange','contrastOut','contrast');
-bindRange('threshRange','threshOut','threshold');
-bindRange('sliceRange','sliceOut','sliceH');
-bindRange('chunkRange','chunkOut','chunk');
-bindRange('delayRange','delayOut','delay');
-bindRange('pauseRange','pauseOut','pauseBlocks');
-bindRange('initRange','initOut','initPause');
+  function renderPreview(){
+    if (!sourceImage) return;
+    try{
+      const paperWidth = clampInt($('paperWidth').value, 384, 576, 384);
+      const sizePct = clampInt($('sizeSlider').value, 30, 100, 100);
+      const stretchPct = clampInt($('stretchSlider').value, 50, 200, 100);
+      const src = getRotatedSource();
 
-$('protoMode').addEventListener('change', e=>{ settings.protocol=e.target.value; saveSettings(); log('Протокол: '+e.target.options[e.target.selectedIndex].text,'warn'); updateEstimate(); });
-$('paperWidth').addEventListener('change', e=>{ settings.paperWidth=+e.target.value; saveSettings(); scheduleRender(); });
-$('ditherMode').addEventListener('change', e=>{ settings.dither=e.target.value; saveSettings(); scheduleRender(); });
-$('writeMode').addEventListener('change', e=>{ settings.writeMode=e.target.value; saveSettings(); });
-$('copiesSel').addEventListener('change', e=>{ settings.copies=+e.target.value; saveSettings(); updateEstimate(); });
-$('invertChk').addEventListener('change', e=>{ settings.invert=e.target.checked; saveSettings(); scheduleRender(); });
-$('invertDotsChk').addEventListener('change', e=>{ settings.invertDots=e.target.checked; saveSettings(); if(S.src) renderOutput(); });
-$('chkAllDevices').addEventListener('change', e=>{
-  try{ localStorage.setItem(LS_ALLDEV, e.target.checked?'1':'0'); }catch(err){}
-  showToast('Применится при следующем подключении.','warn',3500);
-});
+      const drawWidth = Math.max(8, Math.round(paperWidth * sizePct/100));
+      const baseScale = drawWidth / src.width;
+      const baseHeight = Math.max(1, Math.round(src.height * baseScale));
+      const drawHeight = Math.max(1, Math.round(baseHeight * stretchPct/100));
+      const offsetX = Math.round((paperWidth - drawWidth)/2);
 
-/* защита от закрытия страницы во время печати */
-window.addEventListener('beforeunload', e=>{
-  if(S.printing || S.sweeping){ e.preventDefault(); e.returnValue=''; }
-});
+      const canvas = $('preview');
+      canvas.width = paperWidth;
+      canvas.height = drawHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0,0,paperWidth,drawHeight);
+      ctx.drawImage(src, offsetX, 0, drawWidth, drawHeight);
 
-function updateButtons(){
-  const busy = S.printing || S.sweeping;
-  const connected = !!S.char;
-  $('diagGate').classList.toggle('show', !connected && !busy);
-  $('printBtn').disabled = !S.out || !connected || busy;
-  $('testBtn').disabled = !connected || busy;
-  $('downloadBtn').disabled = !S.out;
-  document.querySelectorAll('.diagBtn').forEach(b=>b.disabled = !connected || busy);
-  $('sweepBtn').disabled = !connected || busy || !S.candidates.length;
-  $('rescanBtn').disabled = !S.server || busy;
-  $('charSelect').disabled = !connected;
-  if(S.out && !connected && !busy)
-    $('estTime').textContent = 'Фото готово — осталось подключить принтер';
-}
-updateButtons();
+      const rows = imageToBitmapRows(canvas, $('ditherMode').value);
+      const out = ctx.createImageData(paperWidth, drawHeight);
+      for (let y=0;y<drawHeight;y++){
+        for (let x=0;x<paperWidth;x++){
+          const bit = (rows[y][x>>3] >> (7-(x&7))) & 1;
+          const val = bit ? 0 : 255;
+          const idx = (y*paperWidth+x)*4;
+          out.data[idx]=out.data[idx+1]=out.data[idx+2]=val;
+          out.data[idx+3]=255;
+        }
+      }
+      ctx.putImageData(out,0,0);
+
+      $('previewWrap').style.display = 'block';
+      $('dropzone').classList.add('has-img');
+      $('dropzone').textContent = 'заменить фото';
+      $('printBtn')._rows = rows;
+      updateButtons();
+      updateDurationEstimate();
+    } catch(e){
+      log('ошибка обработки фото: ' + e.message);
+    }
+  }
+
+  ['input','change'].forEach(evt=>{
+    $('sizeSlider').addEventListener(evt, renderPreview);
+    $('stretchSlider').addEventListener(evt, renderPreview);
+    $('ditherMode').addEventListener(evt, renderPreview);
+    $('paperWidth').addEventListener(evt, renderPreview);
+  });
+
+  // heat/darkness only affects the print job (energy sent to the printer) — it does NOT
+  // re-run the dithering pipeline, so touching it can never corrupt the already-rendered bitmap.
+  $('darkness').addEventListener('input', () => {
+    $('darknessVal').textContent = $('darkness').value + '%';
+  });
+
+  // ---------- Duration estimate (approximate — real timing depends on the specific unit) ----------
+  function estimateSeconds(){
+    const rows = ($('printBtn')._rows || []).length;
+    if (!rows) return 0;
+    const paperWidth = clampInt($('paperWidth').value, 384, 576, 384);
+    const bytesPerRow = paperWidth/8;
+    const rowCmdBytes = bytesPerRow + 8;
+    const totalBytes = rows*rowCmdBytes + 120;
+    const speedByte = speedByteFromSlider(clampInt($('speedSlider').value,0,100,60));
+    const delayMs = delayMsFromSlider(clampInt($('delaySlider').value,0,100,20));
+    const CHUNK = 180;
+    const transmitMs = Math.ceil(totalBytes/CHUNK)*delayMs;
+    const feedMsPerRow = 8 + speedByte*1.5; // rough — actual motor timing is firmware-controlled
+    const physicalMs = rows*feedMsPerRow;
+    return Math.max(1, Math.round((transmitMs+physicalMs)/1000));
+  }
+  function updateDurationEstimate(){
+    $('durationEst').textContent = '≈ ' + estimateSeconds() + ' сек';
+  }
+  ['input','change'].forEach(evt=>{
+    $('speedSlider').addEventListener(evt, updateDurationEstimate);
+    $('delaySlider').addEventListener(evt, updateDurationEstimate);
+  });
+
+  $('advToggle').addEventListener('click', () => {
+    $('advPanel').classList.toggle('open');
+    $('advToggle').textContent = $('advPanel').classList.contains('open') ? 'настройки принтера ▴' : 'настройки принтера ▾';
+  });
+
+  function updateButtons(){
+    $('printBtn').disabled = !(writeChar && sourceImage && $('printBtn')._rows);
+    $('feedBtn').disabled = !writeChar;
+  }
+
+  async function writeChunk(chunk){
+    if (writeChar.writeValueWithoutResponse){
+      try { await writeChar.writeValueWithoutResponse(chunk); return; } catch(e){ /* fall through */ }
+    }
+    await writeChar.writeValue(chunk);
+  }
+
+  $('feedBtn').addEventListener('click', async () => {
+    if (!writeChar) return;
+    $('feedBtn').disabled = true;
+    try{
+      const cmd = new Uint8Array(makeCommand(0xa1, u16le(160)));
+      await writeChunk(cmd);
+      log('лента протянута — можно оторвать');
+    } catch(e){
+      log('ошибка протяжки: ' + e.message);
+    } finally {
+      updateButtons();
+    }
+  });
+
+  $('stopBtn').addEventListener('click', () => {
+    printAbort = true;
+    log('остановка…');
+  });
+
+  $('printBtn').addEventListener('click', async () => {
+    const rows = $('printBtn')._rows;
+    if (!rows || !writeChar) return;
+    printAbort = false;
+    $('printBtn').style.display = 'none';
+    $('stopBtn').style.display = 'block';
+    $('progressBar').style.width = '0%';
+    try{
+      const darkness = clampInt($('darkness').value, 0, 100, 55);
+      const energy = Math.max(0x1000, Math.round(darkness/100 * 0xffff));
+      const speed = speedByteFromSlider(clampInt($('speedSlider').value,0,100,60));
+      const delayMs = delayMsFromSlider(clampInt($('delaySlider').value,0,100,20));
+      const job = new PrintJob({ energy, speed });
+      const data = job.build(rows);
+      log('отправка данных…');
+      const CHUNK = 180;
+      let stopped = false;
+      for (let i=0; i<data.length; i+=CHUNK){
+        if (printAbort){ stopped = true; break; }
+        while (paused && !printAbort) await sleep(150);
+        if (printAbort){ stopped = true; break; }
+        await writeChunk(data.subarray(i, i+CHUNK));
+        await sleep(delayMs);
+        $('progressBar').style.width = Math.min(100, Math.round((i+CHUNK)/data.length*100)) + '%';
+      }
+      if (stopped){
+        try{
+          const stopSeq = new Uint8Array([
+            ...makeCommand(0xa6,[0xaa,0x55,0x17,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x17]),
+            ...makeCommand(0xa1, u16le(24))
+          ]);
+          await writeChunk(stopSeq);
+        } catch(e){ /* best effort */ }
+        log('печать остановлена');
+      } else {
+        log('готово! ✓');
+      }
+    } catch(e){
+      log('ошибка печати: ' + e.message);
+    } finally {
+      $('printBtn').style.display = 'block';
+      $('stopBtn').style.display = 'none';
+      updateButtons();
+    }
+  });
+
+  function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+})();
 </script>
 </body>
 </html>
