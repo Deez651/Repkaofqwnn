@@ -157,7 +157,7 @@
 
     <div class="field">
       <label>скорость выхода ленты <span class="val" id="durationEst">≈ 0 сек</span></label>
-      <input type="range" id="speedSlider" min="0" max="100" value="60">
+      <input type="range" id="speedSlider" min="0" max="100" value="50">
       <div class="hint-row"><span>медленнее / чётче</span><span>быстрее</span></div>
     </div>
 
@@ -253,7 +253,9 @@
     return [0x51,0x78,commandBit,0x00,payload.length,0x00, ...payload, crc8(payload), 0xff];
   }
 
-  function speedByteFromSlider(s){ return clampInt(Math.round(48 - s*0.32), 16, 48, 32); }
+  // Narrow band centred on 32 — that exact value is confirmed working on this unit;
+  // wider swings previously produced blank prints, so we stay close to it.
+  function speedByteFromSlider(s){ return clampInt(Math.round(24 + s*0.16), 24, 40, 32); }
   function delayMsFromSlider(t){ return Math.round(5 + t * 0.75); }
 
   // ---------- Builds the full print job as one flat byte stream ----------
@@ -481,7 +483,7 @@
     const bytesPerRow = paperWidth/8;
     const rowCmdBytes = bytesPerRow + 8;
     const totalBytes = rows*rowCmdBytes + 120;
-    const speedByte = speedByteFromSlider(clampInt($('speedSlider').value,0,100,60));
+    const speedByte = speedByteFromSlider(clampInt($('speedSlider').value,0,100,50));
     const delayMs = delayMsFromSlider(clampInt($('delaySlider').value,0,100,20));
     const CHUNK = 180;
     const transmitMs = Math.ceil(totalBytes/CHUNK)*delayMs;
@@ -543,11 +545,11 @@
     try{
       const darkness = clampInt($('darkness').value, 0, 100, 55);
       const energy = Math.max(0x1000, Math.round(darkness/100 * 0xffff));
-      const speed = speedByteFromSlider(clampInt($('speedSlider').value,0,100,60));
+      const speed = speedByteFromSlider(clampInt($('speedSlider').value,0,100,50));
       const delayMs = delayMsFromSlider(clampInt($('delaySlider').value,0,100,20));
       const job = new PrintJob({ energy, speed });
       const data = job.build(rows);
-      log('отправка данных…');
+      log('отправка… нагрев=0x' + energy.toString(16) + ' скорость=' + speed + ' пауза=' + delayMs + 'мс');
       const CHUNK = 180;
       let stopped = false;
       for (let i=0; i<data.length; i+=CHUNK){
